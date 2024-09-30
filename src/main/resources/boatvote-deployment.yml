@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boatvote-dep
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: boatvote-dep
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: boatvote-kube
+    spec:
+      containers:
+        - name: botevote-server-container
+          image: boatvote-server:0.1
+          ports:
+            - containerPort: 80
