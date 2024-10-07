@@ -24,28 +24,30 @@ public class SurveyService {
 
     @Transactional
     public int addNewSurvey(SurveyDTO surveyDTO){
-        int ownerId = surveyDTO.ownerId();
-        User owner = userRepository.findById(ownerId).orElseThrow();
+//        int ownerId = surveyDTO.ownerId();
+//        User owner = userRepository.findById(ownerId).orElseThrow();
+
+        User owner = userRepository.findByUsername("mintuchel");
 
         Survey survey = Survey.builder()
                 .owner(owner)
-                .point(100) // 포인트는 우리가 넣어줘야함
+                .headCnt(surveyDTO.headCnt())
+                .point(100) // 포인트는 우리가 알아서 넣어줘야함
                 .build();
 
         // 의뢰받은 QuestionDTO들 빼내기
         List<QuestionDTO> questionDTOList = surveyDTO.questionList();
 
-        for(QuestionDTO curQuestionDTO : questionDTOList){
-            String curTitle = curQuestionDTO.title();
-            QuestionType curType = curQuestionDTO.questionType();
+        for(QuestionDTO questionDTO : questionDTOList){
 
             Question curQuestion = Question.builder()
-                    .title(curTitle)
-                    .type(curType)
+                    .title(questionDTO.title())
+                    .isMultipleAnswer(questionDTO.isMultipleAnswer())
+                    .type(questionDTO.questionType())
                     .build();
 
-            if(curType == QuestionType.MC) {
-                List<OptionDTO> optionList = curQuestionDTO.optionList();
+            if(questionDTO.questionType() == QuestionType.MC) {
+                List<OptionDTO> optionList = questionDTO.optionList();
                 for (OptionDTO curOptionDTO: optionList) {
                     Option option = Option.builder()
                             .text(curOptionDTO.text())
@@ -59,7 +61,26 @@ public class SurveyService {
         }
 
         surveyRepository.save(survey);
+        survey.getOwner().addRequestedSurvey(survey); // 연관관계 편의메서드
 
+        survey.setEndAt(surveyDTO.duration());
         return survey.getId();
+    }
+
+    // 나중에 예외처리해야함
+    @Transactional(readOnly = true)
+    public SurveyDTO getSurveyById(int surveyId){
+        return surveyRepository.findById(surveyId)
+                .map(survey -> {
+                    SurveyDTO dto = new SurveyDTO(
+
+                    )
+                }
+        );
+    }
+    
+    // 이거 메서드 분리해보기
+    private void setOptionsToQuestion(Question question){
+
     }
 }

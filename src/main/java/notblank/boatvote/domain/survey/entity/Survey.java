@@ -7,6 +7,7 @@ import notblank.boatvote.domain.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +25,20 @@ public class Survey {
     @JoinColumn(name="owner_id", nullable = false)
     private User owner;
 
+    // db에 저장되는 순간 자동으로 초기화됨
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     private LocalDateTime endAt;
+
+    private int headCnt;
+
+    private int regionCode;
+
+    private int jobCode;
+
+    private int ageCode;
 
     private int point;
 
@@ -36,4 +47,8 @@ public class Survey {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="sid")
     List<Question> questionList = new ArrayList<>();
+
+    public void setEndAt(int duration) {
+        this.endAt = this.createdAt.plus(duration, ChronoUnit.DAYS);
+    }
 }

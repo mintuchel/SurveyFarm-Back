@@ -7,6 +7,6 @@ import java.util.List;
 public record QuestionDTO(
         String title,
         List<OptionDTO> optionList,
-        // boolean isMAPossible,
+        boolean isMultipleAnswer,
         QuestionType questionType
 ) { }

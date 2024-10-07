@@ -71,7 +71,7 @@ public class SurveyServiceTest {
         question = Question.builder()
                 .title("응원하는 팀 고르셈")
                 .type(QuestionType.MC)
-                .isMultipleChoiceAvailable(false)
+                .isMultipleAnswer(false)
                 .build();
 
         question.getOptionList().add(option1);
@@ -96,9 +96,7 @@ public class SurveyServiceTest {
     @Transactional
     @Rollback
     public void addSurveyTest(){
-        em.persist(survey);
-
-        // surveyService.save(survey);
+        surveyRepository.save(survey);
 
         Survey s = surveyRepository.findById(survey.getId()).orElseThrow();
 
@@ -126,32 +124,36 @@ public class SurveyServiceTest {
 
         String json = "{\n" +
                 "  \"ownerId\": 123,\n" +
-                "  \"selectedRegion\": [\"서울\", \"제주\"],\n" +
+                "  \"selectedRegion\": [\"서울\"],\n" +
                 "  \"selectedJob\": [\"개발\"],\n" +
-                "  \"selectedGender\": [],\n" +
+                "  \"selectedGender\": [\"남자\"],\n" +
                 "  \"selectedAge\": [\"20대\", \"30대\"],\n" +
-                "  \"selectedHeadCnt\": [\"500명\"],\n" +
+                "  \"headCnt\": 1000,\n" +
+                "  \"duration\": 5,\n" +
                 "  \"description\": \"this is survey description\",\n" +
                 "  \"questionList\": [\n" +
                 "    {\n" +
-                "      \"title\": \"니 어디사냐?\",\n" +
+                "      \"title\": \"성실히 대답할꺼지?\",\n" +
                 "      \"optionList\": [\n" +
-                "        { \"text\": \"부산\" },\n" +
-                "        { \"text\": \"서울\" }\n" +
+                "        { \"text\": \"ㅇㅇ\" },\n" +
+                "        { \"text\": \"ㄴㄴ\" }\n" +
                 "      ],\n" +
+                "      \"isMultipleAnswer\": false,\n" +
                 "      \"questionType\": \"MC\"\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"title\": \"what is your name?\",\n" +
+                "      \"title\": \"너 이름 적어\",\n" +
                 "      \"optionList\": [],\n" +
+                "      \"isMultipleAnswer\": false,\n" +
                 "      \"questionType\": \"SA\"\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"title\": \"니 뭐꼬\",\n" +
+                "      \"title\": \"니 어디사냐?\",\n" +
                 "      \"optionList\": [\n" +
-                "        { \"text\": \"황자르\" },\n" +
-                "        { \"text\": \"즐라탄\" }\n" +
+                "        { \"text\": \"서울\" },\n" +
+                "        { \"text\": \"부산\" }\n" +
                 "      ],\n" +
+                "      \"isMultipleAnswer\": true,\n" +
                 "      \"questionType\": \"MC\"\n" +
                 "    }\n" +
                 "  ]\n" +

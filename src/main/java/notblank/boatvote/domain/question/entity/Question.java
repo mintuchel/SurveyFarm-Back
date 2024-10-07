@@ -21,7 +21,7 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionType type;
 
-    private boolean isMAPossible;
+    private boolean isMultipleAnswer;
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
