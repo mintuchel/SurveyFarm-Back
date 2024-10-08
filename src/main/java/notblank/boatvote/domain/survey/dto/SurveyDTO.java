@@ -1,4 +1,4 @@
-package notblank.boatvote.domain.survey.dto.request;
+package notblank.boatvote.domain.survey.dto;
 
 import java.util.List;
 

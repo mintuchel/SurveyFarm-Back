@@ -3,14 +3,14 @@ package notblank.boatvote.survey.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import notblank.boatvote.domain.survey.dto.request.OptionDTO;
-import notblank.boatvote.domain.survey.dto.request.QuestionDTO;
+import notblank.boatvote.domain.survey.dto.OptionDTO;
+import notblank.boatvote.domain.survey.dto.QuestionDTO;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.question.repository.OptionRepository;
 import notblank.boatvote.domain.question.repository.QuestionRepository;
-import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.SurveyDTO;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.survey.service.SurveyService;
@@ -170,33 +170,33 @@ public class SurveyServiceTest {
                 .point(100)
                 .build();
 
-        // 의뢰받은 QuestionDTO들 빼내기
-        List<QuestionDTO> questionDTOList = surveyDTO.questionList();
-
-        for(QuestionDTO curQuestionDTO : questionDTOList){
-            String curTitle = curQuestionDTO.title();
-            QuestionType curType = curQuestionDTO.questionType();
-
-            Question curQuestion = Question.builder()
-                    .title(curTitle)
-                    .type(curType)
-                    .build();
-
-            if(curType == QuestionType.MC) {
-                List<OptionDTO> optionList = curQuestionDTO.optionList();
-                for (OptionDTO curOptionDTO: optionList) {
-                    Option option = Option.builder()
-                            .text(curOptionDTO.text())
-                            .cnt(0)
-                            .build();
-                    curQuestion.getOptionList().add(option);
-                }
-            }
-
-            curSurvey.getQuestionList().add(curQuestion);
-        }
-
-        surveyRepository.save(curSurvey);
+//        // 의뢰받은 QuestionDTO들 빼내기
+//        List<QuestionDTO> questionDTOList = surveyDTO.questionList();
+//
+//        for(QuestionDTO curQuestionDTO : questionDTOList){
+//            String curTitle = curQuestionDTO.title();
+//            QuestionType curType = curQuestionDTO.questionType();
+//
+//            Question curQuestion = Question.builder()
+//                    .title(curTitle)
+//                    .type(curType)
+//                    .build();
+//
+//            if(curType == QuestionType.MC) {
+//                List<OptionDTO> optionList = curQuestionDTO.optionList();
+//                for (OptionDTO curOptionDTO : optionList) {
+//                    Option option = Option.builder()
+//                            .text(curOptionDTO.text())
+//                            .cnt(0)
+//                            .build();
+//                    curQuestion.getOptionList().add(option);
+//                }
+//            }
+//
+//            curSurvey.getQuestionList().add(curQuestion);
+//        }
+//
+//        surveyRepository.save(curSurvey);
 
         Assertions.assertThat(curSurvey.getId()).isNotNull();
         Assertions.assertThat(curSurvey.getQuestionList()).hasSize(3);

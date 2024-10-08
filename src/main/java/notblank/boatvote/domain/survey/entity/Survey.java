@@ -43,10 +43,11 @@ public class Survey {
     private int point;
 
     // FetchType.EAGER로 할까??
+    // 여기서 굳이 new 를 해줄 필요가 있을까?
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="sid")
-    List<Question> questionList = new ArrayList<>();
+    private List<Question> questionList = new ArrayList<>();
 
     public void setEndAt(int duration) {
         this.endAt = this.createdAt.plus(duration, ChronoUnit.DAYS);
