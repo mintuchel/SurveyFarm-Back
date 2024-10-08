@@ -11,6 +11,7 @@ import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.question.repository.OptionRepository;
 import notblank.boatvote.domain.question.repository.QuestionRepository;
 import notblank.boatvote.domain.survey.dto.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.survey.service.SurveyService;
@@ -79,7 +80,7 @@ public class SurveyServiceTest {
     }
 
     @BeforeEach
-    private void surveySetUp() {
+    public void surveySetUp() {
         userSetUp();
         optionSetUp();
         questionSetUp();
@@ -90,6 +91,17 @@ public class SurveyServiceTest {
                 .build();
 
         survey.getQuestionList().add(question);
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void findSurveyTest(){
+        surveyRepository.save(survey);
+
+        SurveyInfoResponse response = surveyService.getSurveyById(survey.getId());
+
+        System.out.println(response);
     }
 
     @Test

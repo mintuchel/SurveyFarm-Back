@@ -7,6 +7,7 @@ import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.survey.dto.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.survey.utility.CodeConverter;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +29,8 @@ public class SurveyService {
 
     @Transactional
     public int addNewSurvey(SurveyDTO surveyDTO){
-//        int ownerId = surveyDTO.ownerId();
-//        User owner = userRepository.findById(ownerId).orElseThrow();
-
-        User owner = userRepository.findByUsername("mintuchel");
+        int ownerId = surveyDTO.ownerId();
+        User owner = userRepository.findById(ownerId).orElseThrow();
 
         Survey survey = Survey.builder()
                 .owner(owner)
@@ -45,8 +45,46 @@ public class SurveyService {
         surveyRepository.save(survey);
         survey.getOwner().addRequestedSurvey(survey); // 연관관계 편의메서드
 
-        survey.setEndAt(surveyDTO.duration());
+        // survey.setEndAt(surveyDTO.duration());
         return survey.getId();
+    }
+
+    // 예외 커스텀 해줘야함
+    @Transactional(readOnly = true)
+    public SurveyInfoResponse getSurveyById(int id){
+        return surveyRepository.findById(id)
+                .map(survey -> {
+
+                    return new SurveyInfoResponse(
+                            survey.getId(),
+                            codeConverter.convertRegionCodeToList(survey.getRegionCode()),
+                            codeConverter.convertJobCodeToList(survey.getJobCode()),
+                            codeConverter.convertGenderCodeToList(survey.getGenderCode()),
+                            codeConverter.convertAgeCodeToList(survey.getAgeCode()),
+                            survey.getHeadCnt(),
+                            survey.getPoint(),
+                            survey.getEndAt(),
+                            survey.getDescription(),
+                            survey.getQuestionList().stream()
+                                    .map(question -> {
+                                        return new QuestionDTO(
+                                                question.getTitle(),
+                                                question.getOptionList().stream()
+                                                                .map(option -> {
+                                                                    return new OptionDTO(
+                                                                            option.getText()
+                                                                    );
+                                                                })
+                                                        .collect(Collectors.toList()),
+                                                question.isMultipleAnswer(),
+                                                question.getType()
+                                        );
+                                    })
+                                    .collect(Collectors.toList())
+
+                    );
+                })
+                .orElseThrow();
     }
 
     // Survey 에 집어넣을 QuestionList return

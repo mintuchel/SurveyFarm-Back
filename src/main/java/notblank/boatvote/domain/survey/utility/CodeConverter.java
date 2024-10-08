@@ -11,12 +11,14 @@ public class CodeConverter {
     Map<Integer,String> regionCodeTable = new HashMap<>();
     Map<Integer, String> jobCodeTable = new HashMap<>();
     Map<Integer, String> ageCodeTable = new HashMap<>();
+    Map<Integer, String> genderCodeTable = new HashMap<>();
 
     @PostConstruct
     public void initCodeConverter(){
         initializeRegionCode();
         initializeJobCodeTable();
         initializeAgeCodeTable();
+        initializeGenderCodeTable();
     }
 
     private void initializeRegionCode(){
@@ -81,6 +83,12 @@ public class CodeConverter {
         ageCodeTable.put((int) Math.pow(2, 10), "70대");     // 1024
     }
 
+    private void initializeGenderCodeTable() {
+        genderCodeTable.put((int)Math.pow(2,0), "남자");
+        genderCodeTable.put((int)Math.pow(2,1), "여자");
+        genderCodeTable.put((int)Math.pow(2,2), "전체");
+    }
+
     public int convertRegionListToRegionCode(List<String> selectedRegion){
         int regionCode = 0;
         for(Map.Entry<Integer,String> entry : regionCodeTable.entrySet()){
@@ -132,6 +140,16 @@ public class CodeConverter {
             }
         }
         return selectedJob;
+    }
+
+    public List<String> convertGenderCodeToList(int genderCode){
+        List<String> selectedGender = new ArrayList<>();
+        for(int curGenderCode : genderCodeTable.keySet()){
+            if((genderCode & curGenderCode)!=0){
+                selectedGender.add(genderCodeTable.get(curGenderCode));
+            }
+        }
+        return selectedGender;
     }
 
     public List<String> convertAgeCodeToList(int ageCode){
