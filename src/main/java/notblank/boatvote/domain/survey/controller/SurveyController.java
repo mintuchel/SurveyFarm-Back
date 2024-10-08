@@ -1,8 +1,8 @@
 package notblank.boatvote.domain.survey.controller;
 
 import lombok.RequiredArgsConstructor;
-import notblank.boatvote.domain.survey.dto.SurveyDTO;
-import notblank.boatvote.domain.survey.dto.SurveyInfoResponse;
+import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.service.SurveyService;
 import org.springframework.web.bind.annotation.*;
 

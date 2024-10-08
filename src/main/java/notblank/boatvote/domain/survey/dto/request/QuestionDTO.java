@@ -1,4 +1,4 @@
-package notblank.boatvote.domain.survey.dto;
+package notblank.boatvote.domain.survey.dto.request;
 
 import notblank.boatvote.domain.question.entity.QuestionType;
 

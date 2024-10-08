@@ -1,13 +1,12 @@
 package notblank.boatvote.domain.survey.service;
 
 import lombok.RequiredArgsConstructor;
-import notblank.boatvote.domain.survey.dto.OptionDTO;
-import notblank.boatvote.domain.survey.dto.QuestionDTO;
+import notblank.boatvote.domain.survey.dto.request.OptionDTO;
+import notblank.boatvote.domain.survey.dto.request.QuestionDTO;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
-import notblank.boatvote.domain.question.entity.QuestionType;
-import notblank.boatvote.domain.survey.dto.SurveyDTO;
-import notblank.boatvote.domain.survey.dto.SurveyInfoResponse;
+import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.survey.utility.CodeConverter;
@@ -85,6 +84,12 @@ public class SurveyService {
                     );
                 })
                 .orElseThrow();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SurveyInfoResponse> getAvailableSurveys(User participant){
+        List<SurveyInfoResponse> responseList = new ArrayList<>();
+        return responseList;
     }
 
     // Survey 에 집어넣을 QuestionList return

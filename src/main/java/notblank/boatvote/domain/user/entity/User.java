@@ -23,9 +23,11 @@ public class User {
 
     private String password;
 
-    private long regionCode;
+    private int regionCode;
 
-    private long jobCode;
+    private int jobCode;
+
+    private int genderCode;
 
     private int ageCode;
 

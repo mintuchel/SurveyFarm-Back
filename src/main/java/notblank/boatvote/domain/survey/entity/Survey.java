@@ -45,6 +45,7 @@ public class Survey {
     private int point;
 
     private String description;
+
     // FetchType.EAGER로 할까??
     // 여기서 굳이 new 를 해줄 필요가 있을까?
     @Builder.Default

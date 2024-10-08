@@ -1,4 +1,6 @@
-package notblank.boatvote.domain.survey.dto;
+package notblank.boatvote.domain.survey.dto.response;
+
+import notblank.boatvote.domain.survey.dto.request.QuestionDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
