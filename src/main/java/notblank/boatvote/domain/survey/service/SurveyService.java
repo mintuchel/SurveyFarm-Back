@@ -48,48 +48,56 @@ public class SurveyService {
         return survey.getId();
     }
 
+    private SurveyInfoResponse changeSurveyToResponseDTO(Survey survey){
+        return new SurveyInfoResponse(
+                survey.getId(),
+                codeConverter.convertRegionCodeToList(survey.getRegionCode()),
+                codeConverter.convertJobCodeToList(survey.getJobCode()),
+                codeConverter.convertGenderCodeToList(survey.getGenderCode()),
+                codeConverter.convertAgeCodeToList(survey.getAgeCode()),
+                survey.getHeadCnt(),
+                survey.getPoint(),
+                survey.getEndAt(),
+                survey.getDescription(),
+                survey.getQuestionList().stream()
+                        .map(question -> {
+                            return new QuestionDTO(
+                                    question.getTitle(),
+                                    question.getOptionList().stream()
+                                            .map(option -> {
+                                                return new OptionDTO(
+                                                        option.getText()
+                                                );
+                                            })
+                                            .collect(Collectors.toList()),
+                                    question.isMultipleAnswer(),
+                                    question.getType()
+                            );
+                        })
+                        .collect(Collectors.toList())
+
+        );
+    }
+
     // 예외 커스텀 해줘야함
     @Transactional(readOnly = true)
     public SurveyInfoResponse getSurveyById(int id){
-        return surveyRepository.findById(id)
-                .map(survey -> {
-
-                    return new SurveyInfoResponse(
-                            survey.getId(),
-                            codeConverter.convertRegionCodeToList(survey.getRegionCode()),
-                            codeConverter.convertJobCodeToList(survey.getJobCode()),
-                            codeConverter.convertGenderCodeToList(survey.getGenderCode()),
-                            codeConverter.convertAgeCodeToList(survey.getAgeCode()),
-                            survey.getHeadCnt(),
-                            survey.getPoint(),
-                            survey.getEndAt(),
-                            survey.getDescription(),
-                            survey.getQuestionList().stream()
-                                    .map(question -> {
-                                        return new QuestionDTO(
-                                                question.getTitle(),
-                                                question.getOptionList().stream()
-                                                                .map(option -> {
-                                                                    return new OptionDTO(
-                                                                            option.getText()
-                                                                    );
-                                                                })
-                                                        .collect(Collectors.toList()),
-                                                question.isMultipleAnswer(),
-                                                question.getType()
-                                        );
-                                    })
-                                    .collect(Collectors.toList())
-
-                    );
-                })
-                .orElseThrow();
+        Survey survey = surveyRepository.findById(id).orElseThrow();
+        return changeSurveyToResponseDTO(survey);
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyInfoResponse> getAvailableSurveys(User participant){
-        List<SurveyInfoResponse> responseList = new ArrayList<>();
-        return responseList;
+    public List<SurveyInfoResponse> getAvailableSurveys(int participantId) {
+        User participant = userRepository.findById(participantId).orElseThrow();
+
+        int user_region_code = participant.getRegionCode();
+        int user_job_code = participant.getJobCode();
+        int user_age_code = participant.getAgeCode();
+
+        return surveyRepository.findAvailableSurveyByParticipant(user_region_code, user_job_code, user_age_code)
+                .stream()
+                .map(this::changeSurveyToResponseDTO) // changeSurveyToResponseDTO 메서드를 사용
+                .collect(Collectors.toList());
     }
 
     // Survey 에 집어넣을 QuestionList return

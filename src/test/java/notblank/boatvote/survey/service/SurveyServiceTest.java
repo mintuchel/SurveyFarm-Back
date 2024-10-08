@@ -39,6 +39,7 @@ public class SurveyServiceTest {
     private CodeConverter codeConverter;
 
     private User owner;
+    private User participant;
     private Survey survey;
 
     @BeforeEach
@@ -85,6 +86,12 @@ public class SurveyServiceTest {
 
         // then
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("참여 가능한 설문 조회 성공")
+    public void getAvailableSurveySuccess() throws JsonProcessingException{
+        // given
     }
 
     private SurveyDTO surveyDTO() throws JsonProcessingException {

@@ -1,6 +1,6 @@
 package notblank.boatvote.survey.api;
 
-import notblank.boatvote.domain.survey.controller.SurveyController;
+import notblank.boatvote.domain.survey.api.SurveyController;
 import notblank.boatvote.domain.survey.service.SurveyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
