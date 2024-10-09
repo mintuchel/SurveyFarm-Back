@@ -1,8 +1,10 @@
 package notblank.boatvote.survey.service;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import notblank.boatvote.domain.question.entity.Option;
+import notblank.boatvote.domain.question.entity.Question;
+import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
 import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
@@ -23,8 +25,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -48,20 +48,36 @@ public class SurveyServiceTest {
 
     private User owner;
     private Survey survey;
+    private Question question;
+    private Option option1;
+    private Option option2;
 
-    @BeforeEach
-    public void testSetUp(){
-
-        codeConverter.initCodeConverter();
-
-        owner = User.builder()
-                .id(123)
-                .username("mintuchel")
+    private void optionSetUp(){
+        option1 = Option.builder()
+                .text("chelsea")
+                .cnt(0)
                 .build();
 
+        option2 = Option.builder()
+                .text("arsenal")
+                .cnt(0)
+                .build();
+    }
+
+    private void questionSetUp(){
+        question = Question.builder()
+                .title("응원하는 팀 고르셈")
+                .type(QuestionType.MC)
+                .isMultipleAnswer(false)
+                .build();
+
+        question.getOptionList().add(option1);
+        question.getOptionList().add(option2);
+    }
+
+    private void surveySetUp(){
         survey = Survey.builder()
                 .id(123)
-                .owner(owner)
                 .createdAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now())
                 .headCnt(100)
@@ -70,10 +86,21 @@ public class SurveyServiceTest {
                 .ageCode(7)
                 .point(10)
                 .build();
+
+        survey.getQuestionList().add(question);
+    }
+
+    @BeforeEach
+    public void testSetUp(){
+        codeConverter.initCodeConverter();
+
+        optionSetUp();
+        questionSetUp();
+        surveySetUp();
     }
 
     @Test
-    @DisplayName("설문 조회 성공")
+    @DisplayName("설문 조회 성공 (entity to responseDTO 성공)")
     public void findSurveySuccess(){
         // given
         given(surveyRepository.findById(123)).willReturn(Optional.of(survey));
@@ -82,11 +109,15 @@ public class SurveyServiceTest {
         SurveyInfoResponse response = surveyService.getSurveyById(123);
 
         // then
-        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.headCnt()).isEqualTo(100);
+        Assertions.assertThat(response.questionList()).hasSize(1);
+        Assertions.assertThat(response.questionList().get(0).title()).isEqualTo(question.getTitle());
+        Assertions.assertThat(response.questionList().get(0).optionList().get(0).text()).isEqualTo("chelsea");
+        Assertions.assertThat(response.questionList().get(0).optionList().get(1).text()).isEqualTo("arsenal");
     }
 
     @Test
-    @DisplayName("설문 의뢰 성공")
+    @DisplayName("의뢰된 설문 저장 성공 (requestDTO to entity 성공)")
     public void addSurveySuccess() throws JsonProcessingException{
         // given
         given(userRepository.findById(123)).willReturn(Optional.of(owner));
