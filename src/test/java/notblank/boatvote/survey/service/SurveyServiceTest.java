@@ -1,5 +1,6 @@
 package notblank.boatvote.survey.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
@@ -15,14 +16,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class SurveyServiceTest {
@@ -35,15 +41,19 @@ public class SurveyServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
+    // codeConverter 실제 동작 확인 위해 spy 로 지정
+    // mock 하면 내가 given 으로 행동 강령을 명시해야함
+    @Spy
     private CodeConverter codeConverter;
 
     private User owner;
-    private User participant;
     private Survey survey;
 
     @BeforeEach
     public void testSetUp(){
+
+        codeConverter.initCodeConverter();
+
         owner = User.builder()
                 .id(123)
                 .username("mintuchel")
@@ -81,10 +91,20 @@ public class SurveyServiceTest {
         // given
         given(userRepository.findById(123)).willReturn(Optional.of(owner));
 
+        ArgumentCaptor<Survey> argumentCaptor = ArgumentCaptor.forClass(Survey.class);
+
         // when
         surveyService.addNewSurvey(surveyDTO());
 
         // then
+        verify(surveyRepository).save(argumentCaptor.capture());
+        Survey savedSurvey = argumentCaptor.getValue();
+
+        Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("this is survey description");
+        Assertions.assertThat(savedSurvey.getQuestionList()).hasSize(3);
+        Assertions.assertThat(savedSurvey.getQuestionList().get(0).getOptionList()).hasSize(4);
+        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(14);
+
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
     }
 
@@ -95,44 +115,47 @@ public class SurveyServiceTest {
     }
 
     private SurveyDTO surveyDTO() throws JsonProcessingException {
-        String json = "{\n" +
-                "  \"ownerId\": 123,\n" +
-                "  \"selectedRegion\": [\"서울\"],\n" +
-                "  \"selectedJob\": [\"개발\"],\n" +
-                "  \"selectedGender\": [\"남자\"],\n" +
-                "  \"selectedAge\": [\"20대\", \"30대\"],\n" +
-                "  \"headCnt\": 1000,\n" +
-                "  \"duration\": 5,\n" +
-                "  \"description\": \"this is survey description\",\n" +
-                "  \"questionList\": [\n" +
-                "    {\n" +
-                "      \"title\": \"성실히 대답할꺼지?\",\n" +
-                "      \"optionList\": [\n" +
-                "        { \"text\": \"ㅇㅇ\" },\n" +
-                "        { \"text\": \"ㄴㄴ\" }\n" +
-                "      ],\n" +
-                "      \"isMultipleAnswer\": false,\n" +
-                "      \"questionType\": \"MC\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"title\": \"너 이름 적어\",\n" +
-                "      \"optionList\": [],\n" +
-                "      \"isMultipleAnswer\": false,\n" +
-                "      \"questionType\": \"SA\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"title\": \"니 어디사냐?\",\n" +
-                "      \"optionList\": [\n" +
-                "        { \"text\": \"서울\" },\n" +
-                "        { \"text\": \"부산\" }\n" +
-                "      ],\n" +
-                "      \"isMultipleAnswer\": true,\n" +
-                "      \"questionType\": \"MC\"\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}";
+        String jsonString = "{\n"
+                + "  \"ownerId\": 123,\n"
+                + "  \"selectedRegion\": [\"서울\", \"경기\", \"인천\"],\n"
+                + "  \"selectedJob\": [\"개발\", \"스포츠\", \"기획\"],\n"
+                + "  \"selectedGender\": [\"남자\"],\n"
+                + "  \"selectedAge\": [\"20대\", \"10대\"],\n"
+                + "  \"selectedHeadCnt\": \"1000\",\n"
+                + "  \"selectedDuration\": \"5\",\n"
+                + "  \"description\": \"this is survey description\",\n"
+                + "  \"questionList\": [\n"
+                + "    {\n"
+                + "      \"title\": \"최애 첼시 선수는?\",\n"
+                + "      \"optionList\": [\n"
+                + "        {\"text\": \"파머\"},\n"
+                + "        {\"text\": \"마두에케\"},\n"
+                + "        {\"text\": \"엔조\"},\n"
+                + "        {\"text\": \"카이세도\"}\n"
+                + "      ],\n"
+                + "      \"isMultipleAnswer\": false,\n"
+                + "      \"questionType\": \"MC\"\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"title\": \"최근 5경기 니콜라스 잭슨의 폼에 대해 너의 의견을 적어줘\",\n"
+                + "      \"optionList\": [],\n"
+                + "      \"isMultipleAnswer\": false,\n"
+                + "      \"questionType\": \"SA\"\n"
+                + "    },\n"
+                + "    {\n"
+                + "      \"title\": \"첼시에 영입하면 좋을거 같은 선수를 모두 골라\",\n"
+                + "      \"optionList\": [\n"
+                + "        {\"text\": \"손흥민\"},\n"
+                + "        {\"text\": \"박지성\"},\n"
+                + "        {\"text\": \"차범근\"}\n"
+                + "      ],\n"
+                + "      \"isMultipleAnswer\": true,\n"
+                + "      \"questionType\": \"MC\"\n"
+                + "    }\n"
+                + "  ]\n"
+                + "}";
 
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(json, SurveyDTO.class);
+        return objectMapper.readValue(jsonString, SurveyDTO.class);
     }
 }

@@ -33,10 +33,11 @@ public class SurveyService {
 
         Survey survey = Survey.builder()
                 .owner(owner)
-                .headCnt(surveyDTO.headCnt())
                 .regionCode(codeConverter.convertRegionListToRegionCode(surveyDTO.selectedRegion()))
                 .jobCode(codeConverter.convertJobListToJobCode(surveyDTO.selectedJob()))
                 .ageCode(codeConverter.convertAgeListToAgeCode(surveyDTO.selectedAge()))
+                .headCnt(surveyDTO.selectedHeadCnt())
+                .description(surveyDTO.description())
                 .questionList(getQuestionList(surveyDTO.questionList()))
                 .point(100) // 포인트는 우리가 알아서 넣어줘야함
                 .build();
@@ -125,6 +126,7 @@ public class SurveyService {
                     .text(curOptionDTO.text())
                     .cnt(0)
                     .build();
+            optionList.add(option);
         }
         return optionList;
     }

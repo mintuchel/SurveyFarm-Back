@@ -8,8 +8,8 @@ public record SurveyDTO(
     List<String> selectedJob,
     List<String> selectedGender,
     List<String> selectedAge,
-    int headCnt,
-    int duration,
+    int selectedHeadCnt,
+    int selectedDuration,
     String description,
     List<QuestionDTO> questionList
 ) { }
