@@ -25,6 +25,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -47,10 +49,34 @@ public class SurveyServiceTest {
     private CodeConverter codeConverter;
 
     private User owner;
+    private User participant;
+
     private Survey survey;
     private Question question;
     private Option option1;
     private Option option2;
+
+    private void ownerSetUp(){
+        owner = User.builder()
+                .username("modric")
+                .password("1234")
+                .regionCode(2) // 서울
+                .jobCode(64) // 개발자
+                .genderCode(1) // 남자
+                .ageCode(40) // 대학생, 20대
+                .build();
+    }
+
+    private void participantSetUp(){
+        participant = User.builder()
+                .username("mintuchel")
+                .password("1234")
+                .regionCode(2) // 서울
+                .jobCode(64) // 개발자
+                .ageCode(40) // 대학생, 20대
+                .genderCode(1) // 남자
+                .build();
+    }
 
     private void optionSetUp(){
         option1 = Option.builder()
@@ -80,10 +106,11 @@ public class SurveyServiceTest {
                 .id(123)
                 .createdAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now())
+                .regionCode(14) // 서울(2), 경기(4), 인천(8)
+                .jobCode(112) // 개발(64) + 마케팅(32) + 회계(16)
+                .ageCode(48) // 20대(32) + 10대(16)
+                .genderCode(1) // 남자(1)
                 .headCnt(100)
-                .regionCode(7)
-                .genderCode(7)
-                .ageCode(7)
                 .point(10)
                 .build();
 
@@ -97,6 +124,9 @@ public class SurveyServiceTest {
         optionSetUp();
         questionSetUp();
         surveySetUp();
+
+        ownerSetUp();
+        participantSetUp();
     }
 
     @Test
@@ -112,6 +142,10 @@ public class SurveyServiceTest {
         Assertions.assertThat(response.headCnt()).isEqualTo(100);
         Assertions.assertThat(response.questionList()).hasSize(1);
         Assertions.assertThat(response.questionList().get(0).title()).isEqualTo(question.getTitle());
+        Assertions.assertThat(response.selectedRegion()).contains("서울","경기","인천");
+        Assertions.assertThat(response.selectedJob()).contains("개발","마케팅","회계");
+        Assertions.assertThat(response.selectedAge()).contains("10대","20대");
+        Assertions.assertThat(response.selectedGender()).contains("남자");
         Assertions.assertThat(response.questionList().get(0).optionList().get(0).text()).isEqualTo("chelsea");
         Assertions.assertThat(response.questionList().get(0).optionList().get(1).text()).isEqualTo("arsenal");
     }
@@ -134,8 +168,10 @@ public class SurveyServiceTest {
         Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("this is survey description");
         Assertions.assertThat(savedSurvey.getQuestionList()).hasSize(3);
         Assertions.assertThat(savedSurvey.getQuestionList().get(0).getOptionList()).hasSize(4);
-        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(14);
-
+        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(14); // 서울 + 경기 + 인천
+        Assertions.assertThat(savedSurvey.getJobCode()).isEqualTo(112); // 개발 + 마케팅 + 회계
+        Assertions.assertThat(savedSurvey.getAgeCode()).isEqualTo(48); // 10대 + 20대
+        Assertions.assertThat(savedSurvey.getGenderCode()).isEqualTo(1); // 남자
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
     }
 
@@ -143,13 +179,22 @@ public class SurveyServiceTest {
     @DisplayName("참여 가능한 설문 조회 성공")
     public void getAvailableSurveySuccess() throws JsonProcessingException{
         // given
+        given(userRepository.findById(100)).willReturn(Optional.of(participant));
+        given(userRepository.findById(123)).willReturn(Optional.of(owner));
+
+        // when
+        surveyService.addNewSurvey(surveyDTO());
+        List<SurveyInfoResponse> list = surveyService.getAvailableSurveys(100);
+
+        // then
+        Assertions.assertThat(list).hasSize(1);
     }
 
     private SurveyDTO surveyDTO() throws JsonProcessingException {
         String jsonString = "{\n"
                 + "  \"ownerId\": 123,\n"
                 + "  \"selectedRegion\": [\"서울\", \"경기\", \"인천\"],\n"
-                + "  \"selectedJob\": [\"개발\", \"스포츠\", \"기획\"],\n"
+                + "  \"selectedJob\": [\"개발\", \"마케팅\", \"회계\"],\n"
                 + "  \"selectedGender\": [\"남자\"],\n"
                 + "  \"selectedAge\": [\"20대\", \"10대\"],\n"
                 + "  \"selectedHeadCnt\": \"1000\",\n"
