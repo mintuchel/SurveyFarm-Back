@@ -56,3 +56,8 @@ INSERT INTO agecodes (name, code) VALUES ('40대', 128);              -- (int) M
 INSERT INTO agecodes (name, code) VALUES ('50대', 256);              -- (int) Math.pow(2, 8)  --> 256
 INSERT INTO agecodes (name, code) VALUES ('60대', 512);              -- (int) Math.pow(2, 9)  --> 512
 INSERT INTO agecodes (name, code) VALUES ('70대', 1024);             -- (int) Math.pow(2, 10) --> 1024
+
+-- gendercodes 데이터 삽입
+INSERT INTO gendercodes (name, code) VALUES ('남자', 1);
+INSERT INTO gendercodes (name, code) VALUES ('여자', 2);
+INSERT INTO gendercodes (name, code) VALUES ('전체', 4);
