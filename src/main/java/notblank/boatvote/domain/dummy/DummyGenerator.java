@@ -13,5 +13,7 @@ public class DummyGenerator {
     @PostConstruct
     public void generateDummyUser(){
         dummyService.initUser();
+        dummyService.initSurvey1();
+        dummyService.initSurvey2();
     }
 }
