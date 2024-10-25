@@ -26,6 +26,7 @@ public class SurveyService {
     private final UserRepository userRepository;
     private final CodeConverter codeConverter;
 
+    // 새로운 설문 추가
     @Transactional
     public int addNewSurvey(SurveyDTO surveyDTO){
         int ownerId = surveyDTO.ownerId();
@@ -36,6 +37,7 @@ public class SurveyService {
                 .regionCode(codeConverter.convertRegionListToRegionCode(surveyDTO.selectedRegion()))
                 .jobCode(codeConverter.convertJobListToJobCode(surveyDTO.selectedJob()))
                 .ageCode(codeConverter.convertAgeListToAgeCode(surveyDTO.selectedAge()))
+                .genderCode(codeConverter.convertGenderListToGenderCode(surveyDTO.selectedGender()))
                 .headCnt(surveyDTO.selectedHeadCnt())
                 .description(surveyDTO.description())
                 .questionList(getQuestionList(surveyDTO.questionList()))
@@ -49,37 +51,7 @@ public class SurveyService {
         return survey.getId();
     }
 
-    private SurveyInfoResponse changeSurveyToResponseDTO(Survey survey){
-        return new SurveyInfoResponse(
-                survey.getId(),
-                codeConverter.convertRegionCodeToList(survey.getRegionCode()),
-                codeConverter.convertJobCodeToList(survey.getJobCode()),
-                codeConverter.convertGenderCodeToList(survey.getGenderCode()),
-                codeConverter.convertAgeCodeToList(survey.getAgeCode()),
-                survey.getHeadCnt(),
-                survey.getPoint(),
-                survey.getEndAt(),
-                survey.getDescription(),
-                survey.getQuestionList().stream()
-                        .map(question -> {
-                            return new QuestionDTO(
-                                    question.getTitle(),
-                                    question.getOptionList().stream()
-                                            .map(option -> {
-                                                return new OptionDTO(
-                                                        option.getText()
-                                                );
-                                            })
-                                            .collect(Collectors.toList()),
-                                    question.isMultipleAnswer(),
-                                    question.getType()
-                            );
-                        })
-                        .collect(Collectors.toList())
-
-        );
-    }
-
+    // 설문 단건 조회
     // 예외 커스텀 해줘야함
     @Transactional(readOnly = true)
     public SurveyInfoResponse getSurveyById(int id){
@@ -87,6 +59,7 @@ public class SurveyService {
         return changeSurveyToResponseDTO(survey);
     }
 
+    // 특정 유저가 참여가능한 설문 조사
     @Transactional(readOnly = true)
     public List<SurveyInfoResponse> getAvailableSurveys(int participantId) {
         User participant = userRepository.findById(participantId).orElseThrow();
@@ -94,8 +67,9 @@ public class SurveyService {
         int user_region_code = participant.getRegionCode();
         int user_job_code = participant.getJobCode();
         int user_age_code = participant.getAgeCode();
+        int user_gender_code = participant.getGenderCode();
 
-        return surveyRepository.findAvailableSurveyByParticipant(user_region_code, user_job_code, user_age_code)
+        return surveyRepository.findAvailableSurveyByParticipant(user_region_code, user_job_code, user_age_code, user_gender_code)
                 .stream()
                 .map(this::changeSurveyToResponseDTO) // changeSurveyToResponseDTO 메서드를 사용
                 .collect(Collectors.toList());
@@ -129,5 +103,37 @@ public class SurveyService {
             optionList.add(option);
         }
         return optionList;
+    }
+
+    // 설문을 ResponseDTO 로
+    private SurveyInfoResponse changeSurveyToResponseDTO(Survey survey){
+        return new SurveyInfoResponse(
+                survey.getId(),
+                codeConverter.convertRegionCodeToList(survey.getRegionCode()),
+                codeConverter.convertJobCodeToList(survey.getJobCode()),
+                codeConverter.convertGenderCodeToList(survey.getGenderCode()),
+                codeConverter.convertAgeCodeToList(survey.getAgeCode()),
+                survey.getHeadCnt(),
+                survey.getPoint(),
+                survey.getEndAt(),
+                survey.getDescription(),
+                survey.getQuestionList().stream()
+                        .map(question -> {
+                            return new QuestionDTO(
+                                    question.getTitle(),
+                                    question.getOptionList().stream()
+                                            .map(option -> {
+                                                return new OptionDTO(
+                                                        option.getText()
+                                                );
+                                            })
+                                            .collect(Collectors.toList()),
+                                    question.isMultipleAnswer(),
+                                    question.getType()
+                            );
+                        })
+                        .collect(Collectors.toList())
+
+        );
     }
 }

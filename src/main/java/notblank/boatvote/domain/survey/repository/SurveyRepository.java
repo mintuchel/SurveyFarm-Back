@@ -14,8 +14,10 @@ import java.util.Optional;
 public interface SurveyRepository extends JpaRepository<Survey, Integer> {
     List<Survey> findByOwner(User owner);
 
-    @Query(value = "SELECT * FROM SURVEY WHERE region_code & :user_region_code != 0 AND jobcode & :user_job_code != 0 AND agecode & :user_age_code != 0 ", nativeQuery = true)
+    @Query(value = "SELECT * FROM SURVEY WHERE region_code & :user_region_code != 0 AND job_code & :user_job_code != 0 AND age_code & :user_age_code != 0 AND gender_code & :user_gender_code !=0", nativeQuery = true)
     Optional<Survey> findAvailableSurveyByParticipant(@Param("user_region_code") int user_region_code,
                                                       @Param("user_job_code") int user_job_code,
-                                                      @Param("user_age_code") int user_age_code);
+                                                      @Param("user_age_code") int user_age_code,
+                                                      @Param("user_gender_code") int user_gender_code
+    );
 }

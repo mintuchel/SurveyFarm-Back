@@ -84,10 +84,12 @@ public class CodeConverter {
     }
 
     private void initializeGenderCodeTable() {
-        genderCodeTable.put((int)Math.pow(2,0), "남자");
-        genderCodeTable.put((int)Math.pow(2,1), "여자");
-        genderCodeTable.put((int)Math.pow(2,2), "전체");
+        genderCodeTable.put((int)Math.pow(2,0), "남자"); // 1
+        genderCodeTable.put((int)Math.pow(2,1), "여자"); // 2
+        genderCodeTable.put((int)Math.pow(2,2), "전체"); // 4
     }
+
+    //==================== STRING LIST TO CODE ====================//
 
     public int convertRegionListToRegionCode(List<String> selectedRegion){
         int regionCode = 0;
@@ -121,6 +123,19 @@ public class CodeConverter {
         }
         return ageCode;
     }
+
+    public int convertGenderListToGenderCode(List<String> selectedGender){
+        int genderCode = 0;
+        for(Map.Entry<Integer, String> entry : genderCodeTable.entrySet()){
+            String age = entry.getValue();
+            if(selectedGender.contains(age)){
+                genderCode += entry.getKey();
+            }
+        }
+        return genderCode;
+    }
+
+    //==================== CODE TO STRING LIST ====================//
 
     public List<String> convertRegionCodeToList(int regionCode){
         List<String> selectedRegion = new ArrayList<>();

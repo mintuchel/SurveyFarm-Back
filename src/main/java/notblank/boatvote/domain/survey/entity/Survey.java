@@ -38,9 +38,9 @@ public class Survey {
 
     private int jobCode;
 
-    private int genderCode;
-
     private int ageCode;
+
+    private int genderCode;
 
     private int point;
 
