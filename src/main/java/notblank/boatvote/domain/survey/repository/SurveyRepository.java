@@ -8,16 +8,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Integer> {
     List<Survey> findByOwner(User owner);
 
-    @Query(value = "SELECT * FROM SURVEY WHERE region_code & :user_region_code != 0 AND job_code & :user_job_code != 0 AND age_code & :user_age_code != 0 AND gender_code & :user_gender_code !=0", nativeQuery = true)
-    Optional<Survey> findAvailableSurveyByParticipant(@Param("user_region_code") int user_region_code,
-                                                      @Param("user_job_code") int user_job_code,
-                                                      @Param("user_age_code") int user_age_code,
-                                                      @Param("user_gender_code") int user_gender_code
+    @Query(value = "SELECT * FROM SURVEY WHERE region_code & :participantRegionCode != 0 AND job_code & :participantJobCode != 0 AND age_code & :participantAgeCode != 0 AND gender_code & :participantGenderCode != 0", nativeQuery = true)
+    List<Survey> findAvailableSurveyByParticipant(
+            @Param("participantRegionCode") int participantRegionCode,
+            @Param("participantJobCode") int participantJobCode,
+            @Param("participantAgeCode") int participantAgeCode,
+            @Param("participantGenderCode") int participantGenderCode
     );
+
 }

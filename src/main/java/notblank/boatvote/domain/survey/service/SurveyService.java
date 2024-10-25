@@ -64,12 +64,12 @@ public class SurveyService {
     public List<SurveyInfoResponse> getAvailableSurveys(int participantId) {
         User participant = userRepository.findById(participantId).orElseThrow();
 
-        int user_region_code = participant.getRegionCode();
-        int user_job_code = participant.getJobCode();
-        int user_age_code = participant.getAgeCode();
-        int user_gender_code = participant.getGenderCode();
+        int participantRegionCode = participant.getRegionCode();
+        int participantJobCode = participant.getJobCode();
+        int participantAgeCode = participant.getAgeCode();
+        int participantGenderCode = participant.getGenderCode();
 
-        return surveyRepository.findAvailableSurveyByParticipant(user_region_code, user_job_code, user_age_code, user_gender_code)
+        return surveyRepository.findAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
                 .stream()
                 .map(this::changeSurveyToResponseDTO) // changeSurveyToResponseDTO 메서드를 사용
                 .collect(Collectors.toList());
@@ -98,7 +98,6 @@ public class SurveyService {
         for (OptionDTO curOptionDTO : optionDTOList) {
             Option option = Option.builder()
                     .text(curOptionDTO.text())
-                    .cnt(0)
                     .build();
             optionList.add(option);
         }

@@ -1,10 +1,8 @@
 package notblank.boatvote.domain.question.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import notblank.boatvote.domain.user.entity.User;
 
 @Entity
 @Getter
@@ -16,5 +14,17 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String text;
+    @ManyToOne
+    @JoinColumn(name="uid")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="qid")
+    private Question question;
+
+    // 객관식 답변
+    private int mcAnswer;
+
+    // 주관식 답변
+    private String saAnswer;
 }

@@ -38,17 +38,14 @@ public class SurveyRepositoryTest {
     private void optionSetUp(){
         opt1 = Option.builder()
                 .text("chelsea")
-                .cnt(0)
                 .build();
 
         opt2 = Option.builder()
                 .text("arsenal")
-                .cnt(0)
                 .build();
 
         opt3 = Option.builder()
                 .text("mancity")
-                .cnt(0)
                 .build();
     }
 

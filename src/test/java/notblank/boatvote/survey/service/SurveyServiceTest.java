@@ -25,7 +25,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,8 +42,6 @@ public class SurveyServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    // codeConverter 실제 동작 확인 위해 spy 로 지정
-    // mock 하면 내가 given 으로 행동 강령을 명시해야함
     @Spy
     private CodeConverter codeConverter;
 
@@ -62,8 +59,8 @@ public class SurveyServiceTest {
                 .password("1234")
                 .regionCode(2) // 서울
                 .jobCode(64) // 개발자
-                .genderCode(1) // 남자
                 .ageCode(40) // 대학생, 20대
+                .genderCode(1) // 남자
                 .build();
     }
 
@@ -81,12 +78,10 @@ public class SurveyServiceTest {
     private void optionSetUp(){
         option1 = Option.builder()
                 .text("chelsea")
-                .cnt(0)
                 .build();
 
         option2 = Option.builder()
                 .text("arsenal")
-                .cnt(0)
                 .build();
     }
 
@@ -181,12 +176,16 @@ public class SurveyServiceTest {
         // given
         given(userRepository.findById(100)).willReturn(Optional.of(participant));
         given(userRepository.findById(123)).willReturn(Optional.of(owner));
+        // given(surveyRepository.findAvailableSurveyByParticipant(2,64,40,1)).willReturn(Optional.of(survey));
 
         // when
         surveyService.addNewSurvey(surveyDTO());
         List<SurveyInfoResponse> list = surveyService.getAvailableSurveys(100);
 
         // then
+        Assertions.assertThat(list.get(0).ownerId()).isEqualTo(123);
+        Assertions.assertThat(list.get(0).selectedJob().contains("개발"));
+        Assertions.assertThat(list.get(0).selectedGender().contains("남자"));
         Assertions.assertThat(list).hasSize(1);
     }
 
