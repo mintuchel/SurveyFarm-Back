@@ -1,5 +1,6 @@
 package notblank.boatvote.domain.survey.api;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.survey.dto.request.NewSurveyRequest;
 import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/survey")
+@Tag(name = "Survey API", description = "설문 추가, 설문 단건 조회, 참여가능 설문 조회")
 public class SurveyController {
     private final SurveyService surveyService;
 

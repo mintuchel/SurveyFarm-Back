@@ -1,7 +1,5 @@
 package notblank.boatvote.survey.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.survey.dto.response.QuestionInfoResponse;
 import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;

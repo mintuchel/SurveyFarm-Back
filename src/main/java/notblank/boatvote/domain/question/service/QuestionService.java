@@ -1,19 +1,25 @@
 package notblank.boatvote.domain.question.service;
 
-import notblank.boatvote.domain.question.entity.Option;
+import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.question.entity.Question;
+import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.question.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionService {
-    private QuestionRepository questionRepository;
 
-    public Question findOne(int qid){
+    private final QuestionRepository questionRepository;
+
+    @Transactional(readOnly = true)
+    public Question findQuestionById(int qid){
         return questionRepository.findById(qid).orElseThrow();
     }
 
-    public void addOption(Question question, Option option){
-        question.getOptionList().add(option);
+    @Transactional(readOnly = true)
+    public QuestionType getQuestionTypeById(int qid){
+        return questionRepository.getQuestionTypeByQid(qid);
     }
 }

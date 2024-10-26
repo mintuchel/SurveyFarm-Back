@@ -3,6 +3,7 @@ package notblank.boatvote.domain.answer.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import notblank.boatvote.domain.question.entity.Question;
+import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.user.entity.User;
 
 @Entity
@@ -23,9 +24,7 @@ public class Answer {
     @JoinColumn(name="qid")
     private Question question;
 
-    // 객관식 답변
-    private int mcAnswer;
+    private QuestionType questionType;
 
-    // 주관식 답변
-    private String saAnswer;
+    private String answer;
 }
