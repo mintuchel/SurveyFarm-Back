@@ -2,6 +2,7 @@ package notblank.boatvote.domain.question.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import notblank.boatvote.domain.answer.entity.Answer;
 
 import java.util.ArrayList;
 import java.util.List;

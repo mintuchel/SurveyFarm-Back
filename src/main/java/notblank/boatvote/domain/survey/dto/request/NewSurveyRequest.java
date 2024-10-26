@@ -2,7 +2,7 @@ package notblank.boatvote.domain.survey.dto.request;
 
 import java.util.List;
 
-public record SurveyDTO(
+public record NewSurveyRequest(
     int ownerId,
     List<String> selectedRegion,
     List<String> selectedJob,
@@ -11,5 +11,5 @@ public record SurveyDTO(
     int selectedHeadCnt,
     int selectedDuration,
     String description,
-    List<QuestionDTO> questionList
+    List<NewQuestionRequest> questionList
 ) { }

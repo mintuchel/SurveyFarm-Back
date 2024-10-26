@@ -1,5 +1,5 @@
 package notblank.boatvote.domain.survey.dto.request;
 
-public record OptionDTO(
+public record NewOptionRequest(
     String text
 ) { }

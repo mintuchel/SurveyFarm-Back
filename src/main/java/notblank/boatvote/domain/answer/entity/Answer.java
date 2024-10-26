@@ -1,7 +1,8 @@
-package notblank.boatvote.domain.question.entity;
+package notblank.boatvote.domain.answer.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.user.entity.User;
 
 @Entity

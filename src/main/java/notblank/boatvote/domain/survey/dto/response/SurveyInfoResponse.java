@@ -1,11 +1,10 @@
 package notblank.boatvote.domain.survey.dto.response;
 
-import notblank.boatvote.domain.survey.dto.request.QuestionDTO;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 public record SurveyInfoResponse(
+        int sid,
         int ownerId,
         List<String> selectedRegion,
         List<String> selectedJob,
@@ -15,5 +14,5 @@ public record SurveyInfoResponse(
         int point,
         LocalDateTime endAt,
         String description,
-        List<QuestionDTO> questionList
+        List<QuestionInfoResponse> questionList
 ) { }

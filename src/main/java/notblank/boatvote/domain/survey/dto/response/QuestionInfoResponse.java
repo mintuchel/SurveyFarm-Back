@@ -1,12 +1,13 @@
-package notblank.boatvote.domain.survey.dto.request;
+package notblank.boatvote.domain.survey.dto.response;
 
 import notblank.boatvote.domain.question.entity.QuestionType;
 
 import java.util.List;
 
-public record QuestionDTO(
+public record QuestionInfoResponse(
+        int qid,
         String title,
-        List<OptionDTO> optionList,
+        List<OptionInfoResponse> optionList,
         boolean isMultipleAnswer,
         QuestionType questionType
 ) { }

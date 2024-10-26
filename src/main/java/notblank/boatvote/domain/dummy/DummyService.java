@@ -35,7 +35,7 @@ class DummyService {
        user2 = User.builder()
                 .username("vini")
                 .password("11")
-                .regionCode(8192) // 부산
+                .regionCode(2048) // 대구
                 .jobCode(64) // 개발
                 .ageCode(40) // 대학생, 20대
                 .genderCode(1) // 남자
@@ -50,12 +50,12 @@ class DummyService {
                 .genderCode(1) // 남자
                 .build();
 
-        em.persist(user1);
-        em.persist(user2);
-        em.persist(user3);
+       em.persist(user1);
+       em.persist(user2);
+       em.persist(user3);
     }
 
-    // 호날두 비니시우스만 조회가능한 Dummy Survey
+    // 호날두만 조회가능한 Dummy Survey
     @Transactional
     public void initSurvey1() {
 
@@ -96,6 +96,7 @@ class DummyService {
         em.persist(survey1);
     }
 
+    // 음바페만 조회가능한 Dummy Survey
     @Transactional
     public void initSurvey2() {
 
@@ -124,7 +125,6 @@ class DummyService {
                 .type(QuestionType.SA)
                 .build();
 
-        // 음바페만 조회가능한 Dummy Survey
         Survey survey2 = Survey.builder()
                 .owner(user1)
                 .createdAt(LocalDateTime.now())

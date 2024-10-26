@@ -1,11 +1,13 @@
 package notblank.boatvote.domain.survey.service;
 
 import lombok.RequiredArgsConstructor;
-import notblank.boatvote.domain.survey.dto.request.OptionDTO;
-import notblank.boatvote.domain.survey.dto.request.QuestionDTO;
+import notblank.boatvote.domain.survey.dto.request.NewSurveyRequest;
+import notblank.boatvote.domain.survey.dto.request.NewOptionRequest;
+import notblank.boatvote.domain.survey.dto.request.NewQuestionRequest;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
-import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.response.OptionInfoResponse;
+import notblank.boatvote.domain.survey.dto.response.QuestionInfoResponse;
 import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
@@ -28,26 +30,26 @@ public class SurveyService {
 
     // 새로운 설문 추가
     @Transactional
-    public int addNewSurvey(SurveyDTO surveyDTO){
-        int ownerId = surveyDTO.ownerId();
+    public int addNewSurvey(NewSurveyRequest newSurveyRequest){
+        int ownerId = newSurveyRequest.ownerId();
         User owner = userRepository.findById(ownerId).orElseThrow();
 
         Survey survey = Survey.builder()
                 .owner(owner)
-                .regionCode(codeConverter.convertRegionListToRegionCode(surveyDTO.selectedRegion()))
-                .jobCode(codeConverter.convertJobListToJobCode(surveyDTO.selectedJob()))
-                .ageCode(codeConverter.convertAgeListToAgeCode(surveyDTO.selectedAge()))
-                .genderCode(codeConverter.convertGenderListToGenderCode(surveyDTO.selectedGender()))
-                .headCnt(surveyDTO.selectedHeadCnt())
-                .description(surveyDTO.description())
-                .questionList(getQuestionList(surveyDTO.questionList()))
+                .regionCode(codeConverter.convertRegionListToRegionCode(newSurveyRequest.selectedRegion()))
+                .jobCode(codeConverter.convertJobListToJobCode(newSurveyRequest.selectedJob()))
+                .ageCode(codeConverter.convertAgeListToAgeCode(newSurveyRequest.selectedAge()))
+                .genderCode(codeConverter.convertGenderListToGenderCode(newSurveyRequest.selectedGender()))
+                .headCnt(newSurveyRequest.selectedHeadCnt())
+                .description(newSurveyRequest.description())
+                .questionList(getQuestionList(newSurveyRequest.questionList()))
                 .point(100) // 포인트는 우리가 알아서 넣어줘야함
                 .build();
 
         surveyRepository.save(survey);
         survey.getOwner().addRequestedSurvey(survey); // 연관관계 편의메서드
 
-        // survey.setEndAt(surveyDTO.duration());
+        // survey.setEndAt(newSurveyRequest.duration());
         return survey.getId();
     }
 
@@ -76,16 +78,16 @@ public class SurveyService {
     }
 
     // Survey 에 집어넣을 QuestionList return
-    private List<Question> getQuestionList(List<QuestionDTO> questionDTOList){
+    private List<Question> getQuestionList(List<NewQuestionRequest> newQuestionRequestList){
         List<Question> questionList = new ArrayList<>();
-        for(QuestionDTO questionDTO : questionDTOList){
+        for(NewQuestionRequest newQuestionRequest : newQuestionRequestList){
             Question curQuestion = Question.builder()
-                    .title(questionDTO.title())
-                    .isMultipleAnswer(questionDTO.isMultipleAnswer())
-                    .type(questionDTO.questionType())
+                    .title(newQuestionRequest.title())
+                    .isMultipleAnswer(newQuestionRequest.isMultipleAnswer())
+                    .type(newQuestionRequest.questionType())
                     .build();
 
-            curQuestion.getOptionList().addAll(getOptionList(questionDTO.optionList()));
+            curQuestion.getOptionList().addAll(getOptionList(newQuestionRequest.optionList()));
 
             questionList.add(curQuestion);
         }
@@ -93,11 +95,11 @@ public class SurveyService {
     }
 
     // Question 에 집어넣을 OptionList return
-    private List<Option> getOptionList(List<OptionDTO> optionDTOList){
+    private List<Option> getOptionList(List<NewOptionRequest> newOptionRequestList){
         List<Option> optionList = new ArrayList<>();
-        for (OptionDTO curOptionDTO : optionDTOList) {
+        for (NewOptionRequest curNewOptionRequest : newOptionRequestList) {
             Option option = Option.builder()
-                    .text(curOptionDTO.text())
+                    .text(curNewOptionRequest.text())
                     .build();
             optionList.add(option);
         }
@@ -108,6 +110,7 @@ public class SurveyService {
     private SurveyInfoResponse changeSurveyToResponseDTO(Survey survey){
         return new SurveyInfoResponse(
                 survey.getId(),
+                survey.getOwner().getId(),
                 codeConverter.convertRegionCodeToList(survey.getRegionCode()),
                 codeConverter.convertJobCodeToList(survey.getJobCode()),
                 codeConverter.convertGenderCodeToList(survey.getGenderCode()),
@@ -118,11 +121,12 @@ public class SurveyService {
                 survey.getDescription(),
                 survey.getQuestionList().stream()
                         .map(question -> {
-                            return new QuestionDTO(
+                            return new QuestionInfoResponse(
+                                    question.getId(),
                                     question.getTitle(),
                                     question.getOptionList().stream()
                                             .map(option -> {
-                                                return new OptionDTO(
+                                                return new OptionInfoResponse(
                                                         option.getText()
                                                 );
                                             })
