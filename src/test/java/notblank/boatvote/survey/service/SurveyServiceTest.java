@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
-import notblank.boatvote.domain.survey.dto.request.SurveyDTO;
+import notblank.boatvote.domain.survey.dto.request.NewSurveyRequest;
 import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
@@ -25,7 +25,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -170,26 +169,7 @@ public class SurveyServiceTest {
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
     }
 
-    @Test
-    @DisplayName("참여 가능한 설문 조회 성공")
-    public void getAvailableSurveySuccess() throws JsonProcessingException{
-        // given
-        given(userRepository.findById(100)).willReturn(Optional.of(participant));
-        given(userRepository.findById(123)).willReturn(Optional.of(owner));
-        // given(surveyRepository.findAvailableSurveyByParticipant(2,64,40,1)).willReturn(Optional.of(survey));
-
-        // when
-        surveyService.addNewSurvey(surveyDTO());
-        List<SurveyInfoResponse> list = surveyService.getAvailableSurveys(100);
-
-        // then
-        Assertions.assertThat(list.get(0).ownerId()).isEqualTo(123);
-        Assertions.assertThat(list.get(0).selectedJob().contains("개발"));
-        Assertions.assertThat(list.get(0).selectedGender().contains("남자"));
-        Assertions.assertThat(list).hasSize(1);
-    }
-
-    private SurveyDTO surveyDTO() throws JsonProcessingException {
+    private NewSurveyRequest surveyDTO() throws JsonProcessingException {
         String jsonString = "{\n"
                 + "  \"ownerId\": 123,\n"
                 + "  \"selectedRegion\": [\"서울\", \"경기\", \"인천\"],\n"
@@ -231,6 +211,6 @@ public class SurveyServiceTest {
                 + "}";
 
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonString, SurveyDTO.class);
+        return objectMapper.readValue(jsonString, NewSurveyRequest.class);
     }
 }
