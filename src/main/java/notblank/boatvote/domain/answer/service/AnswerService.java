@@ -7,9 +7,13 @@ import notblank.boatvote.domain.answer.entity.Answer;
 import notblank.boatvote.domain.answer.repository.AnswerRepository;
 import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.question.service.QuestionService;
+import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +29,7 @@ public class AnswerService {
         int qid = submitAnswerRequest.qid();
 
         Answer answer = Answer.builder()
-                .user(userService.findUserById(uid))
+                .participant(userService.findUserById(uid))
                 .question(questionService.findQuestionById(qid))
                 .questionType(submitAnswerRequest.type())
                 .answer(submitAnswerRequest.answer())
@@ -38,10 +42,10 @@ public class AnswerService {
 
     // 한 개의 Question에 대한 특정 User의 답변
     @Transactional(readOnly = true)
-    public UserAnswerResponse getUserAnswer(int uid, int qid){
-        return answerRepository.findByUserIdAndQuestionId(uid, qid)
+    public List<UserAnswerResponse> getUserAnswer(int uid, int qid){
+        return answerRepository.findAnswersByUidAndQid(uid, qid).stream()
                 .map(answer -> new UserAnswerResponse(answer.getAnswer()))
-                .orElseThrow();
+                .collect(Collectors.toList());
     }
 
     // 한 개의 Question에 대한 User들의 답변 결과

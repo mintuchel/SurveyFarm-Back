@@ -18,7 +18,7 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(name="uid")
-    private User user;
+    private User participant;
 
     @ManyToOne
     @JoinColumn(name="qid")

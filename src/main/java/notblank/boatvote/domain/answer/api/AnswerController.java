@@ -8,6 +8,8 @@ import notblank.boatvote.domain.answer.dto.response.UserAnswerResponse;
 import notblank.boatvote.domain.answer.service.AnswerService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/answer")
@@ -23,7 +25,7 @@ public class AnswerController {
     }
 
     @GetMapping("")
-    public UserAnswerResponse getCertainUserResult(@RequestParam int uid, @RequestParam int qid){
+    public List<UserAnswerResponse> getCertainUserResult(@RequestParam int uid, @RequestParam int qid){
         return answerService.getUserAnswer(uid, qid);
     }
 
