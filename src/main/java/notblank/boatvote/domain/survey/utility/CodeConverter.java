@@ -22,29 +22,30 @@ public class CodeConverter {
     }
 
     private void initializeRegionCode(){
-        regionCodeTable.put((int) Math.pow(2, 0), "전체");  // 1
-        regionCodeTable.put((int) Math.pow(2, 1), "서울");   // 2
-        regionCodeTable.put((int) Math.pow(2, 2), "경기");   // 4
-        regionCodeTable.put((int) Math.pow(2, 3), "인천");   // 8
-        regionCodeTable.put((int) Math.pow(2, 4), "대전");   // 16
-        regionCodeTable.put((int) Math.pow(2, 5), "세종");   // 32
-        regionCodeTable.put((int) Math.pow(2, 6), "충남");   // 64
-        regionCodeTable.put((int) Math.pow(2, 7), "충북");   // 128
-        regionCodeTable.put((int) Math.pow(2, 8), "광주");   // 256
-        regionCodeTable.put((int) Math.pow(2, 9), "전남");   // 512
-        regionCodeTable.put((int) Math.pow(2, 10), "전북");  // 1024
-        regionCodeTable.put((int) Math.pow(2, 11), "대구");   // 2048
-        regionCodeTable.put((int) Math.pow(2, 12), "경북");   // 4096
-        regionCodeTable.put((int) Math.pow(2, 13), "부산");   // 8192
-        regionCodeTable.put((int) Math.pow(2, 14), "울산");   // 16384
-        regionCodeTable.put((int) Math.pow(2, 15), "경남");   // 32768
-        regionCodeTable.put((int) Math.pow(2, 16), "강원");   // 65536
-        regionCodeTable.put((int) Math.pow(2, 17), "제주");   // 131072
-        regionCodeTable.put((int) Math.pow(2, 18), "외국");   // 262144
+        regionCodeTable.put((int) Math.pow(2, 0), "서울");   // 1
+        regionCodeTable.put((int) Math.pow(2, 1), "경기");   // 2
+        regionCodeTable.put((int) Math.pow(2, 2), "인천");   // 4
+        regionCodeTable.put((int) Math.pow(2, 3), "대전");   // 8
+        regionCodeTable.put((int) Math.pow(2, 4), "세종");   // 16
+        regionCodeTable.put((int) Math.pow(2, 5), "충남");   // 32
+        regionCodeTable.put((int) Math.pow(2, 6), "충북");   // 64
+        regionCodeTable.put((int) Math.pow(2, 7), "광주");   // 128
+        regionCodeTable.put((int) Math.pow(2, 8), "전남");   // 256
+        regionCodeTable.put((int) Math.pow(2, 9), "전북");   // 512
+        regionCodeTable.put((int) Math.pow(2, 10), "대구");  // 1024
+        regionCodeTable.put((int) Math.pow(2, 11), "경북");  // 2048
+        regionCodeTable.put((int) Math.pow(2, 12), "부산");  // 4096
+        regionCodeTable.put((int) Math.pow(2, 13), "울산");  // 8192
+        regionCodeTable.put((int) Math.pow(2, 14), "경남");  // 16384
+        regionCodeTable.put((int) Math.pow(2, 15), "강원");  // 32768
+        regionCodeTable.put((int) Math.pow(2, 16), "제주");  // 65536
+        regionCodeTable.put((int) Math.pow(2, 17), "외국");  // 131072
+        regionCodeTable.put(262143, "전체"); // 2^0 ~ 2^17 합계
     }
 
+
     private void initializeJobCodeTable() {
-        jobCodeTable.put((int) Math.pow(2, 0), "전체");      // 1
+        jobCodeTable.put((int) Math.pow(2, 0), "학생");      // 1
         jobCodeTable.put((int) Math.pow(2, 1), "기획");      // 2
         jobCodeTable.put((int) Math.pow(2, 2), "법조");      // 4
         jobCodeTable.put((int) Math.pow(2, 3), "인사");      // 8
@@ -66,7 +67,7 @@ public class CodeConverter {
         jobCodeTable.put((int) Math.pow(2, 19), "의료");      // 524288
         jobCodeTable.put((int) Math.pow(2, 20), "스포츠");    // 1048576
         jobCodeTable.put((int) Math.pow(2, 21), "공공/복지"); // 2097152
-        jobCodeTable.put((int) Math.pow(2, 22), "학생");      // 4194304
+        jobCodeTable.put(8388607, "전체"); // 2^0 ~ 2^22 합계
     }
 
     private void initializeAgeCodeTable() {
@@ -86,7 +87,7 @@ public class CodeConverter {
     private void initializeGenderCodeTable() {
         genderCodeTable.put((int)Math.pow(2,0), "남자"); // 1
         genderCodeTable.put((int)Math.pow(2,1), "여자"); // 2
-        genderCodeTable.put((int)Math.pow(2,2), "전체"); // 4
+        genderCodeTable.put(3, "전체"); // 3 남자 + 여자
     }
 
     //==================== STRING LIST TO CODE ====================//
