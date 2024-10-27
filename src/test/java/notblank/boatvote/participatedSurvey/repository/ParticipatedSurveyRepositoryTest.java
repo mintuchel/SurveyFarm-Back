@@ -1,6 +1,5 @@
 package notblank.boatvote.participatedSurvey.repository;
 
-import notblank.boatvote.domain.participatedSurvey.dto.request.ParticipateRequest;
 import notblank.boatvote.domain.participatedSurvey.entity.ParticipatedSurvey;
 import notblank.boatvote.domain.participatedSurvey.repository.ParticipatedSurveyRepository;
 import notblank.boatvote.domain.survey.entity.Survey;
