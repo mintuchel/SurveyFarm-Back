@@ -32,6 +32,8 @@ public class Survey {
 
     private LocalDateTime endAt;
 
+    private LocalDateTime participatedAt;
+
     private int headCnt;
 
     private int regionCode;

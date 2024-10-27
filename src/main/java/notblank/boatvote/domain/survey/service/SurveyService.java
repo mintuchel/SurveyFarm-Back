@@ -61,6 +61,11 @@ public class SurveyService {
         return changeSurveyToResponseDTO(survey);
     }
 
+    @Transactional(readOnly = true)
+    public Survey findSurveyByUID(int uid){
+        return surveyRepository.findById(uid).orElseThrow();
+    }
+
     // 특정 유저가 참여가능한 설문 조사
     @Transactional(readOnly = true)
     public List<SurveyInfoResponse> getAvailableSurveys(int participantId) {
@@ -117,7 +122,9 @@ public class SurveyService {
                 codeConverter.convertAgeCodeToList(survey.getAgeCode()),
                 survey.getHeadCnt(),
                 survey.getPoint(),
+                survey.getCreatedAt(),
                 survey.getEndAt(),
+                survey.getParticipatedAt(),
                 survey.getDescription(),
                 survey.getQuestionList().stream()
                         .map(question -> {
