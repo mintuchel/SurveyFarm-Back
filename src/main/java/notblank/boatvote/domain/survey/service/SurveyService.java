@@ -39,24 +39,23 @@ public class SurveyService {
         Survey survey = Survey.builder()
                 .owner(owner)
                 .title(newSurveyRequest.title())
+                .description(newSurveyRequest.description())
                 .imgUrl(newSurveyRequest.imgUrl())
+                .duration(newSurveyRequest.duration())
+                .maxHeadCnt(newSurveyRequest.maxHeadCnt())
+                .currentHeadCnt(0)
                 .regionCode(codeConverter.convertRegionListToRegionCode(newSurveyRequest.regionList()))
                 .jobCode(codeConverter.convertJobListToJobCode(newSurveyRequest.jobList()))
                 .ageCode(codeConverter.convertAgeListToAgeCode(newSurveyRequest.ageList()))
                 .genderCode(codeConverter.convertGenderListToGenderCode(newSurveyRequest.genderList()))
-                .maxHeadCnt(newSurveyRequest.maxHeadCnt())
-                .currentHeadCnt(0)
-                .description(newSurveyRequest.description())
-                .questionList(getQuestionList(newSurveyRequest.questionList()))
                 .point(100) // 포인트는 우리가 알아서 넣어줘야함
+                .questionList(getQuestionList(newSurveyRequest.questionList()))
                 .build();
 
         surveyRepository.save(survey);
 
         // 연관관계 편의메서드
         survey.getOwner().addRequestedSurvey(survey);
-        // endAt duration으로 설정
-        survey.setEndAt(newSurveyRequest.duration());
 
         return survey.getId();
     }
@@ -92,7 +91,7 @@ public class SurveyService {
 
         return surveyRepository.findAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
                 .stream()
-                .map(this::changeSurveyToResponseDTO) // changeSurveyToResponseDTO 메서드를 사용
+                .map(this::changeSurveyToResponseDTO)
                 .collect(Collectors.toList());
     }
 

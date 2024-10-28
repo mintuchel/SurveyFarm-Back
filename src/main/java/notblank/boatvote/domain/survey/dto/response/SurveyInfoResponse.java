@@ -1,5 +1,7 @@
 package notblank.boatvote.domain.survey.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,11 +22,15 @@ public record SurveyInfoResponse(
 
         int point, // 포인트
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime createdAt, // 설문시작시간
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime endAt, // 설문종료시간
+
         // 설문참여시간은 participatedSurvey 도메인에서만 쓰임
         // 똑같은 DTO를 participatedSurvey 쪽에서도 쓰기 위해 추가함
         // 참여가능설문을 보여줄때는 사용 안해도 되는 변수임
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime participatedAt, // 설문참여시간
 
         String description, // 설문 배경설명

@@ -110,6 +110,7 @@ public class SurveyServiceTest {
                 .createdAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusDays(30))
                 .point(350)
+                .duration(5)
                 .build();
 
         survey.getQuestionList().add(question);

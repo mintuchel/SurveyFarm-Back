@@ -126,16 +126,15 @@ class DummyService {
                 .owner(user3)
                 .title("축구관련설문")
                 .imgUrl("")
-                .createdAt(LocalDateTime.now())
-                .endAt(LocalDateTime.now().plusDays(2))
                 .regionCode(5123) // 서울(1) + 경기(2) + 대구(1024) + 부산(4096)
-                .jobCode(32 + 262144) // 개발·데이터(32) + 미디어·문화·스포츠(262144)
+                .jobCode(262176) // 개발·데이터(32) + 미디어·문화·스포츠(262144)
                 .ageCode(7) // 10대(1) + 20대(2) + 30대(4)
                 .genderCode(1) // 남자(1)
                 .maxHeadCnt(3000)
                 .currentHeadCnt(0)
                 .point(100)
                 .description(description)
+                .duration(1)
                 .build();
 
         // 설문에 질문 추가해주기
@@ -210,8 +209,6 @@ class DummyService {
                 .owner(user1)
                 .title("컴공과 대학생들을 위한 설문")
                 .imgUrl("")
-                .createdAt(LocalDateTime.now())
-                .endAt(LocalDateTime.now().plusDays(4))
                 .regionCode(65536) // 제주
                 .jobCode(32) // 개발·데이터(32)
                 .ageCode(3) // 10대(1) + 20대(2)
@@ -220,6 +217,7 @@ class DummyService {
                 .currentHeadCnt(0)
                 .point(30)
                 .description(description)
+                .duration(3)
                 .build();
 
         // 설문에 질문 추가해주기
@@ -288,8 +286,6 @@ class DummyService {
                 .owner(user3)
                 .title("한국건강관리협회 설문")
                 .imgUrl("")
-                .createdAt(LocalDateTime.now())
-                .endAt(LocalDateTime.now().plusDays(3))
                 .regionCode(131071) // 전체
                 .jobCode(8388607) // 전체
                 .ageCode(30) // 20대부터 50대 이상
@@ -298,6 +294,7 @@ class DummyService {
                 .currentHeadCnt(0)
                 .point(50)
                 .description(description)
+                .duration(5)
                 .build();
 
         // 설문에 질문 추가해주기

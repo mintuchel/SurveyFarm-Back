@@ -7,6 +7,7 @@ import notblank.boatvote.domain.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,33 +27,24 @@ public class Survey {
     private User owner;
 
     private String title;
-
+    private String description;
     private String imgUrl;
 
-    // db에 저장되는 순간 자동으로 초기화됨
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
-
     private LocalDateTime endAt;
-
-    // private LocalDateTime participatedAt;
+    private int duration;
 
     private int maxHeadCnt;
-
     private int currentHeadCnt;
 
     private int regionCode;
-
     private int jobCode;
-
     private int ageCode;
-
     private int genderCode;
 
     private int point;
-
-    private String description;
 
     // FetchType.EAGER로 할까??
     // 여기서 굳이 new 를 해줄 필요가 있을까?
@@ -61,17 +53,8 @@ public class Survey {
     @JoinColumn(name="sid")
     private List<Question> questionList = new ArrayList<>();
 
-//    @PrePersist
-//    public void truncateCreatedAt() {
-//        if (createdAt != null) {
-//            // 분 단위까지만 남기도록 초와 나노초 제거
-//            createdAt = createdAt.truncatedTo(ChronoUnit.MINUTES);
-//        }
-//    }
-
-    public void setEndAt(int duration) {
-        if(this.createdAt!=null) {
-            this.endAt = this.createdAt.plusDays(duration);
-        }
+    @PostPersist
+    public void initializeEndAt() {
+        endAt = createdAt.plusDays(duration);
     }
 }
