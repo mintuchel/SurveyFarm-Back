@@ -4,12 +4,14 @@ import java.util.List;
 
 public record NewSurveyRequest(
     int ownerId,
-    List<String> selectedRegion,
-    List<String> selectedJob,
-    List<String> selectedGender,
-    List<String> selectedAge,
-    int selectedHeadCnt,
-    int selectedDuration,
+    String title,
+    String imgUrl,
+    List<String> regionList,
+    List<String> jobList,
+    List<String> genderList,
+    List<String> ageList,
+    int maxHeadCnt,
+    int duration,
     String description,
     List<NewQuestionRequest> questionList
 ) { }
