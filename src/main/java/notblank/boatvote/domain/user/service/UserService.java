@@ -11,9 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    
+
     @Transactional(readOnly = true)
-    public User findUserById(int uid){
+    public User findByUserName(String username) {
+        return userRepository.findByUserName(username);
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(int uid){
         return userRepository.findById(uid).orElseThrow();
     }
 }
