@@ -12,7 +12,7 @@ import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.survey.service.SurveyService;
 import notblank.boatvote.domain.survey.utility.CodeConverter;
 import notblank.boatvote.domain.user.entity.User;
-import notblank.boatvote.domain.user.repository.UserRepository;
+import notblank.boatvote.domain.user.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,10 +36,10 @@ public class SurveyServiceTest {
     private SurveyService surveyService;
 
     @Mock
-    private SurveyRepository surveyRepository;
+    private UserService userService;
 
     @Mock
-    private UserRepository userRepository;
+    private SurveyRepository surveyRepository;
 
     @Spy
     private CodeConverter codeConverter;
@@ -54,7 +54,7 @@ public class SurveyServiceTest {
 
     private void ownerSetUp(){
         owner = User.builder()
-                .username("modric")
+                .userName("modric")
                 .password("1234")
                 .regionCode(2) // 서울
                 .jobCode(64) // 개발자
@@ -65,7 +65,7 @@ public class SurveyServiceTest {
 
     private void participantSetUp(){
         participant = User.builder()
-                .username("mintuchel")
+                .userName("mintuchel")
                 .password("1234")
                 .regionCode(2) // 서울
                 .jobCode(64) // 개발자
@@ -98,14 +98,18 @@ public class SurveyServiceTest {
     private void surveySetUp(){
         survey = Survey.builder()
                 .id(123)
-                .createdAt(LocalDateTime.now())
-                .endAt(LocalDateTime.now())
-                .regionCode(14) // 서울(2), 경기(4), 인천(8)
-                .jobCode(112) // 개발(64) + 마케팅(32) + 회계(16)
-                .ageCode(48) // 20대(32) + 10대(16)
+                .owner(owner)
+                .title("sample title")
+                .imgUrl("sample imgUrl")
+                .regionCode(7) // 서울(1), 경기(2), 인천(4)
+                .jobCode(9) // 기획·전략(1), 회계·세무(8)
+                .ageCode(3) // 10대(1) + 20대(2)
                 .genderCode(1) // 남자(1)
-                .headCnt(100)
-                .point(10)
+                .maxHeadCnt(100)
+                .currentHeadCnt(0)
+                .createdAt(LocalDateTime.now())
+                .endAt(LocalDateTime.now().plusDays(30))
+                .point(350)
                 .build();
 
         survey.getQuestionList().add(question);
@@ -115,29 +119,29 @@ public class SurveyServiceTest {
     public void testSetUp(){
         codeConverter.initCodeConverter();
 
+        ownerSetUp();
+        participantSetUp();
+
         optionSetUp();
         questionSetUp();
         surveySetUp();
-
-        ownerSetUp();
-        participantSetUp();
     }
 
     @Test
     @DisplayName("설문 조회 성공 (entity to responseDTO 성공)")
-    public void findSurveySuccess(){
+    public void getSurveyInfoResponseSuccess(){
         // given
         given(surveyRepository.findById(123)).willReturn(Optional.of(survey));
 
         // when
-        SurveyInfoResponse response = surveyService.getSurveyById(123);
+        SurveyInfoResponse response = surveyService.getSurveyInfoResponseById(123);
 
         // then
-        Assertions.assertThat(response.headCnt()).isEqualTo(100);
+        Assertions.assertThat(response.maxHeadCnt()).isEqualTo(100);
         Assertions.assertThat(response.questionList()).hasSize(1);
         Assertions.assertThat(response.questionList().get(0).title()).isEqualTo(question.getTitle());
         Assertions.assertThat(response.selectedRegion()).contains("서울","경기","인천");
-        Assertions.assertThat(response.selectedJob()).contains("개발","마케팅","회계");
+        Assertions.assertThat(response.selectedJob()).contains("기획·전략","회계·세무");
         Assertions.assertThat(response.selectedAge()).contains("10대","20대");
         Assertions.assertThat(response.selectedGender()).contains("남자");
         Assertions.assertThat(response.questionList().get(0).optionList().get(0).text()).isEqualTo("chelsea");
@@ -148,7 +152,7 @@ public class SurveyServiceTest {
     @DisplayName("의뢰된 설문 저장 성공 (requestDTO to entity 성공)")
     public void addSurveySuccess() throws JsonProcessingException{
         // given
-        given(userRepository.findById(123)).willReturn(Optional.of(owner));
+        given(userService.findById(123)).willReturn(owner);
 
         ArgumentCaptor<Survey> argumentCaptor = ArgumentCaptor.forClass(Survey.class);
 
@@ -159,12 +163,12 @@ public class SurveyServiceTest {
         verify(surveyRepository).save(argumentCaptor.capture());
         Survey savedSurvey = argumentCaptor.getValue();
 
-        Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("this is survey description");
+        Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("this is sample description");
         Assertions.assertThat(savedSurvey.getQuestionList()).hasSize(3);
         Assertions.assertThat(savedSurvey.getQuestionList().get(0).getOptionList()).hasSize(4);
-        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(14); // 서울 + 경기 + 인천
-        Assertions.assertThat(savedSurvey.getJobCode()).isEqualTo(112); // 개발 + 마케팅 + 회계
-        Assertions.assertThat(savedSurvey.getAgeCode()).isEqualTo(48); // 10대 + 20대
+        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(7); // 서울 + 경기 + 인천
+        Assertions.assertThat(savedSurvey.getJobCode()).isEqualTo(9); // 기획·전략(1), 회계·세무(8)
+        Assertions.assertThat(savedSurvey.getAgeCode()).isEqualTo(3); // 10대 + 20대
         Assertions.assertThat(savedSurvey.getGenderCode()).isEqualTo(1); // 남자
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
     }
@@ -172,13 +176,15 @@ public class SurveyServiceTest {
     private NewSurveyRequest surveyDTO() throws JsonProcessingException {
         String jsonString = "{\n"
                 + "  \"ownerId\": 123,\n"
-                + "  \"selectedRegion\": [\"서울\", \"경기\", \"인천\"],\n"
-                + "  \"selectedJob\": [\"개발\", \"마케팅\", \"회계\"],\n"
-                + "  \"selectedGender\": [\"남자\"],\n"
-                + "  \"selectedAge\": [\"20대\", \"10대\"],\n"
-                + "  \"selectedHeadCnt\": \"1000\",\n"
-                + "  \"selectedDuration\": \"5\",\n"
-                + "  \"description\": \"this is survey description\",\n"
+                + "  \"title\": \"Sample Survey Title\",\n"
+                + "  \"imgUrl\": \"sampleImageUrl\",\n"
+                + "  \"regionList\": [\"서울\", \"경기\", \"인천\"],\n"
+                + "  \"jobList\": [\"기획·전략\", \"회계·세무\"],\n"
+                + "  \"genderList\": [\"남자\"],\n"
+                + "  \"ageList\": [\"20대\", \"10대\"],\n"
+                + "  \"maxHeadCnt\": \"1000\",\n"
+                + "  \"duration\": \"5\",\n"
+                + "  \"description\": \"this is sample description\",\n"
                 + "  \"questionList\": [\n"
                 + "    {\n"
                 + "      \"title\": \"최애 첼시 선수는?\",\n"

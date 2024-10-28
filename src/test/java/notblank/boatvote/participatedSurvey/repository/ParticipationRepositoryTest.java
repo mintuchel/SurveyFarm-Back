@@ -1,7 +1,7 @@
 package notblank.boatvote.participatedSurvey.repository;
 
-import notblank.boatvote.domain.participatedSurvey.entity.ParticipatedSurvey;
-import notblank.boatvote.domain.participatedSurvey.repository.ParticipatedSurveyRepository;
+import notblank.boatvote.domain.participation.entity.Participation;
+import notblank.boatvote.domain.participation.repository.ParticipationRepository;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.user.entity.User;
@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class ParticipatedSurveyRepositoryTest {
+public class ParticipationRepositoryTest {
 
     @Autowired
-    private ParticipatedSurveyRepository participatedSurveyRepository;
+    private ParticipationRepository participationRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -54,13 +54,13 @@ public class ParticipatedSurveyRepositoryTest {
     @DisplayName("참여내역 저장 성공(participatedAt 자동생성 성공)")
     public void participateSurveySuccess(){
         // given
-        ParticipatedSurvey ps = ParticipatedSurvey.builder()
+        Participation ps = Participation.builder()
                 .user(participant)
                 .survey(survey)
                 .build();
 
         // when
-        participatedSurveyRepository.save(ps);
+        participationRepository.save(ps);
         LocalDateTime participatedAt = ps.getParticipatedAt();
 
         // then

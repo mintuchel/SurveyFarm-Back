@@ -32,7 +32,7 @@ public class SpringBootTest {
     @DisplayName("호날두가 참여가능한 설문 조회 성공")
     public void getAvailableSurveyByRonaldoSuccess() {
         // given
-        User participant = userRepository.findByUsername("ronaldo");
+        User participant = userRepository.findByUserName("ronaldo");
 
         // when
         List<SurveyInfoResponse> list = surveyService.getAvailableSurveys(participant.getId());
@@ -40,11 +40,11 @@ public class SpringBootTest {
         // then
         Assertions.assertThat(list).hasSize(1);
         Assertions.assertThat(list.get(0).sid()).isNotNull();
-        Assertions.assertThat(list.get(0).questionList()).hasSize(1);
+        Assertions.assertThat(list.get(0).questionList()).hasSize(5);
         QuestionInfoResponse dto = list.get(0).questionList().get(0);
         Assertions.assertThat(dto.qid()).isNotNull();
         Assertions.assertThat(dto.questionType()).isEqualTo(QuestionType.MC);
-        Assertions.assertThat(dto.title()).isEqualTo("응원하는 팀 고르셈");
+        Assertions.assertThat(dto.title()).isEqualTo("가장 선호하는 운동 종류는 무엇인가요?");
     }
 
     @Test
@@ -52,13 +52,13 @@ public class SpringBootTest {
     @DisplayName("비니시우스가 참여가능한 설문 조회 0개 성공")
     public void getAvailableSurveyByViniSuccess() {
         // given
-        User participant = userRepository.findByUsername("vini");
+        User participant = userRepository.findByUserName("vini");
 
         // when
         List<SurveyInfoResponse> list = surveyService.getAvailableSurveys(participant.getId());
 
         // then
-        Assertions.assertThat(list).hasSize(0);
+        Assertions.assertThat(list).hasSize(2);
     }
 
     @Test
@@ -66,13 +66,13 @@ public class SpringBootTest {
     @DisplayName("음바페가 참여가능한 설문 조회 성공")
     public void getAvailableSurveyByMbappeSuccess() {
         // given
-        User participant = userRepository.findByUsername("mbappe");
+        User participant = userRepository.findByUserName("mbappe");
 
         // when
         List<SurveyInfoResponse> list = surveyService.getAvailableSurveys(participant.getId());
 
         // then
-        Assertions.assertThat(list).hasSize(1);
-        Assertions.assertThat(list.get(0).questionList()).hasSize(2);
+        Assertions.assertThat(list).hasSize(2);
+        Assertions.assertThat(list.get(0).questionList()).hasSize(5);
     }
 }
