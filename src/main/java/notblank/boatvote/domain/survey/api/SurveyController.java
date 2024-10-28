@@ -17,8 +17,8 @@ public class SurveyController {
     private final SurveyService surveyService;
 
     @GetMapping("/{surveyId}")
-    public SurveyInfoResponse getSurvey(@PathVariable int surveyId){
-        return surveyService.getSurveyById(surveyId);
+    public SurveyInfoResponse getSurveyById(@PathVariable int surveyId){
+        return surveyService.getSurveyInfoResponseById(surveyId);
     }
 
     @GetMapping("/available/{participantId}")

@@ -25,6 +25,10 @@ public class Survey {
     @JoinColumn(name="owner_id", nullable = false)
     private User owner;
 
+    private String title;
+
+    private String imgUrl;
+
     // db에 저장되는 순간 자동으로 초기화됨
     @CreationTimestamp
     @Column(updatable = false)
@@ -32,9 +36,11 @@ public class Survey {
 
     private LocalDateTime endAt;
 
-    private LocalDateTime participatedAt;
+    // private LocalDateTime participatedAt;
 
-    private int headCnt;
+    private int maxHeadCnt;
+
+    private int currentHeadCnt;
 
     private int regionCode;
 
@@ -55,7 +61,17 @@ public class Survey {
     @JoinColumn(name="sid")
     private List<Question> questionList = new ArrayList<>();
 
+//    @PrePersist
+//    public void truncateCreatedAt() {
+//        if (createdAt != null) {
+//            // 분 단위까지만 남기도록 초와 나노초 제거
+//            createdAt = createdAt.truncatedTo(ChronoUnit.MINUTES);
+//        }
+//    }
+
     public void setEndAt(int duration) {
-        this.endAt = this.createdAt.plusDays(duration);
+        if(this.createdAt!=null) {
+            this.endAt = this.createdAt.plusDays(duration);
+        }
     }
 }
