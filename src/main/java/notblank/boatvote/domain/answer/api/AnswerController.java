@@ -3,7 +3,7 @@ package notblank.boatvote.domain.answer.api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.answer.dto.request.SubmitAnswerRequest;
-import notblank.boatvote.domain.answer.dto.response.TempResponse;
+import notblank.boatvote.domain.answer.dto.response.AnswerResultResponse;
 import notblank.boatvote.domain.answer.dto.response.UserAnswerResponse;
 import notblank.boatvote.domain.answer.service.AnswerService;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +20,17 @@ public class AnswerController {
 
     // 특정 유저의 답변 저장
     @PostMapping("")
-    public void submitAnswer(@RequestBody SubmitAnswerRequest submitAnswerRequest){
-        answerService.submitAnswer(submitAnswerRequest);
+    public boolean submitAnswer(@RequestBody SubmitAnswerRequest submitAnswerRequest){
+        return answerService.submitAnswer(submitAnswerRequest);
     }
 
     @GetMapping("")
     public List<UserAnswerResponse> getCertainUserResult(@RequestParam int uid, @RequestParam int qid){
-        return answerService.getUserAnswer(uid, qid);
+        return answerService.getParticipantAnswer(uid, qid);
     }
 
     @GetMapping("/result")
-    public TempResponse getQuestionResult(@RequestParam int qid){
+    public AnswerResultResponse getQuestionResult(@RequestParam int qid){
         return answerService.getQuestionResult(qid);
     }
-
 }

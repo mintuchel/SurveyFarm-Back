@@ -24,7 +24,5 @@ public class Answer {
     @JoinColumn(name="qid")
     private Question question;
 
-    private QuestionType questionType;
-
-    private String answer;
+    private String text;
 }

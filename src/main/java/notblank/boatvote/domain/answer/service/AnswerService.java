@@ -29,10 +29,9 @@ public class AnswerService {
         int qid = submitAnswerRequest.qid();
 
         Answer answer = Answer.builder()
-                .participant(userService.findUserById(uid))
+                .participant(userService.findById(uid))
                 .question(questionService.findQuestionById(qid))
-                .questionType(submitAnswerRequest.type())
-                .answer(submitAnswerRequest.answer())
+                .text(submitAnswerRequest.text())
                 .build();
 
         answerRepository.save(answer);
@@ -40,33 +39,23 @@ public class AnswerService {
         return true;
     }
 
-    // 한 개의 Question에 대한 특정 User의 답변
+    // 한 개의 Question에 대한 특정 Participant의 답변
     @Transactional(readOnly = true)
-    public List<UserAnswerResponse> getUserAnswer(int uid, int qid){
+    public List<UserAnswerResponse> getParticipantAnswer(int uid, int qid){
         return answerRepository.findAnswersByUidAndQid(uid, qid).stream()
-                .map(answer -> new UserAnswerResponse(answer.getAnswer()))
+                .map(answer -> new UserAnswerResponse(answer.getText()))
                 .collect(Collectors.toList());
     }
 
     // 한 개의 Question에 대한 User들의 답변 결과
     @Transactional(readOnly = true)
-    public TempResponse getQuestionResult(int qid){
-//        QuestionType type = questionService.getQuestionTypeById(qid);
-//
-//        if(type.equals(QuestionType.MC)){
-//            List<Integer> mcResultList = answerRepository.getMCQuestionResult(qid);
-//            return new MCResultResponse(mcResultList);
-//        }else{
-//            List<String> saResultList = answerRepository.getSAQuestionResult(qid);
-//            return new SAResultResponse(saResultList);
-//        }
-
+    public AnswerResultResponse getQuestionResult(int qid){
         QuestionType type = questionService.getQuestionTypeById(qid);
 
         if(type.equals(QuestionType.MC)){
-            return new TempResponse(answerRepository.getMCQuestionResult(qid));
+            return new AnswerResultResponse(answerRepository.getMCQuestionResult(qid));
         }else{
-            return new TempResponse(answerRepository.getSAQuestionResult(qid));
+            return new AnswerResultResponse(answerRepository.getSAQuestionResult(qid));
         }
     }
 }
