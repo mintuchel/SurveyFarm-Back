@@ -1,4 +1,4 @@
-package notblank.boatvote.domain.participatedSurvey.entity;
+package notblank.boatvote.domain.participation.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,15 +7,13 @@ import notblank.boatvote.domain.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ParticipatedSurvey {
+public class Participation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
