@@ -1,13 +1,13 @@
 package notblank.boatvote.domain.answer.repository;
 
 import notblank.boatvote.domain.answer.entity.Answer;
+import notblank.boatvote.domain.answer.vo.MCResultVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Integer> {
@@ -17,10 +17,10 @@ public interface AnswerRepository extends JpaRepository<Answer, Integer> {
     List<Answer> findAnswersByUidAndQid(@Param("uid") int uid, @Param("qid") int qid);
 
     // 객관식 질문에 대한 답변 개수 보여주기
-    @Query(value = "SELECT COUNT(*) AS SUM FROM answer WHERE qid = :qid GROUP BY answer", nativeQuery = true)
-    List<Integer> getMCQuestionResult(@Param("qid") int qid);
+    @Query("SELECT new notblank.boatvote.domain.answer.vo.MCResultVO(a.text, COUNT(a)) FROM Answer a WHERE a.question.id = :qid GROUP BY a.text")
+    List<MCResultVO> getMCQuestionResult(@Param("qid") int qid);
 
     // 주관식 질문에 대한 답변 결과 보여주기
-    @Query(value = "SELECT answer FROM answer WHERE qid = :qid", nativeQuery = true)
+    @Query(value = "SELECT text FROM answer WHERE qid = :qid", nativeQuery = true)
     List<String> getSAQuestionResult(@Param("qid") int qid);
 }
