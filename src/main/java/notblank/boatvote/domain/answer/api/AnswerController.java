@@ -1,5 +1,6 @@
 package notblank.boatvote.domain.answer.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.answer.dto.request.SubmitAnswerRequest;
@@ -18,19 +19,21 @@ public class AnswerController {
 
     private final AnswerService answerService;
 
-    // 특정 유저의 답변 저장
     @PostMapping("")
+    @Operation(summary = "특정 질문에 대한 유저의 답변 저장")
     public boolean submitAnswer(@RequestBody SubmitAnswerRequest submitAnswerRequest){
         return answerService.submitAnswer(submitAnswerRequest);
     }
 
     @GetMapping("")
+    @Operation(summary = "특정 질문에 대한 유저의 답변 조회")
     public List<UserAnswerResponse> getCertainUserResult(@RequestParam int uid, @RequestParam int qid){
         return answerService.getParticipantAnswer(uid, qid);
     }
 
-    @GetMapping("/result")
-    public AnswerResultResponse getQuestionResult(@RequestParam int qid){
+    @GetMapping("/result/{qid}")
+    @Operation(summary = "특정 질문에 대한 결과 조회")
+    public AnswerResultResponse getQuestionResult(@PathVariable int qid){
         return answerService.getQuestionResult(qid);
     }
 }
