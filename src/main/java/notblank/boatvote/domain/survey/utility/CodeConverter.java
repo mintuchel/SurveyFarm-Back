@@ -13,6 +13,11 @@ public class CodeConverter {
     Map<Integer, String> ageCodeTable = new HashMap<>();
     Map<Integer, String> genderCodeTable = new HashMap<>();
 
+    int REGION_ALL = 131071;
+    int JOB_ALL = 8388607;
+    int AGE_ALL = 31;
+    int GENDER_ALL = 3;
+
     @PostConstruct
     public void initCodeConverter(){
         initializeRegionCode();
@@ -39,7 +44,6 @@ public class CodeConverter {
         regionCodeTable.put(16384, "경남");      // 2^14
         regionCodeTable.put(32768, "강원");      // 2^15
         regionCodeTable.put(65536, "제주");      // 2^16
-        regionCodeTable.put(131071, "전체");     // 2^0 ~ 2^17 합계
     }
 
     private void initializeJobCodeTable() {
@@ -66,7 +70,6 @@ public class CodeConverter {
         jobCodeTable.put(1048576, "중학생");            // 2^20
         jobCodeTable.put(2097152, "고등학생");          // 2^21
         jobCodeTable.put(4194304, "대학생");            // 2^22
-        jobCodeTable.put(8388607, "전체");              // 2^0 ~ 2^22 합계
     }
 
 
@@ -76,100 +79,69 @@ public class CodeConverter {
         ageCodeTable.put(4, "30대");   // 4
         ageCodeTable.put(8, "40대");     // 8
         ageCodeTable.put(16, "50대 이상");      // 16
-        ageCodeTable.put(31, "전체");      // 32
     }
 
     private void initializeGenderCodeTable() {
         genderCodeTable.put(1, "남자"); // 1
         genderCodeTable.put(2, "여자"); // 2
-        genderCodeTable.put(3, "전체"); // 3
     }
 
     //==================== STRING LIST TO CODE ====================//
 
+    public int convertListToCode(List<String> selectedList, Map<Integer, String> codeTable, int allCode) {
+        if (selectedList.contains("전체")) return allCode;
+
+        int code = 0;
+        for (Map.Entry<Integer, String> entry : codeTable.entrySet()) {
+            if (selectedList.contains(entry.getValue())) {
+                code += entry.getKey();
+            }
+        }
+        return code;
+    }
+
     public int convertRegionListToRegionCode(List<String> selectedRegion){
-        int regionCode = 0;
-        for(Map.Entry<Integer,String> entry : regionCodeTable.entrySet()){
-            String region = entry.getValue();
-            if(selectedRegion.contains(region)){
-                regionCode += entry.getKey();
-            }
-        }
-        return regionCode;
+        return convertListToCode(selectedRegion, regionCodeTable, REGION_ALL);
+    }
+    public int convertJobListToJobCode(List<String> selectedJob) {
+        return convertListToCode(selectedJob, jobCodeTable, JOB_ALL);
     }
 
-    public int convertJobListToJobCode(List<String> selectedJob){
-        int jobCode = 0;
-        for(Map.Entry<Integer, String> entry : jobCodeTable.entrySet()){
-            String job = entry.getValue();
-            if(selectedJob.contains(job)){
-                jobCode += entry.getKey();
-            }
-        }
-        return jobCode;
+    public int convertAgeListToAgeCode(List<String> selectedAge) {
+        return convertListToCode(selectedAge, ageCodeTable, AGE_ALL);
     }
 
-    public int convertAgeListToAgeCode(List<String> selectedAge){
-        int ageCode = 0;
-        for(Map.Entry<Integer, String> entry : ageCodeTable.entrySet()){
-            String age = entry.getValue();
-            if(selectedAge.contains(age)){
-                ageCode += entry.getKey();
-            }
-        }
-        return ageCode;
-    }
-
-    public int convertGenderListToGenderCode(List<String> selectedGender){
-        int genderCode = 0;
-        for(Map.Entry<Integer, String> entry : genderCodeTable.entrySet()){
-            String age = entry.getValue();
-            if(selectedGender.contains(age)){
-                genderCode += entry.getKey();
-            }
-        }
-        return genderCode;
+    public int convertGenderListToGenderCode(List<String> selectedGender) {
+        return convertListToCode(selectedGender, genderCodeTable, GENDER_ALL);
     }
 
     //==================== CODE TO STRING LIST ====================//
 
+    public List<String> convertCodeToList(int code, Map<Integer, String> codeTable, int allCode) {
+        if (code == allCode) return List.of("전체");
+
+        List<String> selectedList = new ArrayList<>();
+        for (int curCode : codeTable.keySet()) {
+            if ((code & curCode) != 0) {
+                selectedList.add(codeTable.get(curCode));
+            }
+        }
+        return selectedList;
+    }
+
     public List<String> convertRegionCodeToList(int regionCode){
-        List<String> selectedRegion = new ArrayList<>();
-        for (int curRegionCode : regionCodeTable.keySet()) {
-            if ((regionCode & curRegionCode) != 0) {
-                selectedRegion.add(regionCodeTable.get(curRegionCode));
-            }
-        }
-        return selectedRegion;
+        return convertCodeToList(regionCode, regionCodeTable, REGION_ALL);
     }
 
-    public List<String> convertJobCodeToList(int jobCode){
-        List<String> selectedJob = new ArrayList<>();
-        for(int curJobCode : jobCodeTable.keySet()){
-            if((jobCode & curJobCode)!=0){
-                selectedJob.add(jobCodeTable.get(curJobCode));
-            }
-        }
-        return selectedJob;
+    public List<String> convertJobCodeToList(int jobCode) {
+        return convertCodeToList(jobCode, jobCodeTable, JOB_ALL);
     }
 
-    public List<String> convertGenderCodeToList(int genderCode){
-        List<String> selectedGender = new ArrayList<>();
-        for(int curGenderCode : genderCodeTable.keySet()){
-            if((genderCode & curGenderCode)!=0){
-                selectedGender.add(genderCodeTable.get(curGenderCode));
-            }
-        }
-        return selectedGender;
+    public List<String> convertAgeCodeToList(int ageCode) {
+        return convertCodeToList(ageCode, ageCodeTable, AGE_ALL);
     }
 
-    public List<String> convertAgeCodeToList(int ageCode){
-        List<String> selectedAge = new ArrayList<>();
-        for(int curAgeCode : ageCodeTable.keySet()){
-            if((ageCode & curAgeCode)!=0){
-                selectedAge.add(ageCodeTable.get(curAgeCode));
-            }
-        }
-        return selectedAge;
+    public List<String> convertGenderCodeToList(int genderCode) {
+        return convertCodeToList(genderCode, genderCodeTable, GENDER_ALL);
     }
 }
