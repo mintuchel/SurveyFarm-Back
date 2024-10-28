@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.answer.entity.Answer;
-import notblank.boatvote.domain.participatedSurvey.entity.ParticipatedSurvey;
+import notblank.boatvote.domain.participation.entity.Participation;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
@@ -28,29 +28,29 @@ class DummyService {
     @Transactional
     public void initUser(){
        user1 = User.builder()
-                .username("ronaldo")
+                .userName("ronaldo")
                 .password("7")
                 .regionCode(1) // 서울
-                .jobCode(1048576) // 스포츠
-                .ageCode(128) // 40대
+                .jobCode(262144) // 미디어·문화·스포츠
+                .ageCode(8) // 40대
                 .genderCode(1) // 남자
                 .build();
 
        user2 = User.builder()
-                .username("vini")
+                .userName("vini")
                 .password("11")
                 .regionCode(1024) // 대구
-                .jobCode(64) // 개발
-                .ageCode(32) // 20대
+                .jobCode(32) // 개발·데이터
+                .ageCode(2) // 20대
                 .genderCode(1) // 남자
                 .build();
 
        user3 = User.builder()
-                .username("mbappe")
+                .userName("mbappe")
                 .password("9")
-                .regionCode(66536) // 제주도
-                .jobCode(64) // 개발
-                .ageCode(32) // 20대
+                .regionCode(66536) // 제주
+                .jobCode(32) // 개발·데이터
+                .ageCode(2) // 20대
                 .genderCode(1) // 남자
                 .build();
 
@@ -59,7 +59,7 @@ class DummyService {
        em.persist(user3);
     }
 
-    // 호날두만 조회가능한 Dummy Survey
+    // 비니시우스만 조회가능한 Dummy Survey
     @Transactional
     public void initSurvey1() {
 
@@ -124,13 +124,16 @@ class DummyService {
 
         survey1 = Survey.builder()
                 .owner(user3)
+                .title("축구관련설문")
+                .imgUrl("")
                 .createdAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusDays(2))
                 .regionCode(5123) // 서울(1) + 경기(2) + 대구(1024) + 부산(4096)
-                .jobCode(1048640) // 개발(64) + 스포츠(1048576)
-                .ageCode(176) // 10대(16) + 20대(32) + 30대(128)
+                .jobCode(32 + 262144) // 개발·데이터(32) + 미디어·문화·스포츠(262144)
+                .ageCode(7) // 10대(1) + 20대(2) + 30대(4)
                 .genderCode(1) // 남자(1)
-                .headCnt(3000)
+                .maxHeadCnt(3000)
+                .currentHeadCnt(0)
                 .point(100)
                 .description(description)
                 .build();
@@ -205,13 +208,16 @@ class DummyService {
 
         survey2 = Survey.builder()
                 .owner(user1)
+                .title("컴공과 대학생들을 위한 설문")
+                .imgUrl("")
                 .createdAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusDays(4))
-                .regionCode(65536) // 제주도
-                .jobCode(64) // 개발(64)
-                .ageCode(48) // 10대(16) + 20대(32)
+                .regionCode(65536) // 제주
+                .jobCode(32) // 개발·데이터(32)
+                .ageCode(3) // 10대(1) + 20대(2)
                 .genderCode(1) // 남자(1)
-                .headCnt(100)
+                .maxHeadCnt(100)
+                .currentHeadCnt(0)
                 .point(30)
                 .description(description)
                 .build();
@@ -233,7 +239,7 @@ class DummyService {
         initAnswer(saQuestion1, user3, "개발자로서의 가장 중요하게 생각하는 것은 박주영의 퍼터에는 감동이 있다는 것입니다");
     }
 
-    // 호날두만 조회가능한 Dummy Survey
+    // 모두 조회가능한 Dummy Survey
     @Transactional
     public void initSurvey3() {
 
@@ -280,13 +286,16 @@ class DummyService {
 
         survey3 = Survey.builder()
                 .owner(user3)
+                .title("한국건강관리협회 설문")
+                .imgUrl("")
                 .createdAt(LocalDateTime.now())
                 .endAt(LocalDateTime.now().plusDays(3))
-                .regionCode(262143) // 전체 모든 지역에게
-                .jobCode(8388607) // 전체 모든 직업군에게
-                .ageCode(992) // 20대부터 60대
-                .genderCode(3) // 남여 모두
-                .headCnt(2000)
+                .regionCode(131071) // 전체
+                .jobCode(8388607) // 전체
+                .ageCode(30) // 20대부터 50대 이상
+                .genderCode(3) // 전체
+                .maxHeadCnt(2000)
+                .currentHeadCnt(0)
                 .point(50)
                 .description(description)
                 .build();
@@ -305,7 +314,7 @@ class DummyService {
         initAnswer(mcQuestion2, user1, "5"); // 취미활동
         initAnswer(saQuestion1, user1, "몰라요 저한테 이런 어려운 질문하지 마세요");
         initAnswer(mcQuestion3, user1, "4"); // 저녁
-        initAnswer(saQuestion1, user1, "제 건강 목표는 호날두 처럼 되기 입니다!");
+        initAnswer(saQuestion2, user1, "제 건강 목표는 호날두 처럼 되기 입니다!");
 
         initAnswer(mcQuestion1, user3, "1"); // 축구
         initAnswer(mcQuestion2, user3, "1"); // 건강관리
@@ -313,27 +322,27 @@ class DummyService {
         initAnswer(mcQuestion2, user3, "4"); // 체력 증가
         initAnswer(saQuestion1, user3, "운동을 더 꾸준히 하기 위해 필요한 것은 지구력이라고 생각합니다");
         initAnswer(mcQuestion3, user3, "1"); // 새벽
-        initAnswer(saQuestion1, user3, "박주영의 감아차기에는 감동이 있다");
+        initAnswer(saQuestion2, user3, "박주영의 감아차기에는 감동이 있다");
     }
 
     @Transactional
     public void initParticipatedSurvey(){
-        ParticipatedSurvey ps1 = ParticipatedSurvey.builder()
+        Participation ps1 = Participation.builder()
                 .survey(survey1)
                 .user(user2)
                 .build();
 
-        ParticipatedSurvey ps2 = ParticipatedSurvey.builder()
+        Participation ps2 = Participation.builder()
                 .survey(survey2)
                 .user(user3)
                 .build();
 
-        ParticipatedSurvey ps3 = ParticipatedSurvey.builder()
+        Participation ps3 = Participation.builder()
                 .survey(survey3)
                 .user(user1)
                 .build();
 
-        ParticipatedSurvey ps4 = ParticipatedSurvey.builder()
+        Participation ps4 = Participation.builder()
                 .survey(survey3)
                 .user(user3)
                 .build();
@@ -349,8 +358,7 @@ class DummyService {
         Answer answer = Answer.builder()
                 .question(question)
                 .participant(participant)
-                .questionType(question.getType())
-                .answer(answerText)
+                .text(answerText)
                 .build();
 
         em.persist(answer);

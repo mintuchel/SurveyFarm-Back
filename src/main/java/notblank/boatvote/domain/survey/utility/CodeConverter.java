@@ -22,72 +22,67 @@ public class CodeConverter {
     }
 
     private void initializeRegionCode(){
-        regionCodeTable.put((int) Math.pow(2, 0), "서울");   // 1
-        regionCodeTable.put((int) Math.pow(2, 1), "경기");   // 2
-        regionCodeTable.put((int) Math.pow(2, 2), "인천");   // 4
-        regionCodeTable.put((int) Math.pow(2, 3), "대전");   // 8
-        regionCodeTable.put((int) Math.pow(2, 4), "세종");   // 16
-        regionCodeTable.put((int) Math.pow(2, 5), "충남");   // 32
-        regionCodeTable.put((int) Math.pow(2, 6), "충북");   // 64
-        regionCodeTable.put((int) Math.pow(2, 7), "광주");   // 128
-        regionCodeTable.put((int) Math.pow(2, 8), "전남");   // 256
-        regionCodeTable.put((int) Math.pow(2, 9), "전북");   // 512
-        regionCodeTable.put((int) Math.pow(2, 10), "대구");  // 1024
-        regionCodeTable.put((int) Math.pow(2, 11), "경북");  // 2048
-        regionCodeTable.put((int) Math.pow(2, 12), "부산");  // 4096
-        regionCodeTable.put((int) Math.pow(2, 13), "울산");  // 8192
-        regionCodeTable.put((int) Math.pow(2, 14), "경남");  // 16384
-        regionCodeTable.put((int) Math.pow(2, 15), "강원");  // 32768
-        regionCodeTable.put((int) Math.pow(2, 16), "제주");  // 65536
-        regionCodeTable.put((int) Math.pow(2, 17), "외국");  // 131072
-        regionCodeTable.put(262143, "전체"); // 2^0 ~ 2^17 합계
+        regionCodeTable.put(1, "서울");          // 2^0
+        regionCodeTable.put(2, "경기");          // 2^1
+        regionCodeTable.put(4, "인천");          // 2^2
+        regionCodeTable.put(8, "대전");          // 2^3
+        regionCodeTable.put(16, "세종");         // 2^4
+        regionCodeTable.put(32, "충남");         // 2^5
+        regionCodeTable.put(64, "충북");         // 2^6
+        regionCodeTable.put(128, "광주");        // 2^7
+        regionCodeTable.put(256, "전남");        // 2^8
+        regionCodeTable.put(512, "전북");        // 2^9
+        regionCodeTable.put(1024, "대구");       // 2^10
+        regionCodeTable.put(2048, "경북");       // 2^11
+        regionCodeTable.put(4096, "부산");       // 2^12
+        regionCodeTable.put(8192, "울산");       // 2^13
+        regionCodeTable.put(16384, "경남");      // 2^14
+        regionCodeTable.put(32768, "강원");      // 2^15
+        regionCodeTable.put(65536, "제주");      // 2^16
+        regionCodeTable.put(131071, "전체");     // 2^0 ~ 2^17 합계
     }
-
 
     private void initializeJobCodeTable() {
-        jobCodeTable.put((int) Math.pow(2, 0), "학생");      // 1
-        jobCodeTable.put((int) Math.pow(2, 1), "기획");      // 2
-        jobCodeTable.put((int) Math.pow(2, 2), "법조");      // 4
-        jobCodeTable.put((int) Math.pow(2, 3), "인사");      // 8
-        jobCodeTable.put((int) Math.pow(2, 4), "회계");      // 16
-        jobCodeTable.put((int) Math.pow(2, 5), "마케팅");    // 32
-        jobCodeTable.put((int) Math.pow(2, 6), "개발");      // 64
-        jobCodeTable.put((int) Math.pow(2, 7), "디자인");    // 128
-        jobCodeTable.put((int) Math.pow(2, 8), "물류/무역");  // 256
-        jobCodeTable.put((int) Math.pow(2, 9), "배송업");    // 512
-        jobCodeTable.put((int) Math.pow(2, 10), "영업");     // 1024
-        jobCodeTable.put((int) Math.pow(2, 11), "고객상담");  // 2048
-        jobCodeTable.put((int) Math.pow(2, 12), "금융/보험"); // 4096
-        jobCodeTable.put((int) Math.pow(2, 13), "요식업");    // 8192
-        jobCodeTable.put((int) Math.pow(2, 14), "서비스업");  // 16384
-        jobCodeTable.put((int) Math.pow(2, 15), "설계");      // 32768
-        jobCodeTable.put((int) Math.pow(2, 16), "제조업");    // 65536
-        jobCodeTable.put((int) Math.pow(2, 17), "교육");      // 131072
-        jobCodeTable.put((int) Math.pow(2, 18), "건축");      // 262144
-        jobCodeTable.put((int) Math.pow(2, 19), "의료");      // 524288
-        jobCodeTable.put((int) Math.pow(2, 20), "스포츠");    // 1048576
-        jobCodeTable.put((int) Math.pow(2, 21), "공공/복지"); // 2097152
-        jobCodeTable.put(8388607, "전체"); // 2^0 ~ 2^22 합계
+        jobCodeTable.put(1, "기획·전략");                // 2^0
+        jobCodeTable.put(2, "법무·사무·총무");           // 2^1
+        jobCodeTable.put(4, "인사·HR");                 // 2^2
+        jobCodeTable.put(8, "회계·세무");               // 2^3
+        jobCodeTable.put(16, "마케팅·광고·MD");         // 2^4
+        jobCodeTable.put(32, "개발·데이터");            // 2^5
+        jobCodeTable.put(64, "물류·무역");              // 2^6
+        jobCodeTable.put(128, "운전·운송·배송");         // 2^7
+        jobCodeTable.put(256, "영업");                  // 2^8
+        jobCodeTable.put(512, "고객상담·TM");           // 2^9
+        jobCodeTable.put(1024, "금융·보험");            // 2^10
+        jobCodeTable.put(2048, "식·음료");              // 2^11
+        jobCodeTable.put(4096, "고객서비스·리테일");     // 2^12
+        jobCodeTable.put(8192, "엔지니어링·설계");       // 2^13
+        jobCodeTable.put(16384, "제조·생산");           // 2^14
+        jobCodeTable.put(32768, "교육");                // 2^15
+        jobCodeTable.put(65536, "건축·시설");           // 2^16
+        jobCodeTable.put(131072, "의료·바이오");        // 2^17
+        jobCodeTable.put(262144, "미디어·문화·스포츠");   // 2^18
+        jobCodeTable.put(524288, "공공·복지");          // 2^19
+        jobCodeTable.put(1048576, "중학생");            // 2^20
+        jobCodeTable.put(2097152, "고등학생");          // 2^21
+        jobCodeTable.put(4194304, "대학생");            // 2^22
+        jobCodeTable.put(8388607, "전체");              // 2^0 ~ 2^22 합계
     }
 
+
     private void initializeAgeCodeTable() {
-        ageCodeTable.put((int) Math.pow(2, 0), "초등학생");   // 1
-        ageCodeTable.put((int) Math.pow(2, 1), "중학생");     // 2
-        ageCodeTable.put((int) Math.pow(2, 2), "고등학생");   // 4
-        ageCodeTable.put((int) Math.pow(2, 3), "대학생");     // 8
-        ageCodeTable.put((int) Math.pow(2, 4), "10대");      // 16
-        ageCodeTable.put((int) Math.pow(2, 5), "20대");      // 32
-        ageCodeTable.put((int) Math.pow(2, 6), "30대");      // 64
-        ageCodeTable.put((int) Math.pow(2, 7), "40대");      // 128
-        ageCodeTable.put((int) Math.pow(2, 8), "50대");      // 256
-        ageCodeTable.put((int) Math.pow(2, 9), "60대");      // 512
-        ageCodeTable.put((int) Math.pow(2, 10), "70대");     // 1024
+        ageCodeTable.put(1, "10대");   // 1
+        ageCodeTable.put(2, "20대");     // 2
+        ageCodeTable.put(4, "30대");   // 4
+        ageCodeTable.put(8, "40대");     // 8
+        ageCodeTable.put(16, "50대 이상");      // 16
+        ageCodeTable.put(31, "전체");      // 32
     }
 
     private void initializeGenderCodeTable() {
-        genderCodeTable.put((int)Math.pow(2,0), "남자"); // 1
-        genderCodeTable.put((int)Math.pow(2,1), "여자"); // 2
-        genderCodeTable.put(3, "전체"); // 3 남자 + 여자
+        genderCodeTable.put(1, "남자"); // 1
+        genderCodeTable.put(2, "여자"); // 2
+        genderCodeTable.put(3, "전체"); // 3
     }
 
     //==================== STRING LIST TO CODE ====================//
