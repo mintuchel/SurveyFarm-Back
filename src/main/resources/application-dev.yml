@@ -6,7 +6,7 @@ spring:
     name: boatvote
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${MYSQL_HOST}
+    url: jdbc:mysql://boatvote-mysql-service:13306/boatvote
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
   sql:
