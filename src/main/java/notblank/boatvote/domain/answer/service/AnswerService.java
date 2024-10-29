@@ -44,7 +44,7 @@ public class AnswerService {
     public List<UserAnswerResponse> getParticipantAnswer(int uid, int qid){
         return answerRepository.findAnswersByUidAndQid(uid, qid).stream()
                 .map(answer -> new UserAnswerResponse(answer.getText()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // 한 개의 Question에 대한 User들의 답변 결과

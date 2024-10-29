@@ -72,7 +72,7 @@ public record SurveyInfoResponse(
                                     question.getType()
                             );
                         })
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 

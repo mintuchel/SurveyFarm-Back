@@ -12,6 +12,8 @@ import notblank.boatvote.domain.survey.repository.SurveyRepository;
 import notblank.boatvote.domain.survey.utility.CodeConverter;
 import notblank.boatvote.domain.user.entity.User;
 import notblank.boatvote.domain.user.service.UserService;
+import notblank.boatvote.global.exception.errorcode.SurveyErrorCode;
+import notblank.boatvote.global.exception.exception.SurveyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,13 @@ public class SurveyService {
     private final SurveyRepository surveyRepository;
 
     private final CodeConverter codeConverter;
+
+    // 설문 조회
+    @Transactional(readOnly = true)
+    public Survey getSurveyEntityById(int id){
+        return surveyRepository.findById(id)
+                .orElseThrow(()-> new SurveyException(SurveyErrorCode.NOT_FOUND));
+    }
 
     // 새로운 설문 추가
     @Transactional
@@ -58,10 +67,11 @@ public class SurveyService {
         return survey.getId();
     }
 
-    // SurveyInfoResponse 를 return
+    // 설문 엔티티를 SurveyInfoResponse 로 반환
     @Transactional(readOnly = true)
     public SurveyInfoResponse getSurveyInfoResponseById(int id){
-        Survey survey = surveyRepository.findById(id).orElseThrow();
+        Survey survey = getSurveyEntityById(id);
+
         return SurveyInfoResponse.toResponse(
                 survey,
                 codeConverter.convertRegionCodeToList(survey.getRegionCode()),
@@ -69,12 +79,6 @@ public class SurveyService {
                 codeConverter.convertAgeCodeToList(survey.getAgeCode()),
                 codeConverter.convertGenderCodeToList(survey.getGenderCode())
                 );
-    }
-
-    // Survey Entity 를 return
-    @Transactional(readOnly = true)
-    public Survey getSurveyEntityById(int id){
-        return surveyRepository.findById(id).orElseThrow();
     }
 
     // 설문에 참여했을때 해당 설문의 currentHeadCnt를 1 증가시키는 함수
@@ -104,7 +108,7 @@ public class SurveyService {
                             codeConverter.convertGenderCodeToList(survey.getGenderCode())
                     );
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // Survey 에 집어넣을 QuestionList return
