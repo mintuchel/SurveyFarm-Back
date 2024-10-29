@@ -9,13 +9,13 @@ spring:
     url: jdbc:mysql://boatvote-mysql-service:13306/boatvote
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
-  sql:
-    init:
-      mode: always # 항상 초기화 모드
-      schema-locations: classpath:schema.sql
-      data-locations: classpath:data.sql
+  # sql:
+  #   init:
+  #     mode: always # 항상 초기화 모드
+  #     schema-locations: classpath:schema.sql
+  #     data-locations: classpath:data.sql
   jpa:
-    defer-datasource-initialization: true # data.sql을 hibernate 설정 후 실행하도록
+    # defer-datasource-initialization: true # data.sql을 hibernate 설정 후 실행하도록
     hibernate:
       ddl-auto: create
     properties:
