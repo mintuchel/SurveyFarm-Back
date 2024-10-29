@@ -6,12 +6,12 @@ spring:
     name: boatvote
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://boatvote-mysql-service:13306/boatvote
+    url: ${MYSQL_HOST}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
   sql:
     init:
-      mode: always
+      mode: always # 항상 초기화 모드
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
   jpa:
