@@ -1,0 +1,34 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: boatvote
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://boatvote-mysql-service:13306/boatvote
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  jpa:
+    defer-datasource-initialization: true # data.sql을 hibernate 설정 후 실행하도록
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show-sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+        boot:
+          allow_jdbc_metadata_access: true
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+  
+  openai:
+    api:
+      key: ${GPT_API_KEY}

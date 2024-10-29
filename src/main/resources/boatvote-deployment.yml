@@ -6,15 +6,26 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: boatvote-dep
-  replicas: 3
+      app: boatvote-kube
+  replicas: 2
   template:
     metadata:
       labels:
         app: boatvote-kube
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
-        - name: botevote-server-container
-          image: boatvote-server:0.1
+        - name: boatvote-server-container
+          image: nl8ir2on.kr.private-ncr.ntruss.com/boatvote-server:0.1
           ports:
-            - containerPort: 80
+            - containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              value: jdbc:mysql://mysql-service:13306/boatvote
+            - name: MYSQL_USERNAME
+              value: root
+            - name: MYSQL_PASSWORD
+              value: boatvote123@
+            - name: GPT_API_KEY
+              value: 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
