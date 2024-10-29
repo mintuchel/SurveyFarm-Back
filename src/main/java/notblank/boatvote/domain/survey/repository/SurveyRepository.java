@@ -22,6 +22,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Integer> {
     @Query(value = "UPDATE SURVEY SET current_head_cnt = current_head_cnt + 1 WHERE id = :sid AND current_head_cnt + 1 <= max_head_cnt", nativeQuery = true)
     void incrementCurrentHeadCnt(@Param("sid") int sid);
 
+    // 특정 유저가 참여가능한 설문 조회
     @Query(value = "SELECT * FROM SURVEY WHERE region_code & :participantRegionCode != 0 AND job_code & :participantJobCode != 0 AND age_code & :participantAgeCode != 0 AND gender_code & :participantGenderCode != 0", nativeQuery = true)
     List<Survey> findAvailableSurveyByParticipant(
             @Param("participantRegionCode") int participantRegionCode,

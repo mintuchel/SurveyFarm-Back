@@ -6,8 +6,6 @@ import notblank.boatvote.domain.survey.dto.request.NewOptionRequest;
 import notblank.boatvote.domain.survey.dto.request.NewQuestionRequest;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
-import notblank.boatvote.domain.survey.dto.response.OptionInfoResponse;
-import notblank.boatvote.domain.survey.dto.response.QuestionInfoResponse;
 import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.survey.entity.Survey;
 import notblank.boatvote.domain.survey.repository.SurveyRepository;
@@ -64,7 +62,13 @@ public class SurveyService {
     @Transactional(readOnly = true)
     public SurveyInfoResponse getSurveyInfoResponseById(int id){
         Survey survey = surveyRepository.findById(id).orElseThrow();
-        return changeSurveyToResponseDTO(survey);
+        return SurveyInfoResponse.toResponse(
+                survey,
+                codeConverter.convertRegionCodeToList(survey.getRegionCode()),
+                codeConverter.convertJobCodeToList(survey.getJobCode()),
+                codeConverter.convertAgeCodeToList(survey.getAgeCode()),
+                codeConverter.convertGenderCodeToList(survey.getGenderCode())
+                );
     }
 
     // Survey Entity 를 return
@@ -91,7 +95,15 @@ public class SurveyService {
 
         return surveyRepository.findAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
                 .stream()
-                .map(this::changeSurveyToResponseDTO)
+                .map(survey -> {
+                    return SurveyInfoResponse.toResponse(
+                            survey,
+                            codeConverter.convertRegionCodeToList(survey.getRegionCode()),
+                            codeConverter.convertJobCodeToList(survey.getJobCode()),
+                            codeConverter.convertAgeCodeToList(survey.getAgeCode()),
+                            codeConverter.convertGenderCodeToList(survey.getGenderCode())
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -122,45 +134,5 @@ public class SurveyService {
             optionList.add(option);
         }
         return optionList;
-    }
-
-    // Survey 엔티티를 SurveyInfoResponseDTO 로 바꿔주는 private 함수
-    private SurveyInfoResponse changeSurveyToResponseDTO(Survey survey){
-
-        return new SurveyInfoResponse(
-                survey.getId(),
-                survey.getOwner().getUserName(),
-                survey.getTitle(),
-                survey.getImgUrl(),
-                codeConverter.convertRegionCodeToList(survey.getRegionCode()),
-                codeConverter.convertJobCodeToList(survey.getJobCode()),
-                codeConverter.convertGenderCodeToList(survey.getGenderCode()),
-                codeConverter.convertAgeCodeToList(survey.getAgeCode()),
-                survey.getMaxHeadCnt(),
-                survey.getCurrentHeadCnt(),
-                (double) survey.getMaxHeadCnt() / survey.getCurrentHeadCnt(),
-                survey.getPoint(),
-                survey.getCreatedAt(),
-                survey.getEndAt(),
-                null,
-                survey.getDescription(),
-                survey.getQuestionList().stream()
-                        .map(question -> {
-                            return new QuestionInfoResponse(
-                                    question.getId(),
-                                    question.getTitle(),
-                                    question.getOptionList().stream()
-                                            .map(option -> {
-                                                return new OptionInfoResponse(
-                                                        option.getText()
-                                                );
-                                            })
-                                            .collect(Collectors.toList()),
-                                    question.isMultipleAnswer(),
-                                    question.getType()
-                            );
-                        })
-                        .collect(Collectors.toList())
-        );
     }
 }

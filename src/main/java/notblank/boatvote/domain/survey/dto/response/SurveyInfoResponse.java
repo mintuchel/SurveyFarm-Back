@@ -1,9 +1,11 @@
 package notblank.boatvote.domain.survey.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import notblank.boatvote.domain.survey.entity.Survey;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public record SurveyInfoResponse(
         int sid, // survey 고유 아이디
@@ -36,6 +38,44 @@ public record SurveyInfoResponse(
         String description, // 설문 배경설명
         List<QuestionInfoResponse> questionList // 질문 List
 ) {
+    public static SurveyInfoResponse toResponse(Survey survey, List<String> regionList, List<String> jobList, List<String> ageList, List<String> genderList) {
+        return new SurveyInfoResponse(
+                survey.getId(),
+                survey.getOwner().getUserName(),
+                survey.getTitle(),
+                survey.getImgUrl(),
+                regionList,
+                jobList,
+                ageList,
+                genderList,
+                survey.getMaxHeadCnt(),
+                survey.getCurrentHeadCnt(),
+                (double) survey.getMaxHeadCnt() / survey.getCurrentHeadCnt(),
+                survey.getPoint(),
+                survey.getCreatedAt(),
+                survey.getEndAt(),
+                null,
+                survey.getDescription(),
+                survey.getQuestionList().stream()
+                        .map(question -> {
+                            return new QuestionInfoResponse(
+                                    question.getId(),
+                                    question.getTitle(),
+                                    question.getOptionList().stream()
+                                            .map(option -> {
+                                                return new OptionInfoResponse(
+                                                        option.getText()
+                                                );
+                                            })
+                                            .collect(Collectors.toList()),
+                                    question.isMultipleAnswer(),
+                                    question.getType()
+                            );
+                        })
+                        .collect(Collectors.toList())
+        );
+    }
+
     // participatedAt만 업데이트해서 새로운 record 반환
     public SurveyInfoResponse updateParticipatedAt(LocalDateTime participatedAt) {
         return new SurveyInfoResponse(
