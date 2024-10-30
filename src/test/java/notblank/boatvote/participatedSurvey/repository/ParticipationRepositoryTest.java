@@ -38,8 +38,13 @@ public class ParticipationRepositoryTest {
 
     @BeforeEach
     public void testSetUp(){
-        owner = User.builder().build();
-        participant = User.builder().build();
+        owner = User.builder()
+                .nickName("pedroneto")
+                .build();
+        participant = User.builder()
+                .nickName("madueke")
+                .build();
+
         userRepository.save(owner);
         userRepository.save(participant);
 
@@ -64,7 +69,9 @@ public class ParticipationRepositoryTest {
         LocalDateTime participatedAt = ps.getParticipatedAt();
 
         // then
+        // @GeneratedValue 정상 작동 확인
         Assertions.assertThat(ps.getId()).isNotNull();
+        // @CreationTimeStamp 정상 작동 확인
         Assertions.assertThat(participatedAt).isNotNull();
         System.out.println("participatedAt :" + participatedAt);
     }
