@@ -1,8 +1,7 @@
-package notblank.boatvote.domain.gpt.service;
+package notblank.boatvote.domain.openAI.service;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.*;
 
 @Service
-public class ChatGptService {
+public class OpenAIService {
     private final String apiKey = System.getenv("GPT_API_KEY");
 
     private final RestTemplate restTemplate = new RestTemplate();

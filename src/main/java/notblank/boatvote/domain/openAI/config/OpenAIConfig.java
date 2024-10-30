@@ -1,12 +1,11 @@
-package notblank.boatvote.domain.gpt.config;
+package notblank.boatvote.domain.openAI.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class GptConfig {
+public class OpenAIConfig {
     private final String apiKey = System.getenv("GPT_API_KEY");
 
     @Bean
