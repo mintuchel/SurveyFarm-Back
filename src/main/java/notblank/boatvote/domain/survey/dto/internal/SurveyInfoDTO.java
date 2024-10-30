@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 public record SurveyInfoDTO(
         int sid,
+        int uid,
         String nickName, // 유저 닉네임
         String title, // 질문 제목
         String description, // 질문 설명
