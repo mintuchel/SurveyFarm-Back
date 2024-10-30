@@ -22,7 +22,7 @@ public class Survey {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="owner_id", nullable = false)
+    @JoinColumn(name="uid", nullable = false)
     private User owner;
 
     private String title;

@@ -23,15 +23,21 @@ public class SurveyController {
         return surveyService.getSurveyResponseById(surveyId);
     }
 
-    @GetMapping("/available/{nickName}")
-    @Operation(summary = "특정 유저가 참여가능한 설문 조회")
-    public List<SurveyResponse> getAvailableSurveys(@PathVariable String nickName){
-        return surveyService.getAvailableSurveys(nickName);
+    @PostMapping()
+    @Operation(summary = "설문 생성")
+    public int createSurvey(@RequestBody CreateSurveyRequest createSurveyRequest){
+        return surveyService.addNewSurvey(createSurveyRequest);
     }
 
-    @PostMapping()
-    @Operation(summary = "새로운 설문 추가")
-    public int requestSurvey(@RequestBody CreateSurveyRequest createSurveyRequest){
-        return surveyService.addNewSurvey(createSurveyRequest);
+    @GetMapping("/available/{uid}")
+    @Operation(summary = "특정 유저가 참여가능한 설문 조회")
+    public List<SurveyResponse> getAvailableSurveys(@PathVariable int uid){
+        return surveyService.getAvailableSurveys(uid);
+    }
+
+    @GetMapping("/requested/{uid}")
+    @Operation(summary = "특정 유저가 의뢰한 설문 조회")
+    public List<SurveyResponse> getRequestedSurveys(@PathVariable("uid") int uid) {
+        return surveyService.getRequestedSurveys(uid);
     }
 }

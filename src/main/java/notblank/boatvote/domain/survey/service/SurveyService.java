@@ -30,7 +30,6 @@ public class SurveyService {
 
     private final SurveyRepository surveyRepository;
 
-    private final CodeConverter codeConverter;
     private final DTOConverter dtoConverter;
 
     // 설문 조회
@@ -43,27 +42,8 @@ public class SurveyService {
     // 새로운 설문 추가
     @Transactional
     public int addNewSurvey(CreateSurveyRequest createSurveyRequest){
-
-        SurveyInfoDTO surveyInfoDTO = createSurveyRequest.surveyInfo();
-        FilterDTO filters = createSurveyRequest.filters();
-
-        User owner = userService.findByNickName(surveyInfoDTO.nickName());
-
-        Survey survey = Survey.builder()
-                .owner(owner)
-                .title(surveyInfoDTO.title())
-                .description(surveyInfoDTO.description())
-                .imgUrl(surveyInfoDTO.imgUrl())
-                .duration(surveyInfoDTO.duration())
-                .maxHeadCnt(surveyInfoDTO.maxHeadCnt())
-                .currentHeadCnt(0)
-                .regionCode(codeConverter.convertRegionListToRegionCode(filters.regionList()))
-                .jobCode(codeConverter.convertJobListToJobCode(filters.jobList()))
-                .ageCode(codeConverter.convertAgeListToAgeCode(filters.ageList()))
-                .genderCode(codeConverter.convertGenderListToGenderCode(filters.genderList()))
-                .point(100) // 포인트는 우리가 알아서 넣어줘야함
-                .questionList(getQuestionList(createSurveyRequest.questions()))
-                .build();
+        User owner = userService.findById(createSurveyRequest.surveyInfo().uid());
+        Survey survey = dtoConverter.toSurveyEntity(createSurveyRequest, owner);
 
         surveyRepository.save(survey);
 
@@ -88,8 +68,8 @@ public class SurveyService {
 
     // 특정 유저가 참여가능한 설문 조사
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getAvailableSurveys(String nickName) {
-        User participant = userService.findByNickName(nickName);
+    public List<SurveyResponse> getAvailableSurveys(int uid) {
+        User participant = userService.findById(uid);
 
         int participantRegionCode = participant.getRegionCode();
         int participantJobCode = participant.getJobCode();
@@ -102,32 +82,13 @@ public class SurveyService {
                 .toList();
     }
 
-    // Survey 에 집어넣을 QuestionList return
-    private List<Question> getQuestionList(List<QuestionDTO> questionDTOList){
-        List<Question> questionList = new ArrayList<>();
-        for(QuestionDTO questionDTO : questionDTOList){
-            Question curQuestion = Question.builder()
-                    .title(questionDTO.title())
-                    .isMultipleAnswer(questionDTO.isMultipleAnswer())
-                    .type(questionDTO.questionType())
-                    .build();
+    @Transactional(readOnly = true)
+    public List<SurveyResponse> getRequestedSurveys(int uid) {
+        User owner = userService.findById(uid);
 
-            curQuestion.getOptionList().addAll(getOptionList(questionDTO.optionList()));
-
-            questionList.add(curQuestion);
-        }
-        return questionList;
-    }
-
-    // Question 에 집어넣을 OptionList return
-    private List<Option> getOptionList(List<OptionDTO> optionDTOList){
-        List<Option> optionList = new ArrayList<>();
-        for (OptionDTO curOptionDTO : optionDTOList) {
-            Option option = Option.builder()
-                    .text(curOptionDTO.text())
-                    .build();
-            optionList.add(option);
-        }
-        return optionList;
+        return surveyRepository.getRequestedSurvey(uid)
+                .stream()
+                .map(dtoConverter::toGetSurveyResponse)
+                .toList();
     }
 }
