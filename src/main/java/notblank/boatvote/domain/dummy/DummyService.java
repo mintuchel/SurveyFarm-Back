@@ -28,7 +28,7 @@ class DummyService {
     @Transactional
     public void initUser(){
        user1 = User.builder()
-                .userName("ronaldo")
+                .nickName("ronaldo")
                 .password("7")
                 .regionCode(1) // 서울
                 .jobCode(262144) // 미디어·문화·스포츠
@@ -37,7 +37,7 @@ class DummyService {
                 .build();
 
        user2 = User.builder()
-                .userName("vini")
+                .nickName("vini")
                 .password("11")
                 .regionCode(1024) // 대구
                 .jobCode(32) // 개발·데이터
@@ -46,7 +46,7 @@ class DummyService {
                 .build();
 
        user3 = User.builder()
-                .userName("mbappe")
+                .nickName("mbappe")
                 .password("9")
                 .regionCode(66536) // 제주
                 .jobCode(32) // 개발·데이터
@@ -125,7 +125,7 @@ class DummyService {
         survey1 = Survey.builder()
                 .owner(user3)
                 .title("축구관련설문")
-                .imgUrl("")
+                .imgUrl("축구설문 imgUrl")
                 .regionCode(5123) // 서울(1) + 경기(2) + 대구(1024) + 부산(4096)
                 .jobCode(262176) // 개발·데이터(32) + 미디어·문화·스포츠(262144)
                 .ageCode(7) // 10대(1) + 20대(2) + 30대(4)
@@ -208,7 +208,7 @@ class DummyService {
         survey2 = Survey.builder()
                 .owner(user1)
                 .title("컴공과 대학생들을 위한 설문")
-                .imgUrl("")
+                .imgUrl("컴공과 설문 imgUrl")
                 .regionCode(65536) // 제주
                 .jobCode(32) // 개발·데이터(32)
                 .ageCode(3) // 10대(1) + 20대(2)
@@ -285,7 +285,7 @@ class DummyService {
         survey3 = Survey.builder()
                 .owner(user3)
                 .title("한국건강관리협회 설문")
-                .imgUrl("")
+                .imgUrl("건강 설문 imgUrl")
                 .regionCode(131071) // 전체
                 .jobCode(8388607) // 전체
                 .ageCode(30) // 20대부터 50대 이상
