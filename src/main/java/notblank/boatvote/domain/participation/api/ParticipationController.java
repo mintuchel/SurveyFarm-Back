@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.participation.dto.request.ParticipationRequest;
 import notblank.boatvote.domain.participation.service.ParticipationService;
-import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
+import notblank.boatvote.domain.survey.dto.response.SurveyResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public class ParticipationController {
 
     @GetMapping("/history/{uid}")
     @Operation(summary = "유저가 참여한 설문내역 조회")
-    public List<SurveyInfoResponse> getUserParticipatedSurveys(@PathVariable int uid) {
+    public List<SurveyResponse> getUserParticipatedSurveys(@PathVariable int uid) {
         return participationService.getParticipatedSurveyByUser(uid);
     }
 }
