@@ -21,7 +21,7 @@ public class ParticipationController {
 
     @PostMapping()
     @Operation(summary = "특정 설문에 대한 유저의 참여내역 등록")
-    public LocalDateTime participateSurvey(@RequestBody ParticipationRequest participationRequest) {
+    public String participateSurvey(@RequestBody ParticipationRequest participationRequest) {
         return participationService.addNewParticipation(participationRequest);
     }
 

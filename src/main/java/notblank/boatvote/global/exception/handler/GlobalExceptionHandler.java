@@ -3,6 +3,7 @@ package notblank.boatvote.global.exception.handler;
 import notblank.boatvote.global.exception.exception.ParticipationException;
 import notblank.boatvote.global.exception.exception.SurveyException;
 import notblank.boatvote.global.exception.exception.UserException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,5 +32,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
                 .body(e.getErrorCode().getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<String> handleGlobalException(Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("예기치 않은 오류가 발생했습니다. 관리자에게 문의하세요.");
     }
 }

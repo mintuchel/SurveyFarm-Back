@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -26,13 +27,13 @@ public class ParticipationService {
     private final ParticipationRepository participationRepository;
 
     @Transactional
-    public LocalDateTime addNewParticipation(ParticipationRequest participationRequest) {
-        String nickName = participationRequest.nickName();
+    public String addNewParticipation(ParticipationRequest participationRequest) {
+
+        int uid = participationRequest.uid();
         int sid = participationRequest.sid();
-        User participant = userService.findByNickName(nickName);
 
         // 이미 참여했으면 예외처리
-        if(participationRepository.checkIfUserParticipated(participant.getId(), sid)==1){
+        if(participationRepository.checkIfUserParticipated(uid, sid) == 1){
             throw new ParticipationException(ParticipationErrorCode.ALREADY_EXISTS);
         }
 
@@ -41,14 +42,14 @@ public class ParticipationService {
 
         // 중간테이블에 들어갈 새로운 ParticipatedSurvey 엔티티 만들어주기
         Participation newParticipation = Participation.builder()
-                .user(participant)
+                .user(userService.findById(uid))
                 .survey(surveyService.getSurveyEntityById(sid))
                 .build();
 
         participationRepository.save(newParticipation);
 
         // 참여시간 반환
-        return newParticipation.getParticipatedAt();
+        return newParticipation.getParticipatedAt().truncatedTo(ChronoUnit.MINUTES).toString();
     }
 
     @Transactional(readOnly = true)
