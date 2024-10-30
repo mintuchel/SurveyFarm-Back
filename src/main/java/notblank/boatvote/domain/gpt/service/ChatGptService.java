@@ -16,13 +16,12 @@ import java.util.*;
 
 @Service
 public class ChatGptService {
-
     private final String apiKey = System.getenv("GPT_API_KEY");
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<Map.Entry<String, Integer>> splitTextIntoWords(String inputText) {
+    public List<Map.Entry<String, Integer>> splitTextIntoWords(List<String> inputTexts) {
         String url = "https://api.openai.com/v1/chat/completions";
 
         HttpHeaders headers = new HttpHeaders();
@@ -36,17 +35,22 @@ public class ChatGptService {
 
         ObjectNode systemMessage = objectMapper.createObjectNode();
         systemMessage.put("role", "system");
-        systemMessage.put("content", "You will be given multiple short answer responses. Tokenize the responses, count the frequency of each word, and return the results in descending order. ");
+        systemMessage.put("content",
+                "You will be given multiple short answer responses. Tokenize the responses, " +
+                        "count the frequency of each word, and return the results in JSON format as " +
+                        "[{\"word\":\"frequency\"}]. Please only include nouns, adjectives, and adverbs, " +
+                        "excluding any articles, prepositions, conjunctions, or particles. " +
+                        "If the response contains verbs, please return their base forms as keywords.");
         messages.add(systemMessage);
 
         ObjectNode userMessage = objectMapper.createObjectNode();
         userMessage.put("role", "user");
-        userMessage.put("content", inputText);
+        userMessage.put("content", String.join(" ", inputTexts));
         messages.add(userMessage);
 
         requestBody.set("messages", messages);
         requestBody.put("temperature", 0.7);
-        requestBody.put("max_tokens", 50);
+        requestBody.put("max_tokens", 150);
 
         try {
             String body = objectMapper.writeValueAsString(requestBody);
@@ -58,35 +62,72 @@ public class ChatGptService {
             JsonNode jsonNode = objectMapper.readTree(responseBody);
             String generatedText = jsonNode.path("choices").get(0).path("message").path("content").asText().trim();
 
-            Map<String, Integer> wordCountMap = parseWordFrequency(generatedText);
-
-            return wordCountMap.entrySet().stream()
-                    .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                    .toList();
+            List<Map.Entry<String, Integer>> wordCountList = parseWordFrequency(generatedText);
+            return wordCountList;
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
-    private Map<String, Integer> parseWordFrequency(String text) {
-        Map<String, Integer> wordCountMap = new HashMap<>();
+    private List<Map.Entry<String, Integer>> parseWordFrequency(String text) {
+        List<Map.Entry<String, Integer>> wordCountList = new ArrayList<>();
 
-        String[] words = text.split(",\\s*");
-
-        for (String wordEntry : words) {
-            String[] wordAndCount = wordEntry.split(":");
-            if (wordAndCount.length == 2) {
-                String word = wordAndCount[0].replaceAll("[^\\p{L}]", "").trim();
-
-                try {
-                    int count = Integer.parseInt(wordAndCount[1].trim());
-                    wordCountMap.put(word, count);
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid number format for word: " + wordEntry);
-                }
+        try {
+            JsonNode rootNode = objectMapper.readTree(text);
+            for (JsonNode node : rootNode) {
+                String word = node.fieldNames().next();
+                int frequency = node.path(word).asInt();
+                wordCountList.add(new AbstractMap.SimpleEntry<>(word, frequency));
             }
+        } catch (Exception e) {
+            System.err.println("Failed to parse word frequency: " + e.getMessage());
         }
-        return wordCountMap;
+
+        return wordCountList;
+    }
+
+    public String summarizeAnswers(List<String> answers){
+
+        String url = "https://api.openai.com/v1/chat/completions";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + apiKey);
+        headers.set("Content-Type", "application/json");
+
+        ObjectNode requestBody = objectMapper.createObjectNode();
+        requestBody.put("model", "gpt-3.5-turbo");
+
+        ArrayNode messages = objectMapper.createArrayNode();
+
+        ObjectNode systemMessage = objectMapper.createObjectNode();
+        systemMessage.put("role", "system");
+        systemMessage.put("content","You will be given multiple short answer responses. Please summarize the answers in Korean.");
+        messages.add(systemMessage);
+
+        ObjectNode userMessage = objectMapper.createObjectNode();
+        userMessage.put("role", "user");
+        userMessage.put("content", String.join(" ", answers));
+        messages.add(userMessage);
+
+        requestBody.set("messages", messages);
+        requestBody.put("temperature", 0.7);
+        requestBody.put("max_tokens", 150);
+
+        try {
+            String body = objectMapper.writeValueAsString(requestBody);
+            HttpEntity<String> entity = new HttpEntity<>(body, headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+            String responseBody = response.getBody();
+
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+            String generatedText = jsonNode.path("choices").get(0).path("message").path("content").asText().trim();
+
+            return generatedText;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }
