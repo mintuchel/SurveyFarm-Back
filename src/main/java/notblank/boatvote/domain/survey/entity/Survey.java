@@ -3,18 +3,13 @@ package notblank.boatvote.domain.survey.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import notblank.boatvote.domain.question.entity.Question;
-import notblank.boatvote.domain.survey.dto.response.OptionInfoResponse;
-import notblank.boatvote.domain.survey.dto.response.QuestionInfoResponse;
-import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
+import notblank.boatvote.domain.survey.dto.internal.SurveyInfoDTO;
 import notblank.boatvote.domain.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter

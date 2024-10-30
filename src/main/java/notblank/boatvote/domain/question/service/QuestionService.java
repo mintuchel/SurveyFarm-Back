@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.question.repository.QuestionRepository;
+import notblank.boatvote.global.exception.errorcode.SurveyErrorCode;
+import notblank.boatvote.global.exception.exception.SurveyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +17,8 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public Question findQuestionById(int qid){
-        return questionRepository.findById(qid).orElseThrow();
+        return questionRepository.findById(qid)
+                .orElseThrow(() -> new SurveyException(SurveyErrorCode.QUESTION_NOT_FOUND));
     }
 
     @Transactional(readOnly = true)
