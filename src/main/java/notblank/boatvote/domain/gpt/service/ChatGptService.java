@@ -17,7 +17,7 @@ import java.util.*;
 @Service
 public class ChatGptService {
 
-    private final String apiKey = System.getenv("GPT_API_KEY")
+    private final String apiKey = System.getenv("GPT_API_KEY");
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();

@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class GptConfig {
-    private final String apiKey = System.getenv("GPT_API_KEY")
+    private final String apiKey = System.getenv("GPT_API_KEY");
 
     @Bean
     public RestTemplate restTemplate(){
