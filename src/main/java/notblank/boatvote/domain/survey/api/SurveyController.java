@@ -13,14 +13,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/survey")
-@Tag(name = "Survey API", description = "설문 추가, 설문 단건 조회, 참여가능 설문 조회")
+@Tag(name = "설문 API", description = "설문 생성, 설문 조회")
 public class SurveyController {
     private final SurveyService surveyService;
 
-    @GetMapping("/{surveyId}")
+    @GetMapping("/{sid}")
     @Operation(summary = "설문 단건 조회")
-    public SurveyResponse getSurveyById(@PathVariable int surveyId){
-        return surveyService.getSurveyResponseById(surveyId);
+    public SurveyResponse getSurveyById(@PathVariable int sid){
+        return surveyService.getSurveyResponseById(sid);
     }
 
     @PostMapping()

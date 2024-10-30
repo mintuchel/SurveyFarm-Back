@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/answer")
-@Tag(name = "Answer API", description = "설문 참여, 특정 유저의 답변 확인, 특정 질문의 답변 결과 확인")
+@Tag(name = "답변 API", description = "답변 저장, 답변 조회, 답변 통계 조회")
 public class AnswerController {
 
     private final AnswerService answerService;
@@ -32,7 +32,7 @@ public class AnswerController {
     }
 
     @GetMapping("/result/{qid}")
-    @Operation(summary = "특정 질문에 대한 결과 조회")
+    @Operation(summary = "특정 질문에 대한 통계 조회")
     public AnswerResultResponse getQuestionResult(@PathVariable int qid){
         return answerService.getQuestionResult(qid);
     }

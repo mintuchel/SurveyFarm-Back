@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/participation")
-@Tag(name = "참여내역 API", description = "설문 참여내역 등록, 특정 유저의 참여내역 확인")
+@Tag(name = "참여내역 API", description = "참여내역 등록, 참여내역 확인")
 public class ParticipationController {
 
     private final ParticipationService participationService;
