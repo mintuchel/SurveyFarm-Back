@@ -27,8 +27,8 @@ public class AnswerController {
 
     @GetMapping("")
     @Operation(summary = "특정 질문에 대한 유저의 답변 조회")
-    public List<UserAnswerResponse> getCertainUserResult(@RequestParam int uid, @RequestParam int qid){
-        return answerService.getParticipantAnswer(uid, qid);
+    public List<UserAnswerResponse> getCertainUserResult(@RequestParam String nickName, @RequestParam int qid){
+        return answerService.getParticipantAnswer(nickName, qid);
     }
 
     @GetMapping("/result/{qid}")

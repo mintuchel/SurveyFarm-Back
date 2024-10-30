@@ -7,13 +7,11 @@ import notblank.boatvote.domain.answer.entity.Answer;
 import notblank.boatvote.domain.answer.repository.AnswerRepository;
 import notblank.boatvote.domain.question.entity.QuestionType;
 import notblank.boatvote.domain.question.service.QuestionService;
-import notblank.boatvote.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.boatvote.domain.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +23,11 @@ public class AnswerService {
 
     @Transactional
     public boolean submitAnswer(SubmitAnswerRequest submitAnswerRequest) {
-        int uid = submitAnswerRequest.uid();
+        String nickName = submitAnswerRequest.nickName();
         int qid = submitAnswerRequest.qid();
 
         Answer answer = Answer.builder()
-                .participant(userService.findById(uid))
+                .participant(userService.findByNickName(nickName))
                 .question(questionService.findQuestionById(qid))
                 .text(submitAnswerRequest.text())
                 .build();
@@ -41,7 +39,10 @@ public class AnswerService {
 
     // 한 개의 Question에 대한 특정 Participant의 답변
     @Transactional(readOnly = true)
-    public List<UserAnswerResponse> getParticipantAnswer(int uid, int qid){
+    public List<UserAnswerResponse> getParticipantAnswer(String nickName, int qid){
+
+        int uid = userService.findByNickName(nickName).getId();
+
         return answerRepository.findAnswersByUidAndQid(uid, qid).stream()
                 .map(answer -> new UserAnswerResponse(answer.getText()))
                 .toList();
