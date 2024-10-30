@@ -134,7 +134,7 @@ public class DTOConverterTest {
     @DisplayName("설문 엔티티 DTO 변경 성공 (entity to responseDTO 성공)")
     public void getSurveyResponseDTOSuccess() {
         // when
-        SurveyResponse response = dtoConverter.toGetSurveyResponse(survey);
+        SurveyResponse response = dtoConverter.toSurveyResponse(survey);
 
         // then
         SurveyInfoDTO surveyInfo = response.surveyInfo();

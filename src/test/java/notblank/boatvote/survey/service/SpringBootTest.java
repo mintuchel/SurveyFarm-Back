@@ -22,8 +22,7 @@ public class SpringBootTest {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private SurveyRepository surveyRepository;
+
     @Autowired
     private SurveyService surveyService;
 
@@ -32,7 +31,7 @@ public class SpringBootTest {
     @DisplayName("호날두가 참여가능한 설문 조회 성공")
     public void getAvailableSurveyByRonaldoSuccess() {
         // given
-        User participant = userRepository.findByNickName("ronaldo").orElseThrow();
+        User participant = userRepository.findByNickName("christiano ronaldo").orElseThrow();
 
         // when
         List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getId());
@@ -52,7 +51,7 @@ public class SpringBootTest {
     @DisplayName("비니시우스가 참여가능한 설문 조회 0개 성공")
     public void getAvailableSurveyByViniSuccess() {
         // given
-        User participant = userRepository.findByNickName("vini").orElseThrow();
+        User participant = userRepository.findByNickName("vinicius jr").orElseThrow();
 
         // when
         List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getId());
@@ -66,7 +65,7 @@ public class SpringBootTest {
     @DisplayName("음바페가 참여가능한 설문 조회 성공")
     public void getAvailableSurveyByMbappeSuccess() {
         // given
-        User participant = userRepository.findByNickName("mbappe").orElseThrow();
+        User participant = userRepository.findByNickName("kylian mbappe").orElseThrow();
 
         // when
         List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getId());

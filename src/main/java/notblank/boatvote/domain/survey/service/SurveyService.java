@@ -57,7 +57,7 @@ public class SurveyService {
     @Transactional(readOnly = true)
     public SurveyResponse getSurveyResponseById(int id){
         Survey survey = getSurveyEntityById(id);
-        return dtoConverter.toGetSurveyResponse(survey);
+        return dtoConverter.toSurveyResponse(survey);
     }
 
     // 설문에 참여했을때 해당 설문의 currentHeadCnt를 1 증가시키는 함수
@@ -78,7 +78,7 @@ public class SurveyService {
 
         return surveyRepository.findAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
                 .stream()
-                .map(dtoConverter::toGetSurveyResponse)
+                .map(dtoConverter::toSurveyResponse)
                 .toList();
     }
 
@@ -88,7 +88,7 @@ public class SurveyService {
 
         return surveyRepository.getRequestedSurvey(uid)
                 .stream()
-                .map(dtoConverter::toGetSurveyResponse)
+                .map(dtoConverter::toSurveyResponse)
                 .toList();
     }
 }

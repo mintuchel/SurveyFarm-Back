@@ -44,7 +44,7 @@ public class DTOConverter {
                 .build();
     }
 
-    public SurveyResponse toGetSurveyResponse(Survey survey) {
+    public SurveyResponse toSurveyResponse(Survey survey) {
         return SurveyResponse.builder()
                 .surveyInfo(toSurveyDTO(survey))
                 .filters(toFilterListDTO(survey))
