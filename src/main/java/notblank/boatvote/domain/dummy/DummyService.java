@@ -22,13 +22,13 @@ class DummyService {
     @PersistenceContext
     private final EntityManager em;
 
-    User user1, user2, user3;
+    User ronaldo, user2, user3;
     Survey survey1, survey2, survey3;
 
     @Transactional
     public void initUser(){
-       user1 = User.builder()
-                .userName("ronaldo")
+       ronaldo = User.builder()
+                .nickName("christiano ronaldo")
                 .password("7")
                 .regionCode(1) // 서울
                 .jobCode(262144) // 미디어·문화·스포츠
@@ -37,7 +37,7 @@ class DummyService {
                 .build();
 
        user2 = User.builder()
-                .userName("vini")
+                .nickName("vinicius jr")
                 .password("11")
                 .regionCode(1024) // 대구
                 .jobCode(32) // 개발·데이터
@@ -46,7 +46,7 @@ class DummyService {
                 .build();
 
        user3 = User.builder()
-                .userName("mbappe")
+                .nickName("kylian mbappe")
                 .password("9")
                 .regionCode(66536) // 제주
                 .jobCode(32) // 개발·데이터
@@ -54,7 +54,7 @@ class DummyService {
                 .genderCode(1) // 남자
                 .build();
 
-       em.persist(user1);
+       em.persist(ronaldo);
        em.persist(user2);
        em.persist(user3);
     }
@@ -125,7 +125,7 @@ class DummyService {
         survey1 = Survey.builder()
                 .owner(user3)
                 .title("축구관련설문")
-                .imgUrl("")
+                .imgUrl("축구설문 imgUrl")
                 .regionCode(5123) // 서울(1) + 경기(2) + 대구(1024) + 부산(4096)
                 .jobCode(262176) // 개발·데이터(32) + 미디어·문화·스포츠(262144)
                 .ageCode(7) // 10대(1) + 20대(2) + 30대(4)
@@ -206,9 +206,9 @@ class DummyService {
         String description = "이 설문은 컴공과 대학생들이 선호하는 언어, 도구, 활동 분야와 중요 가치관을 조사하여 개발 문화와 트렌드를 분석하기 위한 목적입니다. 개발자 지원 프로그램 및 학습 자료 개선에 활용할 예정입니다.";
 
         survey2 = Survey.builder()
-                .owner(user1)
+                .owner(ronaldo)
                 .title("컴공과 대학생들을 위한 설문")
-                .imgUrl("")
+                .imgUrl("컴공과 설문 imgUrl")
                 .regionCode(65536) // 제주
                 .jobCode(32) // 개발·데이터(32)
                 .ageCode(3) // 10대(1) + 20대(2)
@@ -285,7 +285,7 @@ class DummyService {
         survey3 = Survey.builder()
                 .owner(user3)
                 .title("한국건강관리협회 설문")
-                .imgUrl("")
+                .imgUrl("건강 설문 imgUrl")
                 .regionCode(131071) // 전체
                 .jobCode(8388607) // 전체
                 .ageCode(30) // 20대부터 50대 이상
@@ -306,12 +306,12 @@ class DummyService {
 
         em.persist(survey3);
 
-        initAnswer(mcQuestion1, user1, "3"); // 테니스
-        initAnswer(mcQuestion2, user1, "3"); // 스트레스 해소
-        initAnswer(mcQuestion2, user1, "5"); // 취미활동
-        initAnswer(saQuestion1, user1, "몰라요 저한테 이런 어려운 질문하지 마세요");
-        initAnswer(mcQuestion3, user1, "4"); // 저녁
-        initAnswer(saQuestion2, user1, "제 건강 목표는 호날두 처럼 되기 입니다!");
+        initAnswer(mcQuestion1, ronaldo, "3"); // 테니스
+        initAnswer(mcQuestion2, ronaldo, "3"); // 스트레스 해소
+        initAnswer(mcQuestion2, ronaldo, "5"); // 취미활동
+        initAnswer(saQuestion1, ronaldo, "몰라요 저한테 이런 어려운 질문하지 마세요");
+        initAnswer(mcQuestion3, ronaldo, "4"); // 저녁
+        initAnswer(saQuestion2, ronaldo, "제 건강 목표는 호날두 처럼 되기 입니다!");
 
         initAnswer(mcQuestion1, user3, "1"); // 축구
         initAnswer(mcQuestion2, user3, "1"); // 건강관리
@@ -336,7 +336,7 @@ class DummyService {
 
         Participation ps3 = Participation.builder()
                 .survey(survey3)
-                .user(user1)
+                .user(ronaldo)
                 .build();
 
         Participation ps4 = Participation.builder()

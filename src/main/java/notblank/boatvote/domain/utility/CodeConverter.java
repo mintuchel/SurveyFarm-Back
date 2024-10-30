@@ -1,4 +1,4 @@
-package notblank.boatvote.domain.survey.utility;
+package notblank.boatvote.domain.utility;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
@@ -130,7 +130,7 @@ public class CodeConverter {
     }
 
     public List<String> convertRegionCodeToList(int regionCode){
-        return convertCodeToList(regionCode, regionCodeTable, REGION_ALL);
+        return  convertCodeToList(regionCode, regionCodeTable, REGION_ALL);
     }
 
     public List<String> convertJobCodeToList(int jobCode) {

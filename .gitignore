@@ -37,6 +37,6 @@ out/
 
 ### VS Code ###
 .vscode/
-application-loc.yml            
-./application-loc.yml            
-./src/main/resources/application-loc.yml            
+application-loc.yml
+./application-loc.yml
+./src/main/resources/application-loc.yml

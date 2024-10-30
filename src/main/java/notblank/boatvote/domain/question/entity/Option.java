@@ -2,6 +2,7 @@ package notblank.boatvote.domain.question.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import notblank.boatvote.domain.survey.dto.internal.OptionDTO;
 
 @Entity
 @Getter
@@ -15,4 +16,10 @@ public class Option {
     private int id;
 
     private String text;
+
+    public OptionDTO toOptionDto(){
+        return OptionDTO.builder()
+                .text(text)
+                .build();
+    }
 }

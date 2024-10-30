@@ -1,4 +1,4 @@
-package notblank.boatvote.domain.survey.utility;
+package notblank.boatvote.domain.utility;
 
 import org.springframework.stereotype.Component;
 

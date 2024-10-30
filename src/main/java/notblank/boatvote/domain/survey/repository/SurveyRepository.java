@@ -13,7 +13,6 @@ import java.util.List;
 
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Integer> {
-    List<Survey> findByOwner(User owner);
 
     // 업데이트된 행 수를 반환
     // 성공이면 1 실패하면 0 반환
@@ -31,4 +30,8 @@ public interface SurveyRepository extends JpaRepository<Survey, Integer> {
             @Param("participantGenderCode") int participantGenderCode
     );
 
+    List<Survey> findByOwner(User owner);
+
+    @Query(value = "SELECT * FROM SURVEY WHERE uid = :uid", nativeQuery = true)
+    List<Survey> getRequestedSurvey(@Param("uid") int uid);
 }

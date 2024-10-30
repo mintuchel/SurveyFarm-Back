@@ -22,10 +22,19 @@ spec:
             - containerPort: 8080
           env:
             - name: MYSQL_HOST
-              value: jdbc:mysql://mysql-service:13306/boatvote
+              value: jdbc:mysql://boatvote-mysql-service:13306/boatvote
             - name: MYSQL_USERNAME
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MYSQL_USERNAME
             - name: MYSQL_PASSWORD
-              value: boatvote123@
+              valueFrom:
+                secretKeyRef:
+                  name: secret
+                  key: MYSQL_PASSWORD
             - name: GPT_API_KEY
-              value: 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
+              valueFrom:
+                secretKeyRef:
+                  key: GPT_API_KEY
+                  name: secret
