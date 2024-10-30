@@ -23,12 +23,10 @@ public class AnswerService {
 
     @Transactional
     public boolean submitAnswer(SubmitAnswerRequest submitAnswerRequest) {
-        String nickName = submitAnswerRequest.nickName();
-        int qid = submitAnswerRequest.qid();
 
         Answer answer = Answer.builder()
-                .participant(userService.findByNickName(nickName))
-                .question(questionService.findQuestionById(qid))
+                .participant(userService.findById(submitAnswerRequest.uid()))
+                .question(questionService.findQuestionById(submitAnswerRequest.qid()))
                 .text(submitAnswerRequest.text())
                 .build();
 
@@ -39,10 +37,7 @@ public class AnswerService {
 
     // 한 개의 Question에 대한 특정 Participant의 답변
     @Transactional(readOnly = true)
-    public List<UserAnswerResponse> getParticipantAnswer(String nickName, int qid){
-
-        int uid = userService.findByNickName(nickName).getId();
-
+    public List<UserAnswerResponse> getParticipantAnswer(int uid, int qid){
         return answerRepository.findAnswersByUidAndQid(uid, qid).stream()
                 .map(answer -> new UserAnswerResponse(answer.getText()))
                 .toList();
