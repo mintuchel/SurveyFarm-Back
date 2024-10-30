@@ -64,10 +64,12 @@ public class SurveyServiceTest {
     private Option option1;
     private Option option2;
 
+    int SURVEY_ID = 1;
+    int OWNER_ID = 15;
+
     private void ownerSetUp(){
         owner = User.builder()
                 .nickName("jackson")
-                .password("1234")
                 .regionCode(2) // 서울
                 .jobCode(64) // 개발자
                 .ageCode(40) // 대학생, 20대
@@ -78,7 +80,6 @@ public class SurveyServiceTest {
     private void participantSetUp(){
         participant = User.builder()
                 .nickName("palmer")
-                .password("1234")
                 .regionCode(2) // 서울
                 .jobCode(64) // 개발자
                 .ageCode(40) // 대학생, 20대
@@ -144,11 +145,10 @@ public class SurveyServiceTest {
     @DisplayName("설문 조회 성공 (entity to responseDTO 성공)")
     public void getSurveyInfoResponseSuccess(){
         // given
-        given(surveyRepository.findById(123)).willReturn(Optional.of(survey));
-        // given(dtoConverter.toSurveyDTO(survey)).willReturn()
+        given(surveyRepository.findById(SURVEY_ID)).willReturn(Optional.of(survey));
 
         // when
-        SurveyResponse response = surveyService.getSurveyResponseById(123);
+        SurveyResponse response = surveyService.getSurveyResponseById(SURVEY_ID);
 
         // then
         SurveyInfoDTO surveyInfo = response.surveyInfo();
@@ -175,7 +175,7 @@ public class SurveyServiceTest {
     @DisplayName("의뢰된 설문 저장 성공 (requestDTO to entity 성공)")
     public void addSurveySuccess() throws JsonProcessingException{
         // given
-        given(userService.findByNickName("SampleOwner")).willReturn(owner);
+        given(userService.findById(OWNER_ID)).willReturn(owner);
 
         ArgumentCaptor<Survey> argumentCaptor = ArgumentCaptor.forClass(Survey.class);
 
@@ -199,7 +199,8 @@ public class SurveyServiceTest {
     private CreateSurveyRequest surveyDTO() throws JsonProcessingException {
         String jsonString = "{\n"
                 + "  \"surveyInfo\": {\n"
-                + "    \"sid\": 123,\n"
+                + "    \"sid\": 1,\n"
+                + "    \"uid\": 15,\n"
                 + "    \"nickName\": \"SampleOwner\",\n"
                 + "    \"title\": \"Sample Survey Title\",\n"
                 + "    \"description\": \"This is a sample description\",\n"

@@ -35,7 +35,7 @@ public class SpringBootTest {
         User participant = userRepository.findByNickName("ronaldo").orElseThrow();
 
         // when
-        List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getNickName());
+        List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getId());
 
         // then
         Assertions.assertThat(list).hasSize(1);
@@ -55,7 +55,7 @@ public class SpringBootTest {
         User participant = userRepository.findByNickName("vini").orElseThrow();
 
         // when
-        List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getNickName());
+        List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getId());
 
         // then
         Assertions.assertThat(list).hasSize(2);
@@ -69,7 +69,7 @@ public class SpringBootTest {
         User participant = userRepository.findByNickName("mbappe").orElseThrow();
 
         // when
-        List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getNickName());
+        List<SurveyResponse> list = surveyService.getAvailableSurveys(participant.getId());
 
         // then
         Assertions.assertThat(list).hasSize(2);
