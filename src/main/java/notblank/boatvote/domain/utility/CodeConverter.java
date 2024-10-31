@@ -8,7 +8,8 @@ import java.util.*;
 @Component
 public class CodeConverter {
 
-    private final String STRING_ALL = "전체";
+    private final int ALL_CODE = 0;
+    private final String ALL_STRING = "전체";
 
     private final List<String> regionList = new ArrayList<>(List.of(
             "서울", "경기", "인천", "대전", "세종",
@@ -63,9 +64,8 @@ public class CodeConverter {
             listToCodeTable.put(curString, val);
             val *= 2;
         }
-        val -= 1;
-        codeToListTable.put(val,STRING_ALL);
-        listToCodeTable.put(STRING_ALL, val);
+        //codeToListTable.put(ALL_CODE, ALL_STRING);
+        listToCodeTable.put(ALL_STRING, ALL_CODE);
     }
 
     //==================== STRING LIST TO CODE ====================//
@@ -97,7 +97,7 @@ public class CodeConverter {
 
     // DB에서 code 값을 가지고 클라이언트로 보내줄때 비트연산통해서 해당 코드가 의미하는 항목들만 List에 넣어서 보내줌
     private List<String> convertCodeToList(int code, Map<Integer, String> codeTable) {
-        if (codeTable.get(code).equals(STRING_ALL)) return List.of(STRING_ALL);
+        if (code == ALL_CODE) return List.of(ALL_STRING);
 
         List<String> selectedList = new ArrayList<>();
         for (int curCode : codeTable.keySet()) {

@@ -1,4 +1,5 @@
 -- regioncodes 데이터 삽입
+INSERT INTO regioncodes (name, code) VALUES ('전체', 0);
 INSERT INTO regioncodes (name, code) VALUES ('서울', 1);          -- (int) Math.pow(2, 0)  --> 1
 INSERT INTO regioncodes (name, code) VALUES ('경기', 2);          -- (int) Math.pow(2, 1)  --> 2
 INSERT INTO regioncodes (name, code) VALUES ('인천', 4);          -- (int) Math.pow(2, 2)  --> 4
@@ -16,9 +17,9 @@ INSERT INTO regioncodes (name, code) VALUES ('울산', 8192);       -- (int) Mat
 INSERT INTO regioncodes (name, code) VALUES ('경남', 16384);      -- (int) Math.pow(2, 14) --> 16384
 INSERT INTO regioncodes (name, code) VALUES ('강원', 32768);      -- (int) Math.pow(2, 15) --> 32768
 INSERT INTO regioncodes (name, code) VALUES ('제주', 65536);      -- (int) Math.pow(2, 16) --> 65536
-INSERT INTO regioncodes (name, code) VALUES ('전체', 131071);
 
 -- jobcodes 데이터 삽입
+INSERT INTO jobcodes (name, code) VALUES ('전체', 0);
 INSERT INTO jobcodes (name, code) VALUES ('기획·전략', 1);              -- (int) Math.pow(2, 0)  --> 1
 INSERT INTO jobcodes (name, code) VALUES ('법무·사무·총무', 2);          -- (int) Math.pow(2, 1)  --> 2
 INSERT INTO jobcodes (name, code) VALUES ('인사·HR', 4);                 -- (int) Math.pow(2, 2)  --> 4
@@ -42,17 +43,16 @@ INSERT INTO jobcodes (name, code) VALUES ('공공·복지', 524288);          --
 INSERT INTO jobcodes (name, code) VALUES ('중학생', 1048576);            -- (int) Math.pow(2, 20) --> 1048576
 INSERT INTO jobcodes (name, code) VALUES ('고등학생', 2097152);          -- (int) Math.pow(2, 21) --> 2097152
 INSERT INTO jobcodes (name, code) VALUES ('대학생', 4194304);            -- (int) Math.pow(2, 22) --> 4194304
-INSERT INTO jobcodes (name, code) VALUES ('전체', 8388607);
 
 -- agecodes 데이터 삽입
+INSERT INTO agecodes (name, code) VALUES ('전체', 0);
 INSERT INTO agecodes (name, code) VALUES ('10대', 1);                -- (int) Math.pow(2, 0)  --> 1
 INSERT INTO agecodes (name, code) VALUES ('20대', 2);                -- (int) Math.pow(2, 1)  --> 2
 INSERT INTO agecodes (name, code) VALUES ('30대', 4);                -- (int) Math.pow(2, 2)  --> 4
 INSERT INTO agecodes (name, code) VALUES ('40대', 8);                -- (int) Math.pow(2, 3)  --> 8
 INSERT INTO agecodes (name, code) VALUES ('50대 이상', 16);          -- (int) Math.pow(2, 4)  --> 16
-INSERT INTO agecodes (name, code) VALUES ('전체', 31);
 
 -- gendercodes 데이터 삽입
+INSERT INTO gendercodes (name, code) VALUES ('전체', 0);
 INSERT INTO gendercodes (name, code) VALUES ('남자', 1);
 INSERT INTO gendercodes (name, code) VALUES ('여자', 2);
-INSERT INTO gendercodes (name, code) VALUES ('전체', 3);

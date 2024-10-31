@@ -285,10 +285,10 @@ class DummyService {
                 .owner(user3)
                 .title("한국건강관리협회 설문")
                 .imgUrl("https://cdn-icons-png.flaticon.com/512/2382/2382533.png")
-                .regionCode(131071) // 전체
-                .jobCode(8388607) // 전체
+                .regionCode(0) // 전체
+                .jobCode(0) // 전체
                 .ageCode(30) // 20대부터 50대 이상
-                .genderCode(3) // 전체
+                .genderCode(0) // 전체
                 .maxHeadCnt(2000)
                 .currentHeadCnt(1200)
                 .point(500)
