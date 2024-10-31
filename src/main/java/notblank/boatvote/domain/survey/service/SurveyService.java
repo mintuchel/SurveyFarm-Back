@@ -66,6 +66,13 @@ public class SurveyService {
         surveyRepository.incrementCurrentHeadCnt(sid);
     }
 
+    @Transactional(readOnly = true)
+    public List<SurveyResponse> getAllSurveys(){
+        return surveyRepository.findAll()
+                .stream().map(dtoConverter::toSurveyResponse)
+                .toList();
+    }
+
     // 특정 유저가 참여가능한 설문 조사
     @Transactional(readOnly = true)
     public List<SurveyResponse> getAvailableSurveys(int uid) {

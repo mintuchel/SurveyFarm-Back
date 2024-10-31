@@ -17,6 +17,12 @@ import java.util.List;
 public class SurveyController {
     private final SurveyService surveyService;
 
+    @GetMapping("")
+    @Operation(summary = "설문 전체 조회")
+    public List<SurveyResponse> getAllSurveys() {
+        return surveyService.getAllSurveys();
+    }
+
     @GetMapping("/{sid}")
     @Operation(summary = "설문 단건 조회")
     public SurveyResponse getSurveyById(@PathVariable int sid){
