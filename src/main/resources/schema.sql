@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS regioncodes;
-CREATE TABLE regioncodes (
+CREATE TABLE IF NOT EXISTS regioncodes (
     name VARCHAR(255),
     code INT PRIMARY KEY
 );
 
 DROP TABLE IF EXISTS jobcodes;
-CREATE TABLE jobcodes (
+CREATE TABLE IF NOT EXISTS jobcodes (
     name VARCHAR(255),
     code INT PRIMARY KEY
 );

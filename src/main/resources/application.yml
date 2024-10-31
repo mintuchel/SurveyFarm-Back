@@ -1,28 +1,29 @@
-spring:
-  profiles:
-    active: dev
-
 #spring:
-#  datasource:
-#    # url: jdbc:h2:mem:boatvotetestdb
-#    url: jdbc:mysql://localhost:3306/boatvote?useSSL=false&serverTimezone=Asia/Seoul
-#    username: root
-#    password: 1234
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#  # 서버 실행할때 항상 sql 파일 실행
-#  sql:
-#    init:
-#      mode: always
-#      schema-locations: classpath:schema.sql
-#      data-locations: classpath:data.sql
-#  jpa:
-#    hibernate:
-#      ddl-auto: create
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
-#        dialect: org.hibernate.dialect.MySQLDialect
-#  logging:
-#    level:
-#      org.hibernate.SQL: DEBUG
+#  profiles:
+#    active: dev
+
+spring:
+  datasource:
+    # url: jdbc:h2:mem:boatvotetestdb
+    url: jdbc:mysql://localhost:3306/boatvote?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # 서버 실행할때 항상 sql 파일 실행
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  jpa:
+    defer-datasource-initialization: true # data.sql을 hibernate 설정 후 실행하도록
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
