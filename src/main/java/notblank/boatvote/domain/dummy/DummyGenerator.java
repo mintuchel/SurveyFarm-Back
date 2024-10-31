@@ -17,6 +17,13 @@ public class DummyGenerator {
         dummyService.initSurvey1();
         dummyService.initSurvey2();
         dummyService.initSurvey3();
+        dummyService.initSurvey4();
+        dummyService.initSurvey5();
+        dummyService.initSurvey6();
+        dummyService.initSurvey7();
+        dummyService.initSurvey8();
+        dummyService.initSurvey9();
+        dummyService.initSurvey10();
 
         dummyService.initParticipatedSurvey();
     }
