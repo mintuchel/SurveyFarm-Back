@@ -2,6 +2,7 @@ package notblank.boatvote.domain.answer.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.answer.dto.request.SubmitAnswerRequest;
 import notblank.boatvote.domain.answer.dto.response.AnswerResultResponse;
@@ -21,7 +22,7 @@ public class AnswerController {
 
     @PostMapping("")
     @Operation(summary = "특정 질문에 대한 유저의 답변 저장")
-    public boolean submitAnswer(@RequestBody SubmitAnswerRequest submitAnswerRequest){
+    public boolean submitAnswer(@RequestBody @Valid SubmitAnswerRequest submitAnswerRequest){
         return answerService.submitAnswer(submitAnswerRequest);
     }
 

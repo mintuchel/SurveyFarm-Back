@@ -1,5 +1,7 @@
 package notblank.boatvote.domain.survey.dto.internal;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
@@ -10,8 +12,8 @@ import java.util.stream.Collectors;
 @Builder
 public record QuestionDTO(
         int qid,
-        String title,
-        List<OptionDTO> optionList,
-        boolean isMultipleAnswer,
-        QuestionType questionType
+        @NotBlank String title,
+        @NotNull List<OptionDTO> optionList,
+        @NotBlank boolean isMultipleAnswer,
+        @NotBlank QuestionType questionType
 ) { }

@@ -2,6 +2,7 @@ package notblank.boatvote.domain.participation.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.participation.dto.request.ParticipationRequest;
 import notblank.boatvote.domain.participation.service.ParticipationService;
@@ -21,7 +22,7 @@ public class ParticipationController {
 
     @PostMapping()
     @Operation(summary = "특정 설문에 대한 유저의 참여내역 등록")
-    public String participateSurvey(@RequestBody ParticipationRequest participationRequest) {
+    public String participateSurvey(@RequestBody @Valid ParticipationRequest participationRequest) {
         return participationService.addNewParticipation(participationRequest);
     }
 
