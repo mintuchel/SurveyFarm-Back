@@ -41,6 +41,16 @@ public class SurveyController {
         return surveyService.getAvailableSurveys(uid);
     }
 
+    // event-scheduler 사용
+    // deadline table은 스키마로 작성해두고 실제 엔티티는 필요가 없음
+    // 근데 문제는 sid를 알려면 survey 테이블이 생성된 후 해야하는데 schema.sql 로 하면
+    // survey 테이블이 생성되기 전에 만들어져서 에러가 터진다는 것 ㅇㅇ
+    // redis table cache 사용
+//    @GetMapping("/deadline")
+//    public List<SurveyResponse> getDeadLineSurveys(){
+//        return surveyService.getDeadLineSurveys();
+//    }
+
     @GetMapping("/requested/{uid}")
     @Operation(summary = "특정 유저가 의뢰한 설문 조회")
     public List<SurveyResponse> getRequestedSurveys(@PathVariable("uid") int uid) {

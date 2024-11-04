@@ -83,11 +83,16 @@ public class SurveyService {
         int participantAgeCode = participant.getAgeCode();
         int participantGenderCode = participant.getGenderCode();
 
-        return surveyRepository.findAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
+        return surveyRepository.getAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
                 .stream()
                 .map(dtoConverter::toSurveyResponse)
                 .toList();
     }
+
+//    @Transactional(readOnly = true)
+//    public List<SurveyResponse> getDeadLineSurveys(){
+//
+//    }
 
     @Transactional(readOnly = true)
     public List<SurveyResponse> getRequestedSurveys(int uid) {
