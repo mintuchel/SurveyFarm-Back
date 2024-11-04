@@ -2,29 +2,29 @@ package notblank.boatvote.domain.dummy;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import notblank.boatvote.domain.dummy.initializer.EnterpriseSurveyGenerator;
+import notblank.boatvote.domain.dummy.initializer.OrganizationSurveyGenerator;
+import notblank.boatvote.domain.dummy.initializer.PersonalSurveyGenerator;
+import notblank.boatvote.domain.dummy.initializer.UserGenerator;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class DummyGenerator {
 
-    private final DummyService dummyService;
+    private final UserGenerator userGenerator;
+    private final PersonalSurveyGenerator personalSurveyGenerator;
+    private final OrganizationSurveyGenerator organizationSurveyGenerator;
+    private final EnterpriseSurveyGenerator enterpriseSurveyGenerator;
 
     @PostConstruct
     public void generateDummyUser(){
-        dummyService.initUser();
 
-        dummyService.initSurvey1();
-        dummyService.initSurvey2();
-        dummyService.initSurvey3();
-        dummyService.initSurvey4();
-        dummyService.initSurvey5();
-        dummyService.initSurvey6();
-        dummyService.initSurvey7();
-        dummyService.initSurvey8();
-        dummyService.initSurvey9();
-        dummyService.initSurvey10();
+        userGenerator.generateUsers();
 
-        dummyService.initParticipatedSurvey();
+        personalSurveyGenerator.generatePersonalSurveys();
+        organizationSurveyGenerator.generateOrganizationSurveys();
+        enterpriseSurveyGenerator.generateEnterpriseSurveys();
     }
 }
