@@ -40,10 +40,13 @@ public class UserGenerator {
     private void initEnterprise(){
         em.persist(buildUser("Netflix_KR", "100", 0, 262144, 0, 0)); // 전체, 미디어·문화·스포츠, 전체 연령, 전체 성별
         em.persist(buildUser("Spotify_KR", "100", 0, 262144, 0, 0)); // 전체, 미디어·문화·스포츠, 전체 연령, 전체 성별
+        em.persist(buildUser("Toss", "100", 0, 262144, 0, 0));
+        em.persist(buildUser("KoreanAir", "100", 0, 262144, 0, 0));
     }
 
     private void initOrganization(){
         em.persist(buildUser("KFA", "100", 0, 262144, 0, 0));       // 전체, 미디어·문화·스포츠, 전체 연령, 전체 성별
         em.persist(buildUser("OSA", "100", 0, 32, 0, 0)); // 개발·데이터
+        em.persist(buildUser("MOF", "100", 0, 32, 0, 0));
     }
 }

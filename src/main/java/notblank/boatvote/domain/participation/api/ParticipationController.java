@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/participation")
+@RequestMapping("api/participation")
 @Tag(name = "참여내역 API", description = "참여내역 등록, 참여내역 확인")
 public class ParticipationController {
 
@@ -26,8 +26,8 @@ public class ParticipationController {
         return participationService.addNewParticipation(participationRequest);
     }
 
-    @GetMapping("/history/{uid}")
-    @Operation(summary = "유저가 참여한 설문내역 조회")
+    @GetMapping("/{uid}")
+    @Operation(summary = "유저가 참여한 설문 조회")
     public List<SurveyResponse> getUserParticipatedSurveys(@PathVariable int uid) {
         return participationService.getParticipatedSurveyByUser(uid);
     }

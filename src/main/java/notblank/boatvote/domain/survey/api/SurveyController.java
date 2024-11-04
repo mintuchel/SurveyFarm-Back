@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/survey")
+@RequestMapping("api/survey")
 @Tag(name = "설문 API", description = "설문 생성, 설문 조회")
 public class SurveyController {
     private final SurveyService surveyService;

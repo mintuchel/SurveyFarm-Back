@@ -1,8 +1,5 @@
 package notblank.boatvote.domain.dummy.initializer;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import lombok.RequiredArgsConstructor;
 import notblank.boatvote.domain.question.entity.Option;
 import notblank.boatvote.domain.question.entity.Question;
 import notblank.boatvote.domain.question.entity.QuestionType;
@@ -17,8 +14,10 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
 
     @Transactional
     public void generateEnterpriseSurveys(){
-        generateSpotifySurvey();
         generateNetflixSurvey();
+        generateSpotifySurvey();
+        generateTossSurvey();
+        generateKoreanAirSurvey();
     }
 
     private void generateNetflixSurvey(){
@@ -49,11 +48,11 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
                 .imgUrl("https://cdn.digitaltoday.co.kr/news/photo/201606/71043_86083_3646.jpg")
                 .regionCode(1536)
                 .jobCode(384)
-                .ageCode(31)
-                .genderCode(3)
-                .maxHeadCnt(3000)
-                .currentHeadCnt(300)
-                .point(350)
+                .ageCode(0)
+                .genderCode(0)
+                .maxHeadCnt(1000)
+                .currentHeadCnt(500)
+                .point(100)
                 .description(description)
                 .duration(10)
                 .build();
@@ -127,5 +126,94 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
         spotify_survey.getQuestionList().add(mcQuestion5);
 
         em.persist(spotify_survey);
+    }
+
+    private void generateTossSurvey(){
+        Question question1 = createQuestion(
+                "토스를 사용하여 주로 어떤 서비스를 이용하시나요?",
+                QuestionType.MC, false,
+                List.of("송금", "신용카드 관리", "대출", "투자", "보험", "결제 서비스", "기타")
+        );
+
+        Question question2 = createQuestion(
+                "토스 앱의 사용자 경험(UX)에 대해 어떻게 평가하시나요?",
+                QuestionType.MC, false,
+                List.of("매우 만족", "만족", "보통", "불만족", "매우 불만족")
+        );
+
+        Question question3 = createQuestion(
+                "토스의 서비스 중 개선이 필요하다고 생각하는 점은 무엇인가요?",
+                QuestionType.SA, false,
+                List.of() // 주관식 질문은 옵션이 필요 없음
+        );
+
+        String description = "토스에서 고객의 서비스 이용 패턴, 선호 기능, 개선 사항 등을 파악하여 더 나은 금융 서비스를 제공하기 위한 기초 자료로 활용하고자 합니다.";
+
+        Survey toss_survey = Survey.builder()
+                .owner(findUserByNickName("Toss"))
+                .title("토스 앱 이용관련 설문")
+                .imgUrl("https://framerusercontent.com/images/EhEElRcoy4v5Y9uyUj3XkTWg.jpg")
+                .regionCode(0)
+                .jobCode(384)
+                .ageCode(0)
+                .genderCode(3)
+                .maxHeadCnt(5000)
+                .currentHeadCnt(2300)
+                .point(50)
+                .description(description)
+                .duration(7)
+                .build();
+
+        // 설문에 질문 추가해주기
+        toss_survey.getQuestionList().add(question1);
+        toss_survey.getQuestionList().add(question2);
+        toss_survey.getQuestionList().add(question3);
+
+        em.persist(toss_survey);
+    }
+
+    private void generateKoreanAirSurvey(){
+        Question question1 = createQuestion(
+                "대한항공을 이용한 이유는 무엇인가요?",
+                QuestionType.MC, false,
+                List.of("항공편의 가격", "항공편의 시간", "항공사 서비스", "직항 노선", "마일리지 적립", "기타")
+        );
+
+        Question question2 = createQuestion(
+                "대한항공의 서비스에 대한 전반적인 만족도는 어떠신가요?",
+                QuestionType.MC, false,
+                List.of("매우 만족", "만족", "보통", "불만족", "매우 불만족")
+        );
+
+        Question question3 = createQuestion(
+                "대한항공에서 개선이 필요하다고 생각하는 서비스는 무엇인가요?",
+                QuestionType.SA, false,
+                List.of() // 주관식 질문은 옵션이 필요 없음
+        );
+
+        String description = "대한항공에서 고객의 여행 경험, 서비스 만족도 및 개선 사항을 파악하여 더 나은 항공 서비스를 제공하기 위한 기초 자료로 활용하고자 합니다.";
+
+        Survey koreanAir_survey = Survey.builder()
+                .owner(findUserByNickName("KoreanAir"))
+                .title("대한항공 서비스 이용관련 설문")
+                .imgUrl("https://blog.kakaocdn.net/dn/w9qx5/btsH6ytpwCX/1WwAkkvMeMgYRRe6iDtsUK/img.jpg") // 적절한 이미지 URL로 변경
+                .regionCode(0)
+                .jobCode(0)
+                .ageCode(0)
+                .genderCode(3)
+                .maxHeadCnt(5000)
+                .currentHeadCnt(2300)
+                .point(50)
+                .description(description)
+                .duration(7)
+                .build();
+
+// 설문에 질문 추가해주기
+        koreanAir_survey.getQuestionList().add(question1);
+        koreanAir_survey.getQuestionList().add(question2);
+        koreanAir_survey.getQuestionList().add(question3);
+
+        em.persist(koreanAir_survey);
+
     }
 }

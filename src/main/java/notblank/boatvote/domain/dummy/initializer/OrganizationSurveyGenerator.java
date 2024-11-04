@@ -141,4 +141,48 @@ public class OrganizationSurveyGenerator extends SurveyGenerator {
         createAnswer(mcQuestion3, huro0906, "4"); // 인프라 운영
         createAnswer(saQuestion1, huro0906, "없어");
     }
+
+    private void generateMinisterySurvey(){
+        Question question1 = createQuestion(
+                "현재 이용하고 있는 대중교통 수단은 무엇인가요?",
+                QuestionType.MC, false,
+                List.of("버스", "지하철", "택시", "자전거", "도보", "기타")
+        );
+
+        Question question2 = createQuestion(
+                "대중교통 이용 시 가장 중요하게 생각하는 요소는 무엇인가요?",
+                QuestionType.MC, false,
+                List.of("정시성", "편리성", "안전성", "비용", "청결", "서비스 품질")
+        );
+
+        Question question3 = createQuestion(
+                "국토교통부에서 개선해야 한다고 생각하는 교통 정책이나 서비스는 무엇인가요?",
+                QuestionType.SA, false,
+                List.of() // 주관식 질문은 옵션이 필요 없음
+        );
+
+        String description = "국토교통부에서는 시민들의 대중교통 이용 패턴과 요구를 파악하여 정책 개선 및 서비스 향상에 활용하고자 합니다.";
+
+        Survey ministryOfLandSurvey = Survey.builder()
+                .owner(findUserByNickName("MOF"))
+                .title("대중교통 이용 관련 설문조사")
+                .imgUrl("https://blog.kakaocdn.net/dn/3JIUU/btrwpiWlCV5/kUxpxTWxv7Zv84HdzpKLD0/img.png")
+                .regionCode(0)
+                .jobCode(0)
+                .ageCode(0)
+                .genderCode(3)
+                .maxHeadCnt(10000)
+                .currentHeadCnt(5000)
+                .point(50)
+                .description(description)
+                .duration(14)
+                .build();
+
+        // 설문에 질문 추가해주기
+        ministryOfLandSurvey.getQuestionList().add(question1);
+        ministryOfLandSurvey.getQuestionList().add(question2);
+        ministryOfLandSurvey.getQuestionList().add(question3);
+
+        em.persist(ministryOfLandSurvey);
+    }
 }

@@ -86,7 +86,7 @@ public class PersonalSurveyGenerator extends SurveyGenerator {
                 .owner(findUserByNickName("huro0906"))
                 .title("운동습관설문")
                 .imgUrl("https://cdn-icons-png.flaticon.com/512/4729/4729230.png")
-                .regionCode(32767)
+                .regionCode(63)
                 .jobCode(96)
                 .ageCode(18)
                 .genderCode(2)

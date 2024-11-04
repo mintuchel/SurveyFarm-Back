@@ -14,22 +14,22 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/answer")
+@RequestMapping("api/answer")
 @Tag(name = "답변 API", description = "답변 저장, 답변 조회, 답변 통계 조회")
 public class AnswerController {
 
     private final AnswerService answerService;
 
-    @PostMapping("")
-    @Operation(summary = "특정 질문에 대한 유저의 답변 저장")
-    public boolean submitAnswer(@RequestBody @Valid SubmitAnswerRequest submitAnswerRequest){
-        return answerService.submitAnswer(submitAnswerRequest);
-    }
-
     @GetMapping("")
     @Operation(summary = "특정 질문에 대한 유저의 답변 조회")
     public List<UserAnswerResponse> getCertainUserResult(@RequestParam int uid, @RequestParam int qid){
         return answerService.getParticipantAnswer(uid, qid);
+    }
+
+    @PostMapping("")
+    @Operation(summary = "특정 질문에 대한 유저의 답변 저장")
+    public boolean submitAnswer(@RequestBody @Valid SubmitAnswerRequest submitAnswerRequest){
+        return answerService.submitAnswer(submitAnswerRequest);
     }
 
     @GetMapping("/result/{qid}")
