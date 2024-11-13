@@ -12,6 +12,7 @@ import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
 import notblank.surveyfarm.domain.survey.service.SurveyService;
 import notblank.surveyfarm.domain.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,6 +66,7 @@ public class ParticipationServiceTest {
     }
 
     @Test
+    @DisplayName("참여 설문 정보 반환 성공")
     public void getParticipatedSurveySuccess() {
         // given
         given(participationRepository.getUserParticipationInfo(UID)).willReturn(List.of(participationInfoVO));
