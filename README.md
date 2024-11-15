@@ -24,7 +24,7 @@
 # Service UI
 
 ## 메인 페이지
-<img width="700" alt="홈페이지" src="https://github.com/user-attachments/assets/8a0ca770-f3c5-4e77-bbd8-7ca8ec3a96b0">
+<img width="1468" alt="홈페이지" src="https://github.com/user-attachments/assets/8a0ca770-f3c5-4e77-bbd8-7ca8ec3a96b0">
 
 인기설문조사 및 마감임박설문조사를 노출시켜 각 설문조사들이 추가적으로 노출될 수 있는 환경을 제공하고 있습니다. 양쪽 사이드바에 광고를 배치함으로써 광고 수익을 창출할 예정입니다.
 설문조사 의뢰하기 버튼 클릭 시 아래의 설문 제작 페이지로 이동합니다.
@@ -35,11 +35,11 @@
 다양한 필터링 조건을 제공하여 의뢰자가 설문조사에 참여가능한 표본집단을 특정할 수 있게 하였습니다.
 
 ## 설문 제작
-<img width="1712" alt="설문제작" src="https://github.com/user-attachments/assets/c18e88b9-8fcf-4589-b742-77dead7da74b">
+<img width="1468" alt="설문제작" src="https://github.com/user-attachments/assets/c18e88b9-8fcf-4589-b742-77dead7da74b">
 
 편리하고 직관적인 UI를 통해 누구나 쉽게 설문을 제작할 수 있게 하였습니다. 객관식, 주관식 질문 외 선형 배율, 체크 박스, 드롭다운등 다양한 종류의 선지를 활용할 수 있는 질문 유형을 추가하여 의뢰자에게 자유도 높은 선지 구성 환경을 제공할 예정입니다.
 
 ## 참여자 답변 분석
-<img width="569" alt="주관식 답변 분석" src="https://github.com/user-attachments/assets/8a2db162-0dc2-412d-affb-b4c3657ae676">
+<img width="1468" alt="주관식 답변 분석" src="https://github.com/user-attachments/assets/8a2db162-0dc2-412d-affb-b4c3657ae676">
 
 설문 의뢰자에게 데이터를 시각화하여 직관적인 UI로 설문 결과를 파악할 수 있게 하고, 워드클라우드등의 추가적인 기능으로 통해 여론 및 조사결과를 쉽게 분석할 수 있는 환경을 마련했습니다.
