@@ -47,12 +47,12 @@ public class SurveyServiceTest {
     private SurveyRepository surveyRepository;
 
     // 모두 실제 로직을 수행하는 진짜 객체이므로 Spy 로 선언
-    // DTOConverter가 CodeConverter가 생성된 채로 의존성 주입을 받아야하므로
+    // DTOConverter는 CodeConverter가 필요하므로 CodeConverter까지 생성
     // Spy 선언할때 생성자로 바로 초기화
     @Spy
     private CodeConverter codeConverter = new CodeConverter();
 
-    // private DTOConverter dtoConverter; 왜 이렇게만 하면 에러뜨는지 나중에 꼭 찾아보기
+    // CodeConverter와의 의존성 문제는 @RequiredArgs를 통해 생성자 주입으로 해결
     @Spy
     private DTOConverter dtoConverter = new DTOConverter(codeConverter);
 
