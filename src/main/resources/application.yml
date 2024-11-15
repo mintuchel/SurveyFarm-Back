@@ -4,8 +4,7 @@
 
 spring:
   datasource:
-    # url: jdbc:h2:mem:boatvotetestdb
-    url: jdbc:mysql://localhost:3306/boatvote?useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/surveyfarm?useSSL=false&serverTimezone=Asia/Seoul
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
