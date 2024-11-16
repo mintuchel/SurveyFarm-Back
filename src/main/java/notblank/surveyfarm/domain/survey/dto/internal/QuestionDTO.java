@@ -12,6 +12,6 @@ public record QuestionDTO(
         int qid,
         @NotBlank String title,
         @NotNull List<OptionDTO> optionList,
-        @NotBlank boolean isMultipleAnswer,
+        @NotBlank boolean isMultipleChoice,
         @NotBlank QuestionType questionType
 ) { }
