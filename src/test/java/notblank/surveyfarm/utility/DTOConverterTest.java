@@ -56,8 +56,8 @@ public class DTOConverterTest {
         // 객관식 질문 1
         Question mcQuestion1 = Question.builder()
                 .title("가장 좋아하는 프리미어리그 축구팀은 어디인가요?")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
+                .questionType(QuestionType.MC)
+                .isMultipleChoice(false)
                 .build();
         List.of("맨시티", "리버풀", "아스날", "첼시", "토트넘", "뉴캐슬", "맨유", "브라이튼", "울버햄튼")
                 .forEach(text -> mcQuestion1.getOptionList().add(Option.builder().text(text).build()));
@@ -65,8 +65,8 @@ public class DTOConverterTest {
         // 객관식 질문 2
         Question mcQuestion2 = Question.builder()
                 .title("가장 좋아하는 라리가 축구팀은 어디인가요?")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
+                .questionType(QuestionType.MC)
+                .isMultipleChoice(false)
                 .build();
         List.of("FC 바르셀로나", "레알 마드리드", "아틀레티코 마드리드", "세비야","비아레얄", "마요르카")
                 .forEach(text -> mcQuestion2.getOptionList().add(Option.builder().text(text).build()));
@@ -74,7 +74,7 @@ public class DTOConverterTest {
         // 주관식 질문 1
         Question saQuestion1 = Question.builder()
                 .title("축구를 좋아하는 이유는 무엇인가요?")
-                .type(QuestionType.SA)
+                .questionType(QuestionType.SA)
                 .build();
 
         survey2 = Survey.builder()

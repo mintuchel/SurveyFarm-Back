@@ -84,11 +84,11 @@ public class DTOConverter {
         return QuestionDTO.builder()
                 .qid(question.getId())
                 .title(question.getTitle())
-                .isMultipleAnswer(question.isMultipleAnswer())
+                .isMultipleAnswer(question.isMultipleChoice())
                 .optionList(question.getOptionList().stream() // 스트림 생성
                         .map(this::toOptionDto) // Option 객체를 OptionDTO로 변환
                         .toList())
-                .questionType(question.getType())
+                .questionType(question.getQuestionType())
                 .build();
     }
 
@@ -104,8 +104,8 @@ public class DTOConverter {
         for(QuestionDTO questionDTO : questionDTOList){
             Question curQuestion = Question.builder()
                     .title(questionDTO.title())
-                    .isMultipleAnswer(questionDTO.isMultipleAnswer())
-                    .type(questionDTO.questionType())
+                    .isMultipleChoice(questionDTO.isMultipleAnswer())
+                    .questionType(questionDTO.questionType())
                     .build();
 
             curQuestion.getOptionList().addAll(getOptionList(questionDTO.optionList()));

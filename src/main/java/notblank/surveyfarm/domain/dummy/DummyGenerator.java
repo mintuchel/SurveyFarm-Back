@@ -17,7 +17,7 @@ public class DummyGenerator {
     private final OrganizationSurveyGenerator organizationSurveyGenerator;
     private final EnterpriseSurveyGenerator enterpriseSurveyGenerator;
 
-    @PostConstruct
+    //@PostConstruct
     public void generateDummyUser(){
 
         userGenerator.generateUsers();

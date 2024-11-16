@@ -69,8 +69,8 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
         // 객관식 질문 1
         Question mcQuestion1 = Question.builder()
                 .title("가장 좋아하는 음악 장르는 무엇인가요?")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
+                .questionType(QuestionType.MC)
+                .isMultipleChoice(false)
                 .build();
         List.of("걸그룹(댄스)", "힙합", "R&B", "발라드")
                 .forEach(text -> mcQuestion1.getOptionList().add(Option.builder().text(text).build()));
@@ -78,8 +78,8 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
         // 객관식 질문 2
         Question mcQuestion2 = Question.builder()
                 .title("가장 좋아하는 가수는 누구인가요?")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
+                .questionType(QuestionType.MC)
+                .isMultipleChoice(false)
                 .build();
         List.of("NewJeans", "블랙핑크", "아이유", "르세라핌", "QWER", "프로미스나인")
                 .forEach(text -> mcQuestion2.getOptionList().add(Option.builder().text(text).build()));
@@ -87,8 +87,8 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
         // 객관식 질문 4
         Question mcQuestion4 = Question.builder()
                 .title("음악을 주로 어디에서 감상하시나요?")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
+                .questionType(QuestionType.MC)
+                .isMultipleChoice(false)
                 .build();
         List.of("스트리밍 앱", "유튜브", "음반 구매", "라이브 공연")
                 .forEach(text -> mcQuestion4.getOptionList().add(Option.builder().text(text).build()));
@@ -96,8 +96,8 @@ public class EnterpriseSurveyGenerator extends SurveyGenerator {
         // 객관식 질문 5
         Question mcQuestion5 = Question.builder()
                 .title("Spotify로 음악을 얼마나 자주 들으시나요?")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
+                .questionType(QuestionType.MC)
+                .isMultipleChoice(false)
                 .build();
         List.of("매일", "주 1-2회", "가끔", "거의 안 듣는다")
                 .forEach(text -> mcQuestion5.getOptionList().add(Option.builder().text(text).build()));
