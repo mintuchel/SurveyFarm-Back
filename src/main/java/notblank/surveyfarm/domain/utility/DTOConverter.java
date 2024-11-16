@@ -10,6 +10,7 @@ import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
 import notblank.surveyfarm.domain.survey.dto.request.CreateSurveyRequest;
 import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
+import notblank.surveyfarm.domain.user.dto.response.UserResponse;
 import notblank.surveyfarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,18 @@ import java.util.List;
 public class DTOConverter {
 
     private final CodeConverter codeConverter;
+
+    public UserResponse toUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .password(user.getPassword())
+                .nickName(user.getNickName())
+                .regionList(codeConverter.convertRegionCodeToList(user.getRegionCode()))
+                .jobList(codeConverter.convertJobCodeToList(user.getJobCode()))
+                .ageList(codeConverter.convertAgeCodeToList(user.getAgeCode()))
+                .genderList(codeConverter.convertGenderCodeToList(user.getGenderCode()))
+                .build();
+    }
 
     public Survey toSurveyEntity(CreateSurveyRequest createSurveyRequest, User owner){
 
