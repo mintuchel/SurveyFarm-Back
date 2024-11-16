@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
-    @Query(value = "SELECT type FROM question WHERE id = :qid", nativeQuery = true)
+    @Query(value = "SELECT question_type FROM question WHERE id = :qid", nativeQuery = true)
     QuestionType getQuestionTypeByQid(@Param("qid") int qid);
 }

@@ -20,9 +20,9 @@ public class Question {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private QuestionType type;
+    private QuestionType questionType;
 
-    private boolean isMultipleAnswer;
+    private boolean isMultipleChoice;
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

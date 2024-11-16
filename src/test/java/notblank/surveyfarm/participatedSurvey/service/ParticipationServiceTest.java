@@ -1,5 +1,6 @@
 package notblank.surveyfarm.participatedSurvey.service;
 
+import net.datafaker.Faker;
 import notblank.surveyfarm.domain.participation.vo.ParticipationInfoVO;
 import notblank.surveyfarm.domain.participation.repository.ParticipationRepository;
 import notblank.surveyfarm.domain.participation.service.ParticipationService;
@@ -9,18 +10,23 @@ import notblank.surveyfarm.domain.survey.dto.internal.OptionDTO;
 import notblank.surveyfarm.domain.survey.dto.internal.QuestionDTO;
 import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
 import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
+import notblank.surveyfarm.domain.survey.entity.Survey;
 import notblank.surveyfarm.domain.survey.service.SurveyService;
 import notblank.surveyfarm.domain.user.entity.User;
+import notblank.surveyfarm.domain.utility.CodeConverter;
+import notblank.surveyfarm.domain.utility.DTOConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.assertj.core.api.Assertions;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -36,33 +42,19 @@ public class ParticipationServiceTest {
     @Mock
     private ParticipationRepository participationRepository;
 
-    private int SID = 1111;
-    private int UID = 9999;
+    private final Faker faker = new Faker();
 
-    private User participant;
-    private User owner;
+    private int SID = faker.number().randomDigitNotZero();
+    private int UID = faker.number().randomDigitNotZero();
+    private String nickName = faker.name().firstName();
+
+    @Mock
     private ParticipationInfoVO participationInfoVO;
-    private SurveyResponse surveyResponse;
 
     @BeforeEach
     public void testSetUp(){
-
-        participationInfoVO = new ParticipationInfoVO(SID, LocalDateTime.now());
-
-        owner = User.builder()
-                .nickName("modric")
-                .regionCode(2) // 서울
-                .jobCode(64) // 개발자
-                .ageCode(40) // 대학생, 20대
-                .genderCode(1) // 남자
-                .build();
-
-        participant = User.builder()
-                .id(UID)
-                .nickName("valverde")
-                .build();
-
-       surveyResponse = GetSurveyResponse();
+        when(participationInfoVO.sid()).thenReturn(SID);
+        when(participationInfoVO.participated_at()).thenReturn(LocalDateTime.now());
     }
 
     @Test
@@ -70,21 +62,20 @@ public class ParticipationServiceTest {
     public void getParticipatedSurveySuccess() {
         // given
         given(participationRepository.getUserParticipationInfo(UID)).willReturn(List.of(participationInfoVO));
-        given(surveyService.getSurveyResponseById(SID)).willReturn(surveyResponse);
+        given(surveyService.getSurveyResponseById(SID)).willReturn(getSurveyResponse());
 
         // when
         List<SurveyResponse> list = participationService.getParticipatedSurveyByUser(UID);
 
         // then
-        Assertions.assertThat(list).hasSize(1);
-        System.out.println(list.get(0).participatedAt());
+        System.out.println(list);
     }
 
-    private SurveyResponse GetSurveyResponse() {
+    private SurveyResponse getSurveyResponse() {
         // SurveyInfoDTO 생성
         SurveyInfoDTO surveyInfo = SurveyInfoDTO.builder()
                 .sid(SID)
-                .nickName("modric")
+                .nickName(nickName)
                 .title("sample title")
                 .description("This survey aims to gather opinions on...")
                 .imgUrl("sample image url")

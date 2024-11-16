@@ -28,8 +28,8 @@ public abstract class SurveyGenerator {
     protected Question createQuestion(String title, QuestionType questionType, boolean isMultipleAnswer, List<String> options){
         Question q =  Question.builder()
                 .title(title)
-                .type(questionType)
-                .isMultipleAnswer(isMultipleAnswer)
+                .questionType(questionType)
+                .isMultipleChoice(isMultipleAnswer)
                 .build();
         options.forEach(text -> q.getOptionList().add(Option.builder().text(text).build()));
 

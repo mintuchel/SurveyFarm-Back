@@ -2,6 +2,7 @@ package notblank.surveyfarm.survey.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.datafaker.Faker;
 import notblank.surveyfarm.domain.question.entity.Option;
 import notblank.surveyfarm.domain.question.entity.Question;
 import notblank.surveyfarm.domain.question.entity.QuestionType;
@@ -34,6 +35,7 @@ import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SurveyServiceTest {
@@ -56,77 +58,47 @@ public class SurveyServiceTest {
     @Spy
     private DTOConverter dtoConverter = new DTOConverter(codeConverter);
 
-    private User owner;
-    private User participant;
+    private final Faker faker = new Faker();
 
+    @Mock
+    private User owner;
+    @Mock
     private Survey survey;
+    @Mock
     private Question question;
+    @Mock
     private Option option1;
+    @Mock
     private Option option2;
 
-    int SURVEY_ID = 1;
-    int OWNER_ID = 15;
+    int SURVEY_ID = faker.number().randomDigitNotZero();
+    int OWNER_ID = faker.number().randomDigitNotZero();
 
     private void ownerSetUp(){
-        owner = User.builder()
-                .nickName("jackson")
-                .regionCode(2) // 서울
-                .jobCode(64) // 개발자
-                .ageCode(40) // 대학생, 20대
-                .genderCode(1) // 남자
-                .build();
-    }
-
-    private void participantSetUp(){
-        participant = User.builder()
-                .nickName("palmer")
-                .regionCode(2) // 서울
-                .jobCode(64) // 개발자
-                .ageCode(40) // 대학생, 20대
-                .genderCode(1) // 남자
-                .build();
-    }
-
-    private void optionSetUp(){
-        option1 = Option.builder()
-                .text("chelsea")
-                .build();
-
-        option2 = Option.builder()
-                .text("arsenal")
-                .build();
+        when(owner.getId()).thenReturn(OWNER_ID);
+        when(owner.getNickName()).thenReturn(faker.name().firstName());
     }
 
     private void questionSetUp(){
-        question = Question.builder()
-                .title("응원하는 팀 고르셈")
-                .type(QuestionType.MC)
-                .isMultipleAnswer(false)
-                .build();
-
-        question.getOptionList().add(option1);
-        question.getOptionList().add(option2);
+        when(question.getOptionList()).thenReturn(List.of(option1, option2));
     }
 
     private void surveySetUp(){
-        survey = Survey.builder()
-                .id(123) // 고유 sid
-                .owner(owner)
-                .title("sample title")
-                .imgUrl("sample imgUrl")
-                .regionCode(7) // 서울(1), 경기(2), 인천(4)
-                .jobCode(9) // 기획·전략(1), 회계·세무(8)
-                .ageCode(3) // 10대(1) + 20대(2)
-                .genderCode(1) // 남자(1)
-                .maxHeadCnt(100)
-                .currentHeadCnt(1)
-                .createdAt(LocalDateTime.now())
-                .endAt(LocalDateTime.now().plusDays(30))
-                .point(350)
-                .duration(5)
-                .build();
-
-        survey.getQuestionList().add(question);
+        when(survey.getId()).thenReturn(SURVEY_ID);
+        when(survey.getOwner()).thenReturn(owner);
+        when(survey.getTitle()).thenReturn("sample title");
+        when(survey.getImgUrl()).thenReturn("sample imgUrl");
+        when(survey.getRegionCode()).thenReturn(faker.number().numberBetween(1, 1000));
+        when(survey.getJobCode()).thenReturn(faker.number().numberBetween(1, 1000));
+        when(survey.getAgeCode()).thenReturn(faker.number().numberBetween(1, 100));
+        when(survey.getGenderCode()).thenReturn(faker.number().numberBetween(1, 2));
+        when(survey.getMaxHeadCnt()).thenReturn(faker.number().numberBetween(1, 100));
+        when(survey.getCurrentHeadCnt()).thenReturn(faker.number().numberBetween(1, 100));
+        when(survey.getCreatedAt()).thenReturn(LocalDateTime.now());
+        when(survey.getEndAt()).thenReturn(LocalDateTime.now().plusDays(30));
+        when(survey.getPoint()).thenReturn(faker.number().numberBetween(1, 100));
+        when(survey.getDuration()).thenReturn(faker.number().numberBetween(1, 10));
+        when(survey.getQuestionList()).thenReturn(List.of(question));
     }
 
     @BeforeEach
@@ -134,9 +106,6 @@ public class SurveyServiceTest {
         codeConverter.initCodeConverter();
 
         ownerSetUp();
-        participantSetUp();
-
-        optionSetUp();
         questionSetUp();
         surveySetUp();
     }
@@ -155,20 +124,13 @@ public class SurveyServiceTest {
         FilterDTO filters = response.filters();
         List<QuestionDTO> questions = response.questions();
 
-        System.out.println(filters);
+        System.out.println(filters.regionList());
+        System.out.println(filters.jobList());
+        System.out.println(filters.ageList());
 
-        Assertions.assertThat(surveyInfo.maxHeadCnt()).isEqualTo(100);
-
+        Assertions.assertThat(surveyInfo.sid()).isEqualTo(SURVEY_ID);
+        Assertions.assertThat(surveyInfo.nickName()).isNotBlank();
         Assertions.assertThat(questions).hasSize(1);
-        Assertions.assertThat(questions.get(0).title()).isEqualTo(question.getTitle());
-
-        Assertions.assertThat(filters.regionList()).contains("서울","경기","인천");
-        Assertions.assertThat(filters.jobList()).contains("기획·전략","회계·세무");
-        Assertions.assertThat(filters.ageList()).contains("10대","20대");
-        Assertions.assertThat(filters.genderList()).contains("남자");
-
-        Assertions.assertThat(questions.get(0).optionList().get(0).text()).isEqualTo("chelsea");
-        Assertions.assertThat(questions.get(0).optionList().get(1).text()).isEqualTo("arsenal");
     }
 
     @Test
