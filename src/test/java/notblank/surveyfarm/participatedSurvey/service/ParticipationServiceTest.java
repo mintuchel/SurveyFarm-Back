@@ -104,14 +104,14 @@ public class ParticipationServiceTest {
                                 new OptionDTO("손흥민"),
                                 new OptionDTO("이강인")
                         ))
-                        .isMultipleAnswer(false)
+                        .isMultipleChoice(false)
                         .questionType(QuestionType.MC)
                         .build(),
                 QuestionDTO.builder()
                         .qid(2)
                         .title("최근 본 영화에 대해 간단히 말해주세요.")
                         .optionList(List.of())
-                        .isMultipleAnswer(false)
+                        .isMultipleChoice(false)
                         .questionType(QuestionType.SA)
                         .build(),
                 QuestionDTO.builder()
@@ -122,7 +122,7 @@ public class ParticipationServiceTest {
                                 new OptionDTO("스페인"),
                                 new OptionDTO("이탈리아")
                         ))
-                        .isMultipleAnswer(true)
+                        .isMultipleChoice(true)
                         .questionType(QuestionType.MC)
                         .build()
         );
