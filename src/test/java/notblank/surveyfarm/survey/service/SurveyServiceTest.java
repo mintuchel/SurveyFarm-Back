@@ -1,15 +1,13 @@
 package notblank.surveyfarm.survey.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.datafaker.Faker;
+import notblank.surveyfarm.SurveyFarmDataFactory;
 import notblank.surveyfarm.domain.question.entity.Option;
 import notblank.surveyfarm.domain.question.entity.Question;
-import notblank.surveyfarm.domain.question.entity.QuestionType;
 import notblank.surveyfarm.domain.survey.dto.internal.FilterDTO;
 import notblank.surveyfarm.domain.survey.dto.internal.QuestionDTO;
 import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
-import notblank.surveyfarm.domain.survey.dto.request.CreateSurveyRequest;
 import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
 import notblank.surveyfarm.domain.survey.repository.SurveyRepository;
@@ -36,6 +34,7 @@ import java.util.Optional;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 public class SurveyServiceTest {
@@ -58,25 +57,30 @@ public class SurveyServiceTest {
     @Spy
     private DTOConverter dtoConverter = new DTOConverter(codeConverter);
 
-    private final Faker faker = new Faker();
-
-    @Mock
+    // owner 는 실제 객체로 테스트해야함
     private User owner;
+
     @Mock
     private Survey survey;
     @Mock
     private Question question;
     @Mock
-    private Option option1;
-    @Mock
-    private Option option2;
+    private Option option1, option2;
 
-    int SURVEY_ID = faker.number().randomDigitNotZero();
-    int OWNER_ID = faker.number().randomDigitNotZero();
+    private final Faker faker = new Faker();
+
+    private final int SURVEY_ID = faker.number().randomDigitNotZero();
+    private final int OWNER_ID = faker.number().randomDigitNotZero();
 
     private void ownerSetUp(){
-        when(owner.getId()).thenReturn(OWNER_ID);
-        when(owner.getNickName()).thenReturn(faker.name().firstName());
+        owner = User.builder()
+                .id(OWNER_ID)
+                .nickName(faker.name().firstName())
+                .regionCode(faker.number().numberBetween(1,100))
+                .jobCode(faker.number().numberBetween(1,100))
+                .ageCode(faker.number().numberBetween(1,100))
+                .genderCode(faker.number().numberBetween(1,2))
+                .build();
     }
 
     private void questionSetUp(){
@@ -106,13 +110,15 @@ public class SurveyServiceTest {
         codeConverter.initCodeConverter();
 
         ownerSetUp();
-        questionSetUp();
-        surveySetUp();
     }
 
     @Test
     @DisplayName("설문 조회 성공 (entity to responseDTO 성공)")
     public void getSurveyInfoResponseSuccess(){
+        // setup
+        questionSetUp();
+        surveySetUp();
+
         // given
         given(surveyRepository.findById(SURVEY_ID)).willReturn(Optional.of(survey));
 
@@ -137,12 +143,12 @@ public class SurveyServiceTest {
     @DisplayName("의뢰된 설문 저장 성공 (requestDTO to entity 성공)")
     public void addSurveySuccess() throws JsonProcessingException{
         // given
-        given(userService.findById(OWNER_ID)).willReturn(owner);
+        given(userService.findById(any(Integer.class))).willReturn(owner);
 
         ArgumentCaptor<Survey> argumentCaptor = ArgumentCaptor.forClass(Survey.class);
 
         // when
-        surveyService.addNewSurvey(surveyDTO());
+        surveyService.addNewSurvey(SurveyFarmDataFactory.getCreateSurveyRequestDTO());
 
         // then
         verify(surveyRepository).save(argumentCaptor.capture());
@@ -155,63 +161,7 @@ public class SurveyServiceTest {
         Assertions.assertThat(savedSurvey.getJobCode()).isEqualTo(9); // 기획·전략(1), 회계·세무(8)
         Assertions.assertThat(savedSurvey.getAgeCode()).isEqualTo(3); // 10대 + 20대
         Assertions.assertThat(savedSurvey.getGenderCode()).isEqualTo(1); // 남자
+
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
     }
-
-    private CreateSurveyRequest surveyDTO() throws JsonProcessingException {
-        String jsonString = "{\n"
-                + "  \"surveyInfo\": {\n"
-                + "    \"sid\": 1,\n"
-                + "    \"uid\": 15,\n"
-                + "    \"nickName\": \"SampleOwner\",\n"
-                + "    \"title\": \"Sample Survey Title\",\n"
-                + "    \"description\": \"This is a sample description\",\n"
-                + "    \"imgUrl\": \"sampleImageUrl\",\n"
-                + "    \"duration\": 5,\n"
-                + "    \"maxHeadCnt\": 1000\n" // 쉼표 제거
-                + "  },\n"
-                + "  \"filters\": {\n"
-                + "    \"regionList\": [\"서울\", \"경기\", \"인천\"],\n"
-                + "    \"jobList\": [\"기획·전략\", \"회계·세무\"],\n"
-                + "    \"genderList\": [\"남자\"],\n"
-                + "    \"ageList\": [\"10대\", \"20대\"]\n"
-                + "  },\n"
-                + "  \"questions\": [\n"
-                + "    {\n"
-                + "      \"qid\": 1,\n"
-                + "      \"title\": \"최애 첼시 선수는?\",\n"
-                + "      \"optionList\": [\n"
-                + "        {\"text\": \"파머\"},\n"
-                + "        {\"text\": \"마두에케\"},\n"
-                + "        {\"text\": \"엔조\"},\n"
-                + "        {\"text\": \"카이세도\"}\n"
-                + "      ],\n"
-                + "      \"isMultipleAnswer\": false,\n"
-                + "      \"questionType\": \"MC\"\n"
-                + "    },\n"
-                + "    {\n"
-                + "      \"qid\": 2,\n"
-                + "      \"title\": \"최근 5경기 니콜라스 잭슨의 폼에 대해 너의 의견을 적어줘\",\n"
-                + "      \"optionList\": [],\n"
-                + "      \"isMultipleAnswer\": false,\n"
-                + "      \"questionType\": \"SA\"\n"
-                + "    },\n"
-                + "    {\n"
-                + "      \"qid\": 3,\n"
-                + "      \"title\": \"첼시에 영입하면 좋을거 같은 선수를 모두 골라\",\n"
-                + "      \"optionList\": [\n"
-                + "        {\"text\": \"손흥민\"},\n"
-                + "        {\"text\": \"박지성\"},\n"
-                + "        {\"text\": \"차범근\"}\n"
-                + "      ],\n"
-                + "      \"isMultipleAnswer\": true,\n"
-                + "      \"questionType\": \"MC\"\n"
-                + "    }\n"
-                + "  ]\n"
-                + "}";
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(jsonString, CreateSurveyRequest.class);
-    }
-
 }
