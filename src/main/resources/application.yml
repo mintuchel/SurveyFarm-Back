@@ -11,13 +11,15 @@ spring:
   # 서버 실행할때 항상 sql 파일 실행
   sql:
     init:
-      mode: always
+      mode: never #
+      # mode: always # 매번 schema.sql data.sql 실행
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
   jpa:
     defer-datasource-initialization: true # data.sql을 hibernate 설정 후 실행하도록
     hibernate:
-      ddl-auto: create
+      ddl-auto: update # 기존 더미 데이터 삭제되지 않게
+      # ddl-auto: create # 매번 db 초기화하고 시작
     properties:
       hibernate:
         show_sql: true
