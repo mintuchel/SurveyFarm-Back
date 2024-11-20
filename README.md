@@ -3,7 +3,6 @@
     <img alt="AwesomeCV" src="https://github.com/user-attachments/assets/560d4d8a-a74b-4c6e-b3ce-add821b60e1c"/>
 </a>
 </h1>
-
 <p align="center">
   저비용-고효율 가성비 설문조사 플랫폼 서비스입니다
 </p>
@@ -25,7 +24,6 @@
 
 # Service Introduction
 
----
 본 서비스는 설문조사 의뢰자로부터 플랫폼 이용료를 받고, 이 중 수수료를 제외한 금액을 설문 참가자 수에 따라 분배하여 각 설문 참여자들에게 참여에 대한 보상을 포인트 형식으로 지급하는 설문조사 플랫폼 서비스입니다.
 
 저희는 다음과 같은 현 설문조사 시장의 문제점들을 파악하고
@@ -42,17 +40,14 @@
 
 # ERD
 
----
 ![SurveyFarm](https://github.com/user-attachments/assets/9bbd1c81-4d26-48cf-9fec-ab841153e379)
 
 # Architecture
 
----
 ![surveyfarm-architecture](https://github.com/user-attachments/assets/6665dc9c-5ff3-43c5-aca7-492e0efb4de6)
 
 # Service UI
 
----
 ## 1. 메인 페이지
 <img width="1468" alt="홈페이지" src="https://github.com/user-attachments/assets/8a0ca770-f3c5-4e77-bbd8-7ca8ec3a96b0">
 
