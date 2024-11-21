@@ -1,5 +1,6 @@
 package notblank.surveyfarm.domain.user.api;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import notblank.surveyfarm.domain.user.dto.response.UserResponse;
@@ -11,12 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
-@Tag(name = "User API", description = "로그인, 회원가입")
+@RequestMapping("/api/user")
+@Tag(name = "유저 API", description = "로그인, 회원가입, 유저 조회")
 public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
+    @Operation(summary = "유저 단건 조회")
     public UserResponse getUserById(@PathVariable int id){
         return userService.getUserResponseById(id);
     }
