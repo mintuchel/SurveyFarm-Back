@@ -29,10 +29,6 @@ public interface SurveyRepository extends JpaRepository<Survey, Integer> {
             @Param("participantGenderCode") int participantGenderCode
     );
 
-    // 마감임박 설문 조회
-//    @Query(value = "SELECT * FROM SURVEY WHERE DATEDIFF(end_at, CURDATE())", nativeQuery = true)
-//    List<Survey> getDeadLineSurveys();
-
     @Query(value = "SELECT * FROM DEAD_LINE_SURVEY", nativeQuery = true)
     List<Survey> getDeadLineSurveys();
 

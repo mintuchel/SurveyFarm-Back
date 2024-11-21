@@ -81,11 +81,6 @@ public class SurveyService {
                 .toList();
     }
 
-//    @Transactional(readOnly = true)
-//    public List<SurveyResponse> getDeadLineSurveys(){
-//
-//    }
-
     @Transactional(readOnly = true)
     public List<SurveyResponse> getRequestedSurveys(int uid) {
         User owner = userService.findById(uid);
