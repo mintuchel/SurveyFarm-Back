@@ -29,7 +29,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-	implementation 'net.datafaker:datafaker:2.4.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -41,6 +42,7 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'net.datafaker:datafaker:2.4.1' // mock data 생성 라이브러리
 	testImplementation 'com.h2database:h2'
 }
 

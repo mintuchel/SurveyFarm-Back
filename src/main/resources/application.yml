@@ -3,6 +3,10 @@
 #    active: dev
 
 spring:
+  # redis 설정
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     url: jdbc:mysql://localhost:3306/surveyfarm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: root
