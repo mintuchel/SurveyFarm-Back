@@ -1,10 +1,7 @@
 package notblank.surveyfarm.domain.redis.deadlineSurvey.dto;
 
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 
 // RedisHash 를 통해 Redis에 의해 서버의 인메모리 캐시에 저장될 객체라는 것을 명시
@@ -12,10 +9,9 @@ import org.springframework.data.redis.core.RedisHash;
 // timetoLive 시간이 다 지나면 해당 객체는 알아서 캐시에서 삭제됨
 @Builder
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @RedisHash(value = "deadline", timeToLive = 86400)
 public class DeadLineSurvey {
+    // Redis 는 @GeneratedValue 같은게 없어서 Id를 직접 관리해줘야함
     @Id
     private int id;
 
