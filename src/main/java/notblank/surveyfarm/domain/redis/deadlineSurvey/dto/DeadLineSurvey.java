@@ -9,9 +9,10 @@ import org.springframework.data.redis.core.RedisHash;
 // timetoLive 시간이 다 지나면 해당 객체는 알아서 캐시에서 삭제됨
 @Builder
 @Getter
-@RedisHash(value = "deadline", timeToLive = 86400)
+@RedisHash(value = "deadline", timeToLive = 86400) // 해당 엔티티가 Redis 엔티티임을 명시
 public class DeadLineSurvey {
     // Redis 는 @GeneratedValue 같은게 없어서 Id를 직접 관리해줘야함
+    // @Id 어노테이션이 적용된 맴버변수에 값이 실제 Redis 의 HashID임
     @Id
     private int id;
 
