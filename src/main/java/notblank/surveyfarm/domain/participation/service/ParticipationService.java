@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import notblank.surveyfarm.domain.participation.dto.request.ParticipationRequest;
 import notblank.surveyfarm.domain.participation.entity.Participation;
 import notblank.surveyfarm.domain.participation.repository.ParticipationRepository;
-import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.surveyfarm.domain.survey.service.SurveyService;
 import notblank.surveyfarm.domain.user.service.UserService;
 import notblank.surveyfarm.global.exception.errorcode.ParticipationErrorCode;
@@ -51,10 +51,14 @@ public class ParticipationService {
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getParticipatedSurveyByUser(int uid) {
+    public List<SurveyInfoResponse> getParticipatedSurveys(int uid) {
         return participationRepository.getUserParticipationInfo(uid).stream()
-                .map(info -> surveyService.getSurveyResponseById(info.sid())
-                        .updateParticipatedAt(info.participated_at()))
+                .map(info -> surveyService.getSurveyInfoById(info.sid()))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public String getParticipatedTime(int uid, int sid){
+        return participationRepository.getParticipatedTime(uid, sid).participated_at().toLocalDate().toString();
     }
 }

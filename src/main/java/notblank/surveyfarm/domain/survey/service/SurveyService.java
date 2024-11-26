@@ -2,7 +2,9 @@ package notblank.surveyfarm.domain.survey.service;
 
 import lombok.RequiredArgsConstructor;
 import notblank.surveyfarm.domain.survey.dto.request.CreateSurveyRequest;
-import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyFilterResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyInfoResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyQuestionListResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
 import notblank.surveyfarm.domain.survey.repository.SurveyRepository;
 import notblank.surveyfarm.domain.utility.DTOConverter;
@@ -47,9 +49,21 @@ public class SurveyService {
 
     // 설문 엔티티를 SurveyInfoResponse 로 반환
     @Transactional(readOnly = true)
-    public SurveyResponse getSurveyResponseById(int id){
-        Survey survey = getSurveyEntityById(id);
-        return dtoConverter.toSurveyResponse(survey);
+    public SurveyInfoResponse getSurveyInfoById(int sid){
+        Survey survey = getSurveyEntityById(sid);
+        return dtoConverter.toSurveyInfoResponse(survey);
+    }
+
+    @Transactional(readOnly = true)
+    public SurveyFilterResponse getSurveyFilterById(int sid){
+        Survey survey = getSurveyEntityById(sid);
+        return dtoConverter.toSurveyFilterResponse(survey);
+    }
+
+    @Transactional(readOnly = true)
+    public SurveyQuestionListResponse getSurveyQuestionListById(int sid){
+        Survey survey = getSurveyEntityById(sid);
+        return dtoConverter.toSurveyQuestionListResponse(survey);
     }
 
     // 설문에 참여했을때 해당 설문의 currentHeadCnt를 1 증가시키는 함수
@@ -59,15 +73,15 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getAllSurveys(){
+    public List<SurveyInfoResponse> getAllSurveys(){
         return surveyRepository.findAll()
-                .stream().map(dtoConverter::toSurveyResponse)
+                .stream().map(dtoConverter::toSurveyInfoResponse)
                 .toList();
     }
 
     // 특정 유저가 참여가능한 설문 조사
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getAvailableSurveys(int uid) {
+    public List<SurveyInfoResponse> getAvailableSurveys(int uid) {
         User participant = userService.findById(uid);
 
         int participantRegionCode = participant.getRegionCode();
@@ -77,33 +91,33 @@ public class SurveyService {
 
         return surveyRepository.getAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
                 .stream()
-                .map(dtoConverter::toSurveyResponse)
+                .map(dtoConverter::toSurveyInfoResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getDeadLineSurveys(){
+    public List<SurveyInfoResponse> getDeadLineSurveys(){
         return surveyRepository.getDeadlineUpcomingSurveys()
                 .stream()
-                .map(dtoConverter::toSurveyResponse)
+                .map(dtoConverter::toSurveyInfoResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getTrendingSurveys(){
+    public List<SurveyInfoResponse> getTrendingSurveys(){
         return surveyRepository.getTrendingSurveys()
                 .stream()
-                .map(dtoConverter::toSurveyResponse)
+                .map(dtoConverter::toSurveyInfoResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getRequestedSurveys(int uid) {
+    public List<SurveyInfoResponse> getRequestedSurveys(int uid) {
         User owner = userService.findById(uid);
 
         return surveyRepository.getRequestedSurvey(uid)
                 .stream()
-                .map(dtoConverter::toSurveyResponse)
+                .map(dtoConverter::toSurveyInfoResponse)
                 .toList();
     }
 }
