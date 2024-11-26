@@ -5,10 +5,10 @@ import net.datafaker.Faker;
 import notblank.surveyfarm.SurveyFarmDataFactory;
 import notblank.surveyfarm.domain.question.entity.Option;
 import notblank.surveyfarm.domain.question.entity.Question;
-import notblank.surveyfarm.domain.survey.dto.internal.FilterDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.QuestionDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
-import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
+import notblank.surveyfarm.domain.survey.dto.common.QuestionDTO;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyFilterResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyInfoResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyQuestionListResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
 import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
 import notblank.surveyfarm.domain.survey.repository.SurveyRepository;
@@ -17,6 +17,7 @@ import notblank.surveyfarm.domain.utility.CodeConverter;
 import notblank.surveyfarm.domain.utility.DTOConverter;
 import notblank.surveyfarm.domain.user.entity.User;
 import notblank.surveyfarm.domain.user.service.UserService;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -73,6 +74,10 @@ public class SurveyServiceTest {
     private final int SURVEY_ID = faker.number().randomDigitNotZero();
     private final int OWNER_ID = faker.number().randomDigitNotZero();
 
+    // DTOConverter 내부에서 이 owner 라는 User 객체를 참조해야하는 경우가 있음
+    // 근데 여기서 DTOConverter가 @Spy로 정의되었기 때문에 실제 객체로 동작함
+    // 따라서 내부에서 쓰이는 owner 객체도 실제 객체여야함
+    // 그래서 @Mock 객체로 선언하지 않고 실제 객체로 build 한거임!
     private void ownerSetUp(){
         owner = User.builder()
                 .id(OWNER_ID)
@@ -84,27 +89,30 @@ public class SurveyServiceTest {
                 .build();
     }
 
-    private void questionSetUp(){
-        when(question.getOptionList()).thenReturn(List.of(option1, option2));
-    }
-
-    private void surveySetUp(){
+    private void surveyInfoSetUp(){
         when(survey.getId()).thenReturn(SURVEY_ID);
         when(survey.getOwner()).thenReturn(owner);
         when(survey.getTitle()).thenReturn("sample title");
         when(survey.getImgUrl()).thenReturn("sample imgUrl");
-        when(survey.getRegionCode()).thenReturn(faker.number().numberBetween(1, 1000));
-        when(survey.getJobCode()).thenReturn(faker.number().numberBetween(1, 1000));
-        when(survey.getAgeCode()).thenReturn(faker.number().numberBetween(1, 100));
-        when(survey.getGenderCode()).thenReturn(faker.number().numberBetween(1, 2));
         when(survey.getMaxHeadCnt()).thenReturn(faker.number().numberBetween(1, 100));
         when(survey.getCurrentHeadCnt()).thenReturn(faker.number().numberBetween(1, 100));
         when(survey.getCreatedAt()).thenReturn(LocalDateTime.now());
         when(survey.getEndAt()).thenReturn(LocalDateTime.now().plusDays(30));
         when(survey.getPoint()).thenReturn(faker.number().numberBetween(1, 100));
         when(survey.getDuration()).thenReturn(faker.number().numberBetween(1, 10));
-        when(survey.getQuestionList()).thenReturn(List.of(question));
         when(survey.getSurveyStatus()).thenReturn(SurveyStatus.IN_PROGRESS);
+    }
+
+    private void surveyFilterSetUp(){
+        when(survey.getRegionCode()).thenReturn(faker.number().numberBetween(1, 1000));
+        when(survey.getJobCode()).thenReturn(faker.number().numberBetween(1, 1000));
+        when(survey.getAgeCode()).thenReturn(faker.number().numberBetween(1, 100));
+        when(survey.getGenderCode()).thenReturn(faker.number().numberBetween(1, 2));
+    }
+
+    private void surveyQuestionListSetUp(){
+        when(survey.getQuestionList()).thenReturn(List.of(question));
+        when(question.getOptionList()).thenReturn(List.of(option1, option2));
     }
 
     @BeforeEach
@@ -115,31 +123,58 @@ public class SurveyServiceTest {
     }
 
     @Test
-    @DisplayName("설문 조회 성공 (entity to responseDTO 성공)")
+    @DisplayName("설문 정보 조회 성공")
     public void getSurveyInfoResponseSuccess(){
         // setup
-        questionSetUp();
-        surveySetUp();
+        surveyInfoSetUp();
 
         // given
         given(surveyRepository.findById(SURVEY_ID)).willReturn(Optional.of(survey));
 
         // when
-        SurveyResponse response = surveyService.getSurveyResponseById(SURVEY_ID);
+        SurveyInfoResponse surveyInfoResponse = surveyService.getSurveyInfoById(SURVEY_ID); // 설문 정보 받아오기
 
         // then
-        SurveyInfoDTO surveyInfo = response.surveyInfo();
-        FilterDTO filters = response.filters();
-        List<QuestionDTO> questions = response.questions();
+        Assertions.assertThat(surveyInfoResponse.sid()).isEqualTo(SURVEY_ID);
+        Assertions.assertThat(surveyInfoResponse.nickName()).isNotBlank();
+        Assertions.assertThat(surveyInfoResponse.surveyStatus()).isEqualTo(SurveyStatus.IN_PROGRESS);
+    }
 
-        System.out.println(filters.regionList());
-        System.out.println(filters.jobList());
-        System.out.println(filters.ageList());
+    @Test
+    @DisplayName("설문 태그 조회 성공")
+    public void getSurveyTagResponseSuccess(){
+        // setup
+        surveyFilterSetUp();
 
-        Assertions.assertThat(surveyInfo.sid()).isEqualTo(SURVEY_ID);
-        Assertions.assertThat(surveyInfo.surveyStatus()).isEqualTo(SurveyStatus.IN_PROGRESS);
-        Assertions.assertThat(surveyInfo.nickName()).isNotBlank();
+        // given
+        given(surveyRepository.findById(SURVEY_ID)).willReturn(Optional.of(survey));
+
+        // when
+        SurveyFilterResponse surveyFilterResponse = surveyService.getSurveyFilterById(SURVEY_ID);
+
+        // then
+        Assertions.assertThat(surveyFilterResponse.regionList()).isNotEmpty();
+        Assertions.assertThat(surveyFilterResponse.jobList()).isNotEmpty();
+        Assertions.assertThat(surveyFilterResponse.ageList()).isNotEmpty();
+        Assertions.assertThat(surveyFilterResponse.genderList()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("설문 질문 조회 성공")
+    public void getSurveyQuestionListResponseSuccess(){
+        // setup
+        surveyQuestionListSetUp();
+
+        // given
+        given(surveyRepository.findById(SURVEY_ID)).willReturn(Optional.of(survey));
+
+        // when
+        SurveyQuestionListResponse questionListResponse = surveyService.getSurveyQuestionListById(SURVEY_ID); // 설문 질문 받아오기
+
+        // then
+        List<QuestionDTO> questions = questionListResponse.questions();
         Assertions.assertThat(questions).hasSize(1);
+        Assertions.assertThat(questions.get(0).optionList()).hasSize(2);
     }
 
     @Test
@@ -157,7 +192,7 @@ public class SurveyServiceTest {
         verify(surveyRepository).save(argumentCaptor.capture());
         Survey savedSurvey = argumentCaptor.getValue();
 
-        Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("This is a sample description");
+        Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("This is a postman sample survey description");
         Assertions.assertThat(savedSurvey.getQuestionList()).hasSize(3);
         Assertions.assertThat(savedSurvey.getQuestionList().get(0).getOptionList()).hasSize(4);
         Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(codeConverter.convertRegionListToRegionCode(List.of("서울","경기","인천")));

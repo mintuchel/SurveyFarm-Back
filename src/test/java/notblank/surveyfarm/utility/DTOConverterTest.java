@@ -1,13 +1,15 @@
 package notblank.surveyfarm.utility;
 
+import net.datafaker.Faker;
 import notblank.surveyfarm.domain.question.entity.Option;
 import notblank.surveyfarm.domain.question.entity.Question;
 import notblank.surveyfarm.domain.question.entity.QuestionType;
-import notblank.surveyfarm.domain.survey.dto.internal.FilterDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.QuestionDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
-import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
+import notblank.surveyfarm.domain.survey.dto.common.QuestionDTO;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyFilterResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyInfoResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyQuestionListResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
+import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
 import notblank.surveyfarm.domain.utility.CodeConverter;
 import notblank.surveyfarm.domain.utility.DTOConverter;
 import notblank.surveyfarm.domain.user.entity.User;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,8 +34,7 @@ public class DTOConverterTest {
     private CodeConverter codeConverter;
 
     private User owner;
-    private Survey survey1;
-    private Survey survey2;
+    private Survey survey;
 
     private void initUser(){
         owner = User.builder()
@@ -41,7 +43,7 @@ public class DTOConverterTest {
     }
 
     private void initSurvey1(){
-        survey1 = Survey.builder()
+        survey = Survey.builder()
                 .owner(owner)
                 .title("축구관련설문")
                 .imgUrl("com")
@@ -77,15 +79,21 @@ public class DTOConverterTest {
                 .questionType(QuestionType.SA)
                 .build();
 
-        survey2 = Survey.builder()
+        survey = Survey.builder()
                 .owner(owner)
                 .title("축구관련설문")
+                .imgUrl("com")
+                .surveyStatus(SurveyStatus.TRENDING)
+                .regionCode(5123) // 서울(1) + 경기(2) + 대구(1024) + 부산(4096)
+                .jobCode(262176) // 개발·데이터(32) + 미디어·문화·스포츠(262144)
+                .ageCode(7) // 10대(1) + 20대(2) + 30대(4)
+                .genderCode(3) // 남자(1)
                 .build();
 
         // 설문에 질문 추가해주기
-        survey2.getQuestionList().add(mcQuestion1);
-        survey2.getQuestionList().add(mcQuestion2);
-        survey2.getQuestionList().add(saQuestion1);
+        survey.getQuestionList().add(mcQuestion1);
+        survey.getQuestionList().add(mcQuestion2);
+        survey.getQuestionList().add(saQuestion1);
     }
 
     @BeforeEach
@@ -97,47 +105,38 @@ public class DTOConverterTest {
     }
 
     @Test
-    @DisplayName("설문 엔티티 DTO 변경 성공 (Code 변경 성공)")
-    public void getSurveyResponseDTOSuccess1() {
+    @DisplayName("설문 엔티티 SurveyInfoResponse 변경 성공")
+    public void getSurveyInfoResponseSuccess() {
         // when
-        SurveyResponse response = dtoConverter.toSurveyResponse(survey1);
+        SurveyInfoResponse response = dtoConverter.toSurveyInfoResponse(survey);
 
         // then
-        SurveyInfoDTO surveyInfo = response.surveyInfo();
-        FilterDTO filters = response.filters();
-
         Assertions.assertThat(response).isNotNull();
-        Assertions.assertThat(surveyInfo.nickName()).isEqualTo("messi");
-
-        System.out.println(filters.regionList());
-        System.out.println(filters.jobList());
-        System.out.println(filters.ageList());
-        System.out.println(filters.genderList());
-
-        Assertions.assertThat(filters.regionList()).contains("서울","경기","대구","부산");
-        Assertions.assertThat(filters.jobList()).hasSize(2);
-        Assertions.assertThat(filters.jobList()).contains("개발·데이터", "미디어·문화·스포츠");
-        Assertions.assertThat(filters.ageList()).contains("10대","20대","30대");
-        Assertions.assertThat(filters.genderList()).contains("남자");
+        Assertions.assertThat(response.nickName()).isEqualTo("messi");
     }
 
     @Test
-    @DisplayName("설문 엔티티 DTO 변경 성공 (Question 변경 성공)")
-    public void getSurveyResponseDTOSuccess2() {
+    @DisplayName("설문 엔티티 SurveyFilterResponse 변경 성공 (FilterCode To List 변경 성공")
+    public void getSurveyFilterResponseSuccess() {
         // when
-        SurveyResponse response = dtoConverter.toSurveyResponse(survey2);
+        SurveyFilterResponse response = dtoConverter.toSurveyFilterResponse(survey);
 
         // then
-        SurveyInfoDTO surveyInfo = response.surveyInfo();
-        List<QuestionDTO> questions = response.questions();
+        Assertions.assertThat(response.regionList()).contains("서울","경기","대구","부산");
+        Assertions.assertThat(response.jobList()).contains("개발·데이터", "미디어·문화·스포츠");
+        Assertions.assertThat(response.ageList()).contains("10대","20대","30대");
+        Assertions.assertThat(response.genderList()).contains("남자");
+    }
+
+    @Test
+    @DisplayName("설문 엔티티 SurveyQuestionListResponse 변경 성공 (Question 변경 성공)")
+    public void getSurveyResponseDTOSuccess2() {
+        // when
+        SurveyQuestionListResponse response = dtoConverter.toSurveyQuestionListResponse(survey);
+
+        // then
 
         Assertions.assertThat(response).isNotNull();
-        Assertions.assertThat(questions).hasSize(3);
-
-        System.out.println(questions.get(0).title());
-        System.out.println(questions.get(0).optionList());
-        System.out.println(questions.get(1).title());
-        System.out.println(questions.get(1).optionList());
-        System.out.println(questions.get(2).title());
+        Assertions.assertThat(response.questions()).hasSize(3);
     }
 }
