@@ -4,9 +4,9 @@
 
 spring:
   # redis 설정
-  redis:
-    host: localhost
-    port: 6379
+#  redis:
+#    host: localhost
+#    port: 6379
   datasource:
     url: jdbc:mysql://localhost:3306/surveyfarm?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
     username: root
@@ -15,7 +15,7 @@ spring:
   # 서버 실행할때 항상 sql 파일 실행
   sql:
     init:
-      mode: never #
+      mode: never
       # mode: always # 매번 schema.sql data.sql 실행
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
