@@ -13,6 +13,9 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey, Integer> {
 
+    @Query(value = "SELECT * FROM SURVEY WHERE survey_status != 'CLOSED'", nativeQuery = true)
+    List<Survey> getInProgressSurveys();
+
     // 업데이트된 행 수를 반환
     // 성공이면 1 실패하면 0 반환
     @Modifying
@@ -29,12 +32,13 @@ public interface SurveyRepository extends JpaRepository<Survey, Integer> {
             @Param("participantGenderCode") int participantGenderCode
     );
 
-    @Query(value = "SELECT * FROM DEAD_LINE_SURVEY", nativeQuery = true)
-    List<Survey> getDeadLineSurveys();
-
     // 특정 유저가 의뢰한 설문 조회
     @Query(value = "SELECT * FROM SURVEY WHERE uid = :uid", nativeQuery = true)
     List<Survey> getRequestedSurvey(@Param("uid") int uid);
 
+    @Query(value = "SELECT * FROM SURVEY WHERE survey_status = 'DEADLINE_UPCOMING'", nativeQuery = true)
+    List<Survey> getDeadlineUpcomingSurveys();
 
+    @Query(value = "SELECT * FROM SURVEY WHERE survey_status = 'TRENDING'", nativeQuery = true)
+    List<Survey> getTrendingSurveys();
 }

@@ -82,6 +82,22 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
+    public List<SurveyResponse> getDeadLineUpcomingSurveys(){
+        return surveyRepository.getDeadlineUpcomingSurveys()
+                .stream()
+                .map(dtoConverter::toSurveyResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SurveyResponse> getTrendingSurveys(){
+        return surveyRepository.getTrendingSurveys()
+                .stream()
+                .map(dtoConverter::toSurveyResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public List<SurveyResponse> getRequestedSurveys(int uid) {
         User owner = userService.findById(uid);
 
