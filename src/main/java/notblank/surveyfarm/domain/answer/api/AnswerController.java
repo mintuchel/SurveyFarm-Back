@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/answer")
+@RequestMapping("api/v1/answer")
 @Tag(name = "답변 API", description = "답변 저장, 답변 조회, 답변 통계 조회")
 public class AnswerController {
 

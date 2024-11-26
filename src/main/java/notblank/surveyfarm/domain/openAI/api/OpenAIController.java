@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/gpt")
+@RequestMapping("api/v1/gpt")
 public class OpenAIController {
 
     @Autowired

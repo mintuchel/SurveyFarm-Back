@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/survey")
+@RequestMapping("api/v1/survey")
 @Tag(name = "설문 API", description = "설문 생성, 설문 조회")
 public class SurveyController {
     private final SurveyService surveyService;
@@ -45,5 +45,17 @@ public class SurveyController {
     @Operation(summary = "특정 유저가 의뢰한 설문 조회")
     public List<SurveyResponse> getRequestedSurveys(@PathVariable("uid") int uid) {
         return surveyService.getRequestedSurveys(uid);
+    }
+
+    @GetMapping("/deadline")
+    @Operation(summary = "마감임박 설문 조회")
+    public List<SurveyResponse> getDeadlineSurveys() {
+        return surveyService.getDeadLineSurveys();
+    }
+
+    @GetMapping("/trending")
+    @Operation(summary = "인기 설문 조회")
+    public List<SurveyResponse> getTrendingSurveys() {
+        return surveyService.getTrendingSurveys();
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/participation")
+@RequestMapping("api/v1/participation")
 @Tag(name = "참여내역 API", description = "참여내역 등록, 참여내역 확인")
 public class ParticipationController {
 
