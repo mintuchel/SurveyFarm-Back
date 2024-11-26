@@ -82,7 +82,7 @@ public class SurveyService {
     }
 
     @Transactional(readOnly = true)
-    public List<SurveyResponse> getDeadLineUpcomingSurveys(){
+    public List<SurveyResponse> getDeadLineSurveys(){
         return surveyRepository.getDeadlineUpcomingSurveys()
                 .stream()
                 .map(dtoConverter::toSurveyResponse)
