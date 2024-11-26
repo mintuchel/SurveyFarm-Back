@@ -20,7 +20,6 @@ public class Scheduler {
     @Scheduled(cron = "0 0 0 * * *")
     public void updateSurveyStatus(){
         List<Survey> surveys = surveyRepository.getInProgressSurveys();
-
         for(Survey survey : surveys) survey.updateStatus();
     }
 }

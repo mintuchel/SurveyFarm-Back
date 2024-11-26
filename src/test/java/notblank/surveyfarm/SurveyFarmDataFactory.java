@@ -10,8 +10,7 @@ public class SurveyFarmDataFactory {
         String jsonString = """
         {
           "surveyInfo": {
-            "uid" : 20, 
-            "nickName": "Noel",
+            "uid" : 20,
             "title": "Postman Sample Survey Title",
             "description": "This is a postman sample survey description",
             "imgUrl": "sampleImageUrl",
@@ -33,13 +32,13 @@ public class SurveyFarmDataFactory {
                 {"text": "엔조"},
                 {"text": "카이세도"}
               ],
-              "isMultipleAnswer": false,
+              "isMultipleChoice": false,
               "questionType": "MC"
             },
             {
               "title": "최근 5경기 니콜라스 잭슨의 폼에 대해 너의 의견을 적어줘",
               "optionList": [],
-              "isMultipleAnswer": false,
+              "isMultipleChoice": false,
               "questionType": "SA"
             },
             {
@@ -49,7 +48,7 @@ public class SurveyFarmDataFactory {
                 {"text": "박지성"},
                 {"text": "차범근"}
               ],
-              "isMultipleAnswer": true,
+              "isMultipleChoice": true,
               "questionType": "MC"
             }
           ]

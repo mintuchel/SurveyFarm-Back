@@ -29,7 +29,7 @@ public enum SurveyStatus {
         if(now.isAfter(endAt)) return CLOSED;
         else if(now.toLocalDate().isEqual(createdAt.toLocalDate())) return NEW;
         else if(now.isAfter(endAt.minusDays(3))) return DEADLINE_UPCOMING;
-        else if(now.isBefore(createdAt.plusDays(3)) && progressRate > 0.5) return TRENDING;
+        else if(now.isBefore(createdAt.plusDays(10)) && progressRate >= 0.3) return TRENDING;
         else return IN_PROGRESS;
     }
 }

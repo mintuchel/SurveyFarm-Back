@@ -3,12 +3,14 @@ package notblank.surveyfarm.domain.utility;
 import lombok.RequiredArgsConstructor;
 import notblank.surveyfarm.domain.question.entity.Option;
 import notblank.surveyfarm.domain.question.entity.Question;
-import notblank.surveyfarm.domain.survey.dto.internal.FilterDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.OptionDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.QuestionDTO;
-import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
+import notblank.surveyfarm.domain.survey.dto.request.internal.SurveyFilterDTO;
+import notblank.surveyfarm.domain.survey.dto.common.OptionDTO;
+import notblank.surveyfarm.domain.survey.dto.common.QuestionDTO;
+import notblank.surveyfarm.domain.survey.dto.request.internal.SurveyInfoDTO;
 import notblank.surveyfarm.domain.survey.dto.request.CreateSurveyRequest;
-import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyFilterResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyInfoResponse;
+import notblank.surveyfarm.domain.survey.dto.response.SurveyQuestionListResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
 import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
 import notblank.surveyfarm.domain.user.dto.response.UserResponse;
@@ -39,7 +41,7 @@ public class DTOConverter {
     public Survey toSurveyEntity(CreateSurveyRequest createSurveyRequest, User owner){
 
         SurveyInfoDTO surveyInfoDTO = createSurveyRequest.surveyInfo();
-        FilterDTO filters = createSurveyRequest.filters();
+        SurveyFilterDTO filters = createSurveyRequest.filters();
 
         return Survey.builder()
                 .owner(owner)
@@ -59,36 +61,18 @@ public class DTOConverter {
                 .build();
     }
 
-    public SurveyResponse toSurveyResponse(Survey survey) {
-        return SurveyResponse.builder()
-                .surveyInfo(toSurveyDTO(survey))
-                .filters(toFilterListDTO(survey))
-                .questions(survey.getQuestionList().stream() // 스트림 생성
-                        .map(this::toQuestionDto) // Question 객체를 QuestionDTO로 변환
-                        .toList())
-                .build();
-    }
-
-    public FilterDTO toFilterListDTO(Survey survey) {
-        return FilterDTO.builder()
-                .regionList(codeConverter.convertRegionCodeToList(survey.getRegionCode()))
-                .jobList(codeConverter.convertJobCodeToList(survey.getJobCode()))
-                .ageList(codeConverter.convertAgeCodeToList(survey.getAgeCode()))
-                .genderList(codeConverter.convertGenderCodeToList(survey.getGenderCode()))
-                .build();
-    }
-
-    public SurveyInfoDTO toSurveyDTO(Survey survey) {
-        return SurveyInfoDTO.builder()
+    // 병렬적으로 설문조사들을 보여줄때 사용하는 API
+    // 이때는 질문들을 굳이 보여줄 필요가 없으니 카드 레이아웃에 떠야하는 최소한의 정보들만 DTO로 보내줌
+    public SurveyInfoResponse toSurveyInfoResponse(Survey survey) {
+        return SurveyInfoResponse.builder()
                 .sid(survey.getId())
-                .uid(survey.getOwner().getId())
                 .nickName(survey.getOwner().getNickName())
                 .title(survey.getTitle())
                 .description(survey.getDescription())
                 .imgUrl(survey.getImgUrl())
-                .duration(survey.getDuration())
                 .maxHeadCnt(survey.getMaxHeadCnt())
                 .currentHeadCnt(survey.getCurrentHeadCnt())
+                .duration(survey.getDuration())
                 .point(survey.getPoint())
                 .createdAt(survey.getCreatedAt())
                 .endAt(survey.getEndAt())
@@ -96,7 +80,26 @@ public class DTOConverter {
                 .build();
     }
 
-    public QuestionDTO toQuestionDto(Question question) {
+    public SurveyFilterResponse toSurveyFilterResponse(Survey survey){
+        return SurveyFilterResponse.builder()
+                .regionList(codeConverter.convertRegionCodeToList(survey.getRegionCode()))
+                .jobList(codeConverter.convertJobCodeToList(survey.getJobCode()))
+                .ageList(codeConverter.convertAgeCodeToList(survey.getAgeCode()))
+                .genderList(codeConverter.convertGenderCodeToList(survey.getGenderCode()))
+                .build();
+    }
+
+    // 특정 설문조사에 대한 참여버튼을 클릭했을 시
+    // 이때는 해당 설문조사의 질문들을 보여줘야하므로 그제서야 API를 통해 QuestionList를 Response로 받으면 됨
+    public SurveyQuestionListResponse toSurveyQuestionListResponse(Survey survey) {
+            return SurveyQuestionListResponse.builder().questions(
+                    survey.getQuestionList().stream() // 스트림 생성
+                            .map(this::toQuestionDto) // Question 객체를 QuestionDTO로 변환
+                            .toList())
+                    .build();
+    }
+
+    private QuestionDTO toQuestionDto(Question question) {
         return QuestionDTO.builder()
                 .qid(question.getId())
                 .title(question.getTitle())
@@ -108,7 +111,7 @@ public class DTOConverter {
                 .build();
     }
 
-    public OptionDTO toOptionDto(Option option) {
+    private OptionDTO toOptionDto(Option option) {
         return OptionDTO.builder()
                 .text(option.getText())
                 .build();
