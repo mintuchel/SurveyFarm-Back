@@ -1,4 +1,4 @@
-package notblank.surveyfarm.domain.survey.dto.internal;
+package notblank.surveyfarm.domain.survey.dto.common;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

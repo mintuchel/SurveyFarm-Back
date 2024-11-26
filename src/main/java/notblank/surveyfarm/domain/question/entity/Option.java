@@ -2,7 +2,7 @@ package notblank.surveyfarm.domain.question.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import notblank.surveyfarm.domain.survey.dto.internal.OptionDTO;
+import notblank.surveyfarm.domain.survey.dto.common.OptionDTO;
 
 @Entity
 @Getter
