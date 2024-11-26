@@ -21,7 +21,7 @@ public record SurveyInfoDTO(
         @NotBlank String description, // 질문 설명
         @NotBlank String imgUrl, // 질문 대표 이미지 URL
         @NotBlank @Size(min = 100) int maxHeadCnt, // 목표 인원수
-        int currentHeadCnt, // 참여인원수
+        int currentHeadCnt, // 현재참여인원수
         @NotBlank @Size(min = 1) int duration, // 기간
         int point, // 포인트
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")

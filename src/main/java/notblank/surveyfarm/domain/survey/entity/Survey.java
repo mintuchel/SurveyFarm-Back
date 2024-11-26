@@ -34,10 +34,6 @@ public class Survey {
     private LocalDateTime endAt;
     private int duration;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SurveyStatus surveyStatus; // 설문상태
-
     private int maxHeadCnt;
     private int currentHeadCnt;
 
@@ -58,5 +54,13 @@ public class Survey {
     @PostPersist
     public void initializeEndAt() {
         endAt = createdAt.plusDays(duration);
+    }
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SurveyStatus surveyStatus; // 설문상태
+
+    public void updateStatus(){
+        this.surveyStatus = SurveyStatus.calculateStatus(createdAt, endAt, (double)currentHeadCnt/maxHeadCnt);
     }
 }
