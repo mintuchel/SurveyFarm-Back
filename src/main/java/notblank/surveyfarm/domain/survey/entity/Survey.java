@@ -34,6 +34,10 @@ public class Survey {
     private LocalDateTime endAt;
     private int duration;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SurveyStatus surveyStatus; // 설문상태
+
     private int maxHeadCnt;
     private int currentHeadCnt;
 
