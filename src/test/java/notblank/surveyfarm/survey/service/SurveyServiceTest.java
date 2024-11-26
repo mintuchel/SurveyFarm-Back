@@ -10,6 +10,7 @@ import notblank.surveyfarm.domain.survey.dto.internal.QuestionDTO;
 import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
 import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
+import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
 import notblank.surveyfarm.domain.survey.repository.SurveyRepository;
 import notblank.surveyfarm.domain.survey.service.SurveyService;
 import notblank.surveyfarm.domain.utility.CodeConverter;
@@ -103,6 +104,7 @@ public class SurveyServiceTest {
         when(survey.getPoint()).thenReturn(faker.number().numberBetween(1, 100));
         when(survey.getDuration()).thenReturn(faker.number().numberBetween(1, 10));
         when(survey.getQuestionList()).thenReturn(List.of(question));
+        when(survey.getSurveyStatus()).thenReturn(SurveyStatus.IN_PROGRESS);
     }
 
     @BeforeEach
@@ -135,6 +137,7 @@ public class SurveyServiceTest {
         System.out.println(filters.ageList());
 
         Assertions.assertThat(surveyInfo.sid()).isEqualTo(SURVEY_ID);
+        Assertions.assertThat(surveyInfo.surveyStatus()).isEqualTo(SurveyStatus.IN_PROGRESS);
         Assertions.assertThat(surveyInfo.nickName()).isNotBlank();
         Assertions.assertThat(questions).hasSize(1);
     }
@@ -157,11 +160,11 @@ public class SurveyServiceTest {
         Assertions.assertThat(savedSurvey.getDescription()).isEqualTo("This is a sample description");
         Assertions.assertThat(savedSurvey.getQuestionList()).hasSize(3);
         Assertions.assertThat(savedSurvey.getQuestionList().get(0).getOptionList()).hasSize(4);
-        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(7); // 서울 + 경기 + 인천
-        Assertions.assertThat(savedSurvey.getJobCode()).isEqualTo(9); // 기획·전략(1), 회계·세무(8)
-        Assertions.assertThat(savedSurvey.getAgeCode()).isEqualTo(3); // 10대 + 20대
-        Assertions.assertThat(savedSurvey.getGenderCode()).isEqualTo(1); // 남자
-
+        Assertions.assertThat(savedSurvey.getRegionCode()).isEqualTo(codeConverter.convertRegionListToRegionCode(List.of("서울","경기","인천")));
+        Assertions.assertThat(savedSurvey.getJobCode()).isEqualTo(codeConverter.convertJobListToJobCode(List.of("기획·전략","회계·세무")));
+        Assertions.assertThat(savedSurvey.getAgeCode()).isEqualTo(codeConverter.convertAgeListToAgeCode(List.of("10대","20대")));
+        Assertions.assertThat(savedSurvey.getGenderCode()).isEqualTo(codeConverter.convertGenderListToGenderCode(List.of("남자")));
+        Assertions.assertThat(savedSurvey.getSurveyStatus()).isEqualTo(SurveyStatus.NEW);
         Assertions.assertThat(owner.getRequestedSurveyList()).hasSize(1);
     }
 }
