@@ -10,6 +10,7 @@ import notblank.surveyfarm.domain.survey.dto.internal.SurveyInfoDTO;
 import notblank.surveyfarm.domain.survey.dto.request.CreateSurveyRequest;
 import notblank.surveyfarm.domain.survey.dto.response.SurveyResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
+import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
 import notblank.surveyfarm.domain.user.dto.response.UserResponse;
 import notblank.surveyfarm.domain.user.entity.User;
 import org.springframework.stereotype.Component;
@@ -54,6 +55,7 @@ public class DTOConverter {
                 .genderCode(codeConverter.convertGenderListToGenderCode(filters.genderList()))
                 .point(100) // 포인트는 우리가 알아서 넣어줘야함
                 .questionList(getQuestionList(createSurveyRequest.questions()))
+                .surveyStatus(SurveyStatus.NEW) // 새로 만들어진 설문이므로 설문상태 "신규"로 지정
                 .build();
     }
 
@@ -90,6 +92,7 @@ public class DTOConverter {
                 .point(survey.getPoint())
                 .createdAt(survey.getCreatedAt())
                 .endAt(survey.getEndAt())
+                .surveyStatus(survey.getSurveyStatus())
                 .build();
     }
 

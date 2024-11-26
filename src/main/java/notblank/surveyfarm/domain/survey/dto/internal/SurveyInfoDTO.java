@@ -4,9 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
+import org.aspectj.weaver.ast.Not;
 
 import java.time.LocalDateTime;
 
+// Request 와 Response 때 모두 이 내부 DTO 사용
+// @NotBlank로 선언 안된 것들은 Request 시 Client가 보낼필요가 없는 것들이어서 그럼
+// @NotBlank로 선언 안된 것들은 Response 때만 사용하는거임
 @Builder
 public record SurveyInfoDTO(
         int sid,
@@ -22,5 +27,6 @@ public record SurveyInfoDTO(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime createdAt, // 설문시작시간
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        LocalDateTime endAt // 설문종료시간
+        LocalDateTime endAt, // 설문종료시간
+        SurveyStatus surveyStatus
 ) { }
