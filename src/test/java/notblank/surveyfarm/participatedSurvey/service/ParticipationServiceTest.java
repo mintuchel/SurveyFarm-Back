@@ -2,14 +2,9 @@ package notblank.surveyfarm.participatedSurvey.service;
 
 import net.datafaker.Faker;
 import notblank.surveyfarm.domain.participation.dto.request.ParticipationRequest;
-import notblank.surveyfarm.domain.participation.vo.ParticipationInfoVO;
 import notblank.surveyfarm.domain.participation.repository.ParticipationRepository;
 import notblank.surveyfarm.domain.participation.service.ParticipationService;
-import notblank.surveyfarm.domain.survey.dto.request.internal.SurveyFilterDTO;
-import notblank.surveyfarm.domain.survey.dto.request.internal.SurveyInfoDTO;
-import notblank.surveyfarm.domain.survey.dto.response.SurveyInfoResponse;
 import notblank.surveyfarm.domain.survey.entity.Survey;
-import notblank.surveyfarm.domain.survey.entity.SurveyStatus;
 import notblank.surveyfarm.domain.survey.service.SurveyService;
 import notblank.surveyfarm.domain.user.entity.User;
 import notblank.surveyfarm.domain.user.service.UserService;
@@ -24,10 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class ParticipationServiceTest {
@@ -50,7 +41,7 @@ public class ParticipationServiceTest {
     @Mock
     private Survey survey;
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
     private int sid = faker.random().nextInt(1,100);
     private int uid = faker.random().nextInt(1,100);
 
