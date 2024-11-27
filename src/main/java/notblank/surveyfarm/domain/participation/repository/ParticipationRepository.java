@@ -1,6 +1,5 @@
 package notblank.surveyfarm.domain.participation.repository;
 
-import notblank.surveyfarm.domain.participation.vo.ParticipationInfoVO;
 import notblank.surveyfarm.domain.participation.entity.Participation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,11 +15,9 @@ public interface ParticipationRepository extends JpaRepository<Participation, In
     @Query(value = "SELECT EXISTS (SELECT 1 FROM Participation WHERE uid = :uid AND sid = :sid)", nativeQuery = true)
     Integer checkIfUserParticipated(@Param("uid") int uid, @Param("sid") int sid);
 
-    @Query(value = "SELECT new notblank.surveyfarm.domain.participation.vo.ParticipationInfoVO(p.survey.id, p.participatedAt) FROM Participation p WHERE p.user.id = :uid AND p.survey.id = :sid")
-    ParticipationInfoVO getParticipatedTime(@Param("uid") int uid, @Param("sid") int sid);
+    @Query(value = "SELECT sid FROM Participation WHERE uid = :uid",nativeQuery = true)
+    List<Integer> getParticipatedSurveyIds(@Param("uid") int uid);
 
-    // 쿼리문으로 DTO로 바로 매핑하기 위해서는 JPQL을 사용해야함
-    // 이 부분 모르겠음 나중에 꼭 찾아보기 JPQL vs native query
-    @Query("SELECT new notblank.surveyfarm.domain.participation.vo.ParticipationInfoVO(p.survey.id, p.participatedAt) FROM Participation p WHERE p.user.id = :uid ORDER BY p.participatedAt")
-    List<ParticipationInfoVO> getUserParticipationInfo(@Param("uid") int uid);
+    @Query(value = "SELECT DATE_FORMAT(participatedAt,'%Y-%m-%d') AS participatedAt FROM Participation WHER uid = :uid AND sid = :sid", nativeQuery = true)
+    String getParticipatedTime(@Param("uid") int uid, @Param("sid") int sid);
 }

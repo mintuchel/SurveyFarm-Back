@@ -39,24 +39,23 @@ public class ParticipationRepositoryTest {
     @BeforeEach
     public void testSetUp(){
         owner = User.builder()
+                .id(1)
                 .nickName("pedroneto")
                 .build();
+
         participant = User.builder()
+                .id(2)
                 .nickName("madueke")
                 .build();
 
-        userRepository.save(owner);
-        userRepository.save(participant);
-
         survey = Survey.builder()
+                .id(1)
                 .owner(owner)
                 .build();
-
-        surveyRepository.save(survey);
     }
 
     @Test
-    @DisplayName("참여내역 저장 성공(participatedAt 자동생성 성공)")
+    @DisplayName("참여내역 저장 성공(@GeneratedValue + @CreationTimeStamp 정상 작동 확인)")
     public void participateSurveySuccess(){
         // given
         Participation ps = Participation.builder()
@@ -66,13 +65,17 @@ public class ParticipationRepositoryTest {
 
         // when
         participationRepository.save(ps);
-        LocalDateTime participatedAt = ps.getParticipatedAt();
 
         // then
-        // @GeneratedValue 정상 작동 확인
+        // @GeneratedValue 정상 작동 확인1
         Assertions.assertThat(ps.getId()).isNotNull();
+
         // @CreationTimeStamp 정상 작동 확인
+        LocalDateTime participatedAt = ps.getParticipatedAt(); // 변경 감지로 인한 재조회하지 않고 즉시 참조 가능
         Assertions.assertThat(participatedAt).isNotNull();
-        System.out.println("participatedAt :" + participatedAt);
+
+        System.out.println(ps.getId());
+        System.out.println(ps.getSurvey().getId());
+        System.out.println(ps.getUser().getId());
     }
 }
