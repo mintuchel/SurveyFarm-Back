@@ -81,7 +81,7 @@ public class SurveyService {
 
     // 특정 유저가 참여가능한 설문 조사
     @Transactional(readOnly = true)
-    public List<SurveyInfoResponse> getAvailableSurveys(int uid) {
+    public List<SurveyInfoResponse> getAvailableSurveys(int uid, int page) {
         User participant = userService.findById(uid);
 
         int participantRegionCode = participant.getRegionCode();
@@ -89,7 +89,9 @@ public class SurveyService {
         int participantAgeCode = participant.getAgeCode();
         int participantGenderCode = participant.getGenderCode();
 
-        return surveyRepository.getAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode)
+        int offset = (page - 1) * 30;
+
+        return surveyRepository.getAvailableSurveyByParticipant(participantRegionCode, participantJobCode, participantAgeCode, participantGenderCode, offset)
                 .stream()
                 .map(dtoConverter::toSurveyInfoResponse)
                 .toList();

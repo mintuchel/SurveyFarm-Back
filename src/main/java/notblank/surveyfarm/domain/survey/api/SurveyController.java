@@ -44,10 +44,10 @@ public class SurveyController {
         return surveyService.getSurveyQuestionListById(sid);
     }
 
-    @GetMapping("/available/{uid}")
+    @GetMapping("/available/{uid}/page={page}")
     @Operation(summary = "특정 유저가 참여가능한 설문 조회")
-    public List<SurveyInfoResponse> getAvailableSurveys(@PathVariable int uid){
-        return surveyService.getAvailableSurveys(uid);
+    public List<SurveyInfoResponse> getAvailableSurveys(@PathVariable int uid, @PathVariable int page){
+        return surveyService.getAvailableSurveys(uid, page);
     }
 
     @GetMapping("/requested/{uid}")

@@ -24,16 +24,17 @@ public interface SurveyRepository extends JpaRepository<Survey, Integer> {
     void incrementCurrentHeadCnt(@Param("sid") int sid);
 
     // 특정 유저가 참여가능한 설문 조회
-    @Query(value = "SELECT * FROM SURVEY WHERE region_code & :participantRegionCode = :participantRegionCode AND job_code & :participantJobCode = :participantJobCode AND age_code & :participantAgeCode = :participantAgeCode AND gender_code & :participantGenderCode = :participantGenderCode", nativeQuery = true)
+    @Query(value = "SELECT * FROM SURVEY WHERE region_code & :participantRegionCode = :participantRegionCode AND job_code & :participantJobCode = :participantJobCode AND age_code & :participantAgeCode = :participantAgeCode AND gender_code & :participantGenderCode = :participantGenderCode LIMIT 30 OFFSET :offset", nativeQuery = true)
     List<Survey> getAvailableSurveyByParticipant(
             @Param("participantRegionCode") int participantRegionCode,
             @Param("participantJobCode") int participantJobCode,
             @Param("participantAgeCode") int participantAgeCode,
-            @Param("participantGenderCode") int participantGenderCode
+            @Param("participantGenderCode") int participantGenderCode,
+            @Param("offset") int offset
     );
 
     // 특정 유저가 의뢰한 설문 조회
-    @Query(value = "SELECT * FROM SURVEY WHERE uid = :uid", nativeQuery = true)
+    @Query(value = "SELECT * FROM SURVEY WHERE uid = :uid ORDER BY id", nativeQuery = true)
     List<Survey> getRequestedSurvey(@Param("uid") int uid);
 
     @Query(value = "SELECT * FROM SURVEY WHERE survey_status = 'DEADLINE_UPCOMING'", nativeQuery = true)
