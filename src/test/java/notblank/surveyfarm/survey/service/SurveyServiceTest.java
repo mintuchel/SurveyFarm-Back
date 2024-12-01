@@ -123,7 +123,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    @DisplayName("설문 정보 조회 성공")
+    @DisplayName("설문 정보 조회 성공 (SurveyInfoResponse)")
     public void getSurveyInfoResponseSuccess(){
         // setup
         surveyInfoSetUp();
@@ -141,7 +141,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    @DisplayName("설문 태그 조회 성공")
+    @DisplayName("설문 태그 조회 성공 (SurveyFilterResponse)")
     public void getSurveyTagResponseSuccess(){
         // setup
         surveyFilterSetUp();
@@ -160,7 +160,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    @DisplayName("설문 질문 조회 성공")
+    @DisplayName("설문 질문 조회 성공 (SurveyQuestionListResponse)")
     public void getSurveyQuestionListResponseSuccess(){
         // setup
         surveyQuestionListSetUp();
@@ -178,7 +178,7 @@ public class SurveyServiceTest {
     }
 
     @Test
-    @DisplayName("의뢰된 설문 저장 성공 (requestDTO to entity 성공)")
+    @DisplayName("설문 저장 성공 (createSurveyRequest to entity 성공)")
     public void addSurveySuccess() throws JsonProcessingException{
         // given
         given(userService.findById(any(Integer.class))).willReturn(owner);

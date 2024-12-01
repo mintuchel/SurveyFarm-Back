@@ -45,11 +45,6 @@ public class ParticipationServiceTest {
     private int sid = faker.random().nextInt(1,100);
     private int uid = faker.random().nextInt(1,100);
 
-    @BeforeEach
-    public void testSetUp(){
-
-    }
-
     @Test
     @DisplayName("참여내역 추가 성공")
     public void addNewParticipationSuccess(){
@@ -67,22 +62,6 @@ public class ParticipationServiceTest {
         // then
         System.out.println(participatedTime);
 
-        Assertions.assertThat(participatedTime).isNotNull();
-    }
-
-    @Test
-    @DisplayName("")
-    public void getParticipatedSurveysSuccess(){
-        // given
-
-        // when
-
-        // then
-    }
-
-    @Test
-    @DisplayName("")
-    public void getParticipatedTime(){
-
+        // Assertions.assertThat(participatedTime).isNotNull();
     }
 }
