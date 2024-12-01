@@ -31,18 +31,19 @@ public class Survey {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
     private LocalDateTime endAt;
+
     private int duration;
 
     private int maxHeadCnt;
     private int currentHeadCnt;
+    private int point;
 
     private int regionCode;
     private int jobCode;
     private int ageCode;
     private int genderCode;
-
-    private int point;
 
     // FetchType.EAGER로 할까??
     // 여기서 굳이 new 를 해줄 필요가 있을까?

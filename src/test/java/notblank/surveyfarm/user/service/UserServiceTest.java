@@ -38,7 +38,7 @@ public class UserServiceTest {
     @Mock
     private User user;
 
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     @BeforeEach
     public void testSetUp(){

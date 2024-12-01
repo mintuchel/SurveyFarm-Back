@@ -15,13 +15,15 @@ public record SurveyInfoResponse(
         @NotBlank String title, // 질문 제목
         @NotBlank String description, // 질문 설명
         @NotBlank String imgUrl, // 질문 대표 이미지 URL
-        @NotBlank @Size(min = 100) int maxHeadCnt, // 목표 인원수
+        @NotBlank int maxHeadCnt, // 목표 인원수
         @NotBlank int currentHeadCnt, // 현재참여인원수
         @NotBlank @Size(min = 1) int duration, // 기간
         @NotBlank int point, // 포인트
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime createdAt, // 설문시작시간
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
         LocalDateTime endAt, // 설문종료시간
-        @NotBlank SurveyStatus surveyStatus
+
+        @NotBlank SurveyStatus surveyStatus // 설문상태
 ) { }

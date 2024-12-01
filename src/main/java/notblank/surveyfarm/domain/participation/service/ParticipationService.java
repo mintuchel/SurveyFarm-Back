@@ -52,13 +52,13 @@ public class ParticipationService {
 
     @Transactional(readOnly = true)
     public List<SurveyInfoResponse> getParticipatedSurveys(int uid) {
-        return participationRepository.getUserParticipationInfo(uid).stream()
-                .map(info -> surveyService.getSurveyInfoById(info.sid()))
+        return participationRepository.getParticipatedSurveyIds(uid).stream()
+                .map(surveyService::getSurveyInfoById)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public String getParticipatedTime(int uid, int sid){
-        return participationRepository.getParticipatedTime(uid, sid).participated_at().toLocalDate().toString();
+        return participationRepository.getParticipatedTime(uid, sid);
     }
 }
