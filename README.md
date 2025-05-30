@@ -1,10 +1,10 @@
-<h1 align="center">
+<p align="center">
 <a href="https://github.com/rong5026/animal_user" title="AwesomeCV Documentation">
     <img alt="AwesomeCV" src="https://github.com/user-attachments/assets/560d4d8a-a74b-4c6e-b3ce-add821b60e1c"/>
 </a>
-</h1>
+</p>
 <p align="center">
-  "저비용-고효율" 가성비 설문조사 플랫폼
+  <strong>"저비용-고효율" 가성비 설문조사 플랫폼</strong>
 </p>
 
 <div align="center">
@@ -16,7 +16,7 @@
 ![JUnit 5](https://img.shields.io/badge/JUnit%205-25A162?style=flat&logo=junit5&logoColor=white)
 ![Mockito](https://img.shields.io/badge/Mockito-4CAF50?style=flat&logo=mockito&logoColor=white)
 ![Mockaroo](https://img.shields.io/badge/Mockaroo-795548?style=flat&logoColor=white)
-![Data-Faker](https://img.shields.io/badge/Data--Faker-6A5ACD?style=flat&logoColor=white)
+![DataFaker](https://img.shields.io/badge/DataFaker-5F7ADB?style=flat&logoColor=white)
 
 </div>
 
@@ -66,6 +66,7 @@
 - 인기 설문과 마감임박 설문을 메인 페이지에 노출하여 설문들이 추가적으로 노출될 수 있는 환경 제공
 - 인기 설문과 마감임박 설문 등 다양한 테마의 설문들을 제공해 높은 참여율 유도
 - 설문조사 의뢰 버튼 클릭 시 아래의 설문 제작 페이지로 이동
+  <br><br>
 
 ## 2. 설문 타겟층 필터링
 
@@ -73,6 +74,7 @@
 
 - 지역, 연령, 직무등 다양한 조건으로 설문 타겟층 필터링 가능
 - 의뢰자가 설문조사에 참여가능한 표본집단을 손쉽게 특정 가능
+  <br><br>
 
 ## 3. 설문 제작 페이지
 
@@ -81,6 +83,7 @@
 - 누구나 쉽게 사용할 수 있도록 편리하고 직관적인 UI 제공
 - 객관식, 주관식, 선형 배율, 체크 박스, 드롭다운 등 다양한 종류의 선지 및 질문 유형 제공
 - 사용자가 원하는 대로 선지와 질문을 자유롭게 구성할 수 있는 높은 유연성 제공
+  <br><br>
 
 ## 4. 답변 분석 페이지
 
